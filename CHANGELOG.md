@@ -63,4 +63,85 @@ The structure and content of this file follows [Keep a Changelog](https://keepac
 ## [1.14.3] - 2022-06-12
 ### Fixed
 - Returned `[]byte` from oj.Marshal and pretty.Marshal now copy the
-  internal buffer instead of just returing
+  internal buffer instead of just returing it.
+
+## [1.14.2] - 2022-06-03
+### Added
+- Added SameType test tool.
+
+## [1.14.1] - 2022-05-31
+### Fixed
+- Removed dependency on external packages.
+
+## [1.14.0] - 2022-04-08
+### Added
+- Added the JSONPath filter operation `in`.
+- Added the JSONPath filter operation `empty`.
+- Added the JSONPath filter operation `=~` for regex.
+
+## [1.13.1] - 2022-03-19
+### Fixed
+- Fixed a case where a un-terminated JSON did not return an error.
+
+## [1.13.0] - 2022-03-05
+### Added
+- Added jp.Expr.Has() function.
+- Added jp.Walk to walk data and provide a the path and value for each
+  element.
+
+## [1.12.14] - 2022-02-28
+### Fixed
+- `[]byte` are encoded according to the ojg.Options.
+
+## [1.12.13] - 2022-02-23
+### Fixed
+- For JSONPath (jp) reflection Get returns `has` value correctly for zero field values.
+
+## [1.12.12] - 2021-12-27
+### Fixed
+- JSONPath scripts (jp.Script or [?(@.foo == 123)]) is now thread safe.
+
+## [1.12.11] - 2021-12-10
+### Fixed
+- Parser reuse was no resetting callback and channels. It does now.
+
+## [1.12.10] - 2021-12-07
+### Added
+- Added a delete option to the oj application.
+
+## [1.12.9] - 2021-10-31
+### Fixed
+- Stuttering extracted elements when using the `-x` options has been fixed.
+
+## [1.12.8] - 2021-09-21
+### Fixed
+- Correct unicode character is now included in error messages.
+
+## [1.12.7] - 2021-09-14
+### Fixed
+- Typo in maxEnd for 32 bit architecture fixed.
+- json.Unmarshaler fields in a struct correctly unmarshal.
+
+## [1.12.6] - 2021-09-12
+### Fixed
+- Due to limitation (a bug most likely) in the stardard math package
+  math.MaxInt64 can not be used on 32 bit architectures. Changes were
+  made to work around this limitation.
+
+- Embedded (Anonymous) pointers types now encode correctly.
+
+### Added
+- Support for json.Unmarshaler interface added.
+
+## [1.12.5] - 2021-08-17
+# Changed
+- Updated to use go 1.17.
+
+## [1.12.4] - 2021-08-06
+### Fixed
+- Setting an element in an array that does not exist now creates the array is the Nth value is not negative.
+
+## [1.12.3] - 2021-08-01
+### Fixed
+- Error message on failed recompose was fixed to display the correct error message.
+- Marshal of a non-pointer that contains a json.Marshaller that is not a poi
