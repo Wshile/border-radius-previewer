@@ -144,4 +144,70 @@ The structure and content of this file follows [Keep a Changelog](https://keepac
 ## [1.12.3] - 2021-08-01
 ### Fixed
 - Error message on failed recompose was fixed to display the correct error message.
-- Marshal of a non-pointer that contains a json.Marshaller that is not a poi
+- Marshal of a non-pointer that contains a json.Marshaller that is not a pointer no longer fails.
+
+## [1.12.2] - 2021-07-28
+### Fixed
+- Structs with recursive lists no longer fail.
+
+## [1.12.1] - 2021-07-23
+### Fixed
+- Applying filters to a non-simple list such as `[]*Sample` now supported as expected.
+
+## [1.12.0] - 2021-07-03
+### Added
+- SEN format parsing now allows string to be delimited with the single quote character.
+- SEN format parsing now allows strings to be concatenated with syntax like `["abc" + "def"]`.
+- SEN format parsing now allows functions such as `ISODate("2021-06-28T10:11:12Z")` in SEN data.
+### Changed
+- When Pretty Align is true map members are now aligned.
+
+## [1.11.1] - 2021-05-29
+### Fixed
+- Missing support for json.Marshaler and encoding.TextMarshaler added.
+
+## [1.11.0] - 2021-05-23
+### Fixed
+- Struct with pointers to base types such as *float64 are fixed.
+- Stack overflow when converting values to JSON which are a type alias
+  of a builtin.
+### Added
+- Added `[]byte` converation option for decompose.
+- Added MustXxx versions of multiple functions to allow a panic and recover code pattern.
+### Changed
+- oj.Unmarshal now emits float64 for all numbers instead of int64 for
+  integers. The parse functions remain unchanged.
+
+## [1.10.0] - 2021-04-22
+### Fixed
+- Multiple part json tags are now parsed correctly and the string
+  options is supported in both decompose and compose.
+### Added
+- Tokenize callback parser added.
+
+## [1.9.5] - 2021-04-04
+### Fixed
+- OmitNil now catches nil maps and slices more consistently.
+
+## [1.9.4] - 2021-04-04
+### Fixed
+- Number parsing in the form of 2e-7 has been fixed.
+
+## [1.9.3] - 2021-03-30
+### Fixed
+- Writer functions now decompose structs if possible instead of resorting to %v too quickly.
+
+## [1.9.2] - 2021-03-24
+### Fixed
+- When parsing SEN format `\r` is now allowed in strings to support
+  Windows line termination as it works in Linux and macOS.
+
+## [1.9.1] - 2021-03-21
+### Fixed
+- oj.Unmarshal now supports the optional alt.Recomposer as documented.
+- Recomposer handles time.Time recomposing like any other struct.
+- Write writes time.Time to conform to other struct encoding.
+
+## [1.9.0] - 2021-03-13
+### Added
+- The Recomposer is now more flexibly in regard to i
