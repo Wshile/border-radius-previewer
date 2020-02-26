@@ -98,3 +98,40 @@ func NewRecomposer(
 	composers map[any]RecomposeFunc,
 	anyComposers ...map[any]RecomposeAnyFunc) (rec *Recomposer, err error) {
 	defer func() {
+		if r := recover(); r != nil {
+			err = ojg.NewError(r)
+		}
+	}()
+	rec = MustNewRecomposer(createKey, composers, anyComposers...)
+
+	return
+}
+
+// MustNewRecomposer creates a new instance. The composers are a map of objects
+// expected and functions to recompose them. If no function is provided then
+// reflection is used instead. Panics on error.
+func MustNewRecomposer(
+	createKey string,
+	composers map[any]RecomposeFunc,
+	anyComposers ...map[any]RecomposeAnyFunc) *Recomposer {
+
+	r := Recomposer{
+		CreateKey: createKey,
+		composers: map[string]*composer{},
+	}
+	for v, fun := range composers {
+		rt := reflect.TypeOf(v)
+		if _, err := r.registerComposer(rt, fun); err != nil {
+			panic(err)
+		}
+	}
+	if 0 < len(anyComposers) {
+		for v, fun := range anyComposers[0] {
+			rt := reflect.TypeOf(v)
+			if _, err := r.registerAnyComposer(rt, fun); err != nil {
+				panic(err)
+			}
+		}
+	}
+	return &r
+}
