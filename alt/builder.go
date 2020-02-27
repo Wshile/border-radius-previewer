@@ -68,4 +68,64 @@ func (b *Builder) Array(key ...string) error {
 	return nil
 }
 
-// V
+// Value pushs a value onto the stack. A key must be provided if the top of
+// the stack is an object (map) and must not be provided if the op of the
+// stack is an array or slice.
+func (b *Builder) Value(value any, key ...string) error {
+	switch {
+	case 0 < len(key):
+		if len(b.starts) == 0 || 0 <= b.starts[len(b.starts)-1] {
+			return fmt.Errorf("can not use a key when pushing to an array")
+		}
+		if obj, _ := b.stack[len(b.stack)-1].(map[string]any); obj != nil {
+			obj[key[0]] = value
+		}
+	case 0 < len(b.starts) && b.starts[len(b.starts)-1] < 0:
+		return fmt.Errorf("must have a key when pushing to an object")
+	default:
+		b.stack = append(b.stack, value)
+	}
+	return nil
+}
+
+// Pop the stack, closing an array or object.
+func (b *Builder) Pop() {
+	if 0 < len(b.starts) {
+		start := b.starts[len(b.starts)-1]
+		if 0 <= start { // array
+			start++
+			size := len(b.stack) - start
+			a := make([]any, size)
+			copy(a, b.stack[start:len(b.stack)])
+			b.stack = b.stack[:start]
+			b.stack[start-1] = a
+			if 2 < len(b.stack) {
+				if k, ok := b.stack[len(b.stack)-2].(gen.Key); ok {
+					if obj, _ := b.stack[len(b.stack)-3].(map[string]any); obj != nil {
+						obj[string(k)] = a
+						b.stack = b.stack[:len(b.stack)-2]
+					}
+				}
+			}
+		} else if 1 < len(b.starts) && b.starts[len(b.starts)-2] < 0 {
+			b.stack = b.stack[:len(b.stack)-1]
+		}
+		b.starts = b.starts[:len(b.starts)-1]
+	}
+}
+
+// PopAll repeats Pop until all open arrays or objects are closed.
+func (b *Builder) PopAll() {
+	for 0 < len(b.starts) {
+		b.Pop()
+	}
+}
+
+// Result of the builder is returned. This is the first item pushed on to the
+// stack.
+func (b *Builder) Result() (result any) {
+	if 0 < len(b.stack) {
+		result = b.stack[0]
+	}
+	return
+}
