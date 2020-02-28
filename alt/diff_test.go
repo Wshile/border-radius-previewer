@@ -76,4 +76,96 @@ func TestCompare(t *testing.T) {
 
 func TestCompareTime(t *testing.T) {
 	t0 := time.Date(2021, time.March, 3, 16, 34, 04, 0, time.UTC)
-	t1 := time.Date(2021
+	t1 := time.Date(2021, time.March, 3, 16, 34, 04, 499, time.UTC)
+
+	alt.TimeTolerance = time.Microsecond
+	dif := alt.Compare(t0, t1)
+	tt.Equal(t, 0, len(dif))
+
+	alt.TimeTolerance = time.Nanosecond
+	dif = alt.Compare(t0, t1)
+	tt.Equal(t, 1, len(dif))
+}
+
+func TestDiffSlice(t *testing.T) {
+	diffs := alt.Diff(
+		[]any{1, 2, []any{3, 4}},
+		[]any{1, 2, []any{4, 4}},
+	)
+	tt.Equal(t, 1, len(diffs))
+	tt.Equal(t, alt.Path{2, 0}, diffs[0])
+
+	diffs = alt.Diff([]any{1, 2}, 5)
+	tt.Equal(t, 1, len(diffs))
+	tt.Equal(t, alt.Path{nil}, diffs[0])
+
+	diffs = alt.Diff(
+		[]any{1, 2, []any{3, 4}},
+		[]any{1, 2, []any{3, 4, 5}},
+		alt.Path{2, 2},
+	)
+	tt.Equal(t, 0, len(diffs))
+
+	dif := alt.Compare(
+		[]any{1, 2, []any{3, 4}},
+		[]any{1, 2, []any{3, 5}},
+	)
+	tt.Equal(t, alt.Path{2, 1}, dif)
+
+	diffs = alt.Diff(
+		[]any{1, 2, []any{3, 4, 5}},
+		[]any{1, 2, []any{3, 4}},
+	)
+	tt.Equal(t, 1, len(diffs))
+	tt.Equal(t, alt.Path{2, 2}, diffs[0])
+}
+
+func TestDiffSliceIgnores(t *testing.T) {
+	diffs := alt.Diff(
+		[]any{1, 2, []any{3, 4}},
+		[]any{1, 2, []any{3, 4, 5}},
+		alt.Path{2, 2},
+	)
+	tt.Equal(t, 0, len(diffs))
+
+	diffs = alt.Diff(
+		[]any{1, 2, []any{3, 4}},
+		[]any{1, 2, []any{3, 5}},
+		alt.Path{2, 1},
+	)
+	tt.Equal(t, 0, len(diffs))
+
+	diffs = alt.Diff(
+		[]any{1, 2, []any{3, 4}},
+		[]any{1, 2, []any{3, 5}},
+		alt.Path{2, nil},
+	)
+	tt.Equal(t, 0, len(diffs))
+}
+
+func TestDiffMap(t *testing.T) {
+	diffs := alt.Diff(
+		map[string]any{"x": 1, "y": 2, "z": map[string]any{"a": 3, "b": 4}},
+		map[string]any{"x": 1, "y": 2, "z": map[string]any{"a": 4, "b": 4}},
+	)
+	tt.Equal(t, 1, len(diffs))
+	tt.Equal(t, alt.Path{"z", "a"}, diffs[0])
+
+	dif := alt.Compare(
+		map[string]any{"x": 1, "y": 2, "z": map[string]any{"a": 3, "b": 4}},
+		map[string]any{"x": 1, "y": 2, "z": true},
+	)
+	tt.Equal(t, alt.Path{"z"}, dif)
+}
+
+func TestDiffMapIgnores(t *testing.T) {
+	diffs := alt.Diff(
+		map[string]any{"x": 1, "y": 2, "z": map[string]any{"a": 3, "b": 4}},
+		map[string]any{"x": 1, "y": 2, "z": map[string]any{"a": 4, "b": 4}},
+		alt.Path{"z"},
+	)
+	tt.Equal(t, 0, len(diffs))
+
+	diffs = alt.Diff(
+		map[string]any{"x": 1, "y": 2, "z": map[string]any{"a": 3, "b": 4}},
+		map[stri
