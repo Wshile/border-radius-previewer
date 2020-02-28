@@ -168,4 +168,32 @@ func TestDiffMapIgnores(t *testing.T) {
 
 	diffs = alt.Diff(
 		map[string]any{"x": 1, "y": 2, "z": map[string]any{"a": 3, "b": 4}},
-		map[stri
+		map[string]any{"x": 1, "y": 2, "z": map[string]any{"a": 4, "b": 4}},
+		alt.Path{"z", nil},
+	)
+	tt.Equal(t, 0, len(diffs))
+}
+
+func TestDiffSimplifier(t *testing.T) {
+	diffs := alt.Diff(
+		&silly{val: 3},
+		&silly{val: 3},
+	)
+	tt.Equal(t, 0, len(diffs))
+}
+
+func TestDiffTypes(t *testing.T) {
+	diffs := alt.Diff(
+		&silly{val: 3},
+		&Dummy{Val: 3},
+	)
+	tt.Equal(t, 1, len(diffs))
+}
+
+func TestDiffReflect(t *testing.T) {
+	diffs := alt.Diff(
+		&Dummy{Val: 3},
+		&Dummy{Val: 3},
+	)
+	tt.Equal(t, 0, len(diffs))
+}
