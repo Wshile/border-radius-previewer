@@ -21,4 +21,10 @@ func (g *genny) Generic() gen.Node {
 func ExampleGenerify() {
 	// Non public types can be encoded with the Genericer interface which
 	// should decompose into a gen.Node.
-	ga := []*genny{{val
+	ga := []*genny{{val: 3}}
+	v := alt.Generify(ga)
+	// Encode to JSON after decomposing using the Genericer interface.
+	fmt.Println(oj.JSON(v, &oj.Options{Sort: true}))
+
+	// Output: [{"type":"genny","val":3}]
+}
