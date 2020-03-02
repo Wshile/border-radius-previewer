@@ -45,4 +45,18 @@ func ivalInt8(fi *finfo, rv reflect.Value, addr uintptr) (any, reflect.Value, bo
 }
 
 func ivalInt8AsString(fi *finfo, rv reflect.Value, addr uintptr) (any, reflect.Value, bool) {
-	return strconv.FormatInt(int64(rv.FieldByIndex(fi.index).Int
+	return strconv.FormatInt(int64(rv.FieldByIndex(fi.index).Interface().(int8)), 10), nilValue, false
+}
+
+func ivalInt8NotEmpty(fi *finfo, rv reflect.Value, addr uintptr) (any, reflect.Value, bool) {
+	v := rv.FieldByIndex(fi.index).Interface().(int8)
+	return v, nilValue, v == 0
+}
+
+func ivalInt8NotEmptyAsString(fi *finfo, rv reflect.Value, addr uintptr) (any, reflect.Value, bool) {
+	v := rv.FieldByIndex(fi.index).Interface().(int8)
+	if v == 0 {
+		return nil, nilValue, true
+	}
+	return strconv.FormatInt(int64(v), 10), nilValue, false
+}
