@@ -56,4 +56,7 @@ func ivalUint32NotEmpty(fi *finfo, rv reflect.Value, addr uintptr) (any, reflect
 func ivalUint32NotEmptyAsString(fi *finfo, rv reflect.Value, addr uintptr) (any, reflect.Value, bool) {
 	v := rv.FieldByIndex(fi.index).Interface().(uint32)
 	if v == 0 {
-		return nil, nil
+		return nil, nilValue, true
+	}
+	return strconv.FormatUint(uint64(v), 10), nilValue, false
+}
