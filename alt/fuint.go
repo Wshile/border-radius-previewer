@@ -47,3 +47,16 @@ func ivalUint(fi *finfo, rv reflect.Value, addr uintptr) (any, reflect.Value, bo
 func ivalUintAsString(fi *finfo, rv reflect.Value, addr uintptr) (any, reflect.Value, bool) {
 	return strconv.FormatUint(uint64(rv.FieldByIndex(fi.index).Interface().(uint)), 10), nilValue, false
 }
+
+func ivalUintNotEmpty(fi *finfo, rv reflect.Value, addr uintptr) (any, reflect.Value, bool) {
+	v := rv.FieldByIndex(fi.index).Interface().(uint)
+	return v, nilValue, v == 0
+}
+
+func ivalUintNotEmptyAsString(fi *finfo, rv reflect.Value, addr uintptr) (any, reflect.Value, bool) {
+	v := rv.FieldByIndex(fi.index).Interface().(uint)
+	if v == 0 {
+		return nil, nilValue, true
+	}
+	return strconv.FormatUint(uint64(v), 10), nilValue, false
+}
