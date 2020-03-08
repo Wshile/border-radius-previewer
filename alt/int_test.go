@@ -50,4 +50,31 @@ func TestInt(t *testing.T) {
 		{value: float32(3.3), expect: 5, defaults: []int64{4, 5}},
 		{value: gen.Float(3.1), expect: 3},
 		{value: gen.Float(3.2), expect: 3, defaults: []int64{4}},
-		{value: gen.Float(3.3), expect: 5, defaults: []
+		{value: gen.Float(3.3), expect: 5, defaults: []int64{4, 5}},
+
+		{value: "3", expect: 3},
+		{value: "3", expect: 3, defaults: []int64{4}},
+		{value: "3", expect: 5, defaults: []int64{4, 5}},
+		{value: "3x", expect: 0},
+		{value: "3x", expect: 4, defaults: []int64{4}},
+		{value: "3.0", expect: 3},
+		{value: "3.1", expect: 3},
+		{value: "3.2", expect: 4, defaults: []int64{4}},
+		{value: "3.3", expect: 5, defaults: []int64{4, 5}},
+		{value: gen.String("3"), expect: 3},
+		{value: gen.String("3x"), expect: 5, defaults: []int64{4, 5}},
+		{value: gen.Big("3"), expect: 3},
+
+		{value: tm, expect: 1586709244123456789},
+		{value: tm, expect: 1586709244123456789, defaults: []int64{4}},
+		{value: tm, expect: 5, defaults: []int64{4, 5}},
+		{value: gen.Time(tm), expect: 1586709244123456789},
+		{value: gen.Time(tm), expect: 5, defaults: []int64{4, 5}},
+
+		{value: []any{}, expect: 0},
+		{value: []any{}, expect: 4, defaults: []int64{4, 5}},
+	} {
+		result := alt.Int(d.value, d.defaults...)
+		tt.Equal(t, d.expect, result, "Int(", d.value, d.defaults, ")")
+	}
+}
