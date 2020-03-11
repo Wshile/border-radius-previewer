@@ -192,3 +192,110 @@ func (r *Recomposer) MustRecompose(v any, tv ...any) (out any) {
 	}
 	return
 }
+
+func (r *Recomposer) recompAny(v any) any {
+	switch tv := v.(type) {
+	case nil, bool, int64, float64, string, time.Time:
+	case int:
+		v = int64(tv)
+	case int8:
+		v = int64(tv)
+	case int16:
+		v = int64(tv)
+	case int32:
+		v = int64(tv)
+	case uint:
+		v = int64(tv)
+	case uint8:
+		v = int64(tv)
+	case uint16:
+		v = int64(tv)
+	case uint32:
+		v = int64(tv)
+	case uint64:
+		v = int64(tv)
+	case float32:
+		// This small rounding makes the conversion from 32 bit to 64 bit
+		// display nicer.
+		f, i := math.Frexp(float64(tv))
+		f = float64(int64(f*fracMax)) / fracMax
+		v = math.Ldexp(f, i)
+	case []any:
+		a := make([]any, len(tv))
+		for i, m := range tv {
+			a[i] = r.recompAny(m)
+		}
+		v = a
+	case map[string]any:
+		if cv := tv[r.CreateKey]; cv != nil {
+			tn, _ := cv.(string)
+			if c := r.composers[tn]; c != nil {
+				if c.fun != nil {
+					val, err := c.fun(tv)
+					if err != nil {
+						panic(err)
+					}
+					return val
+				}
+				rv := reflect.New(c.rtype)
+				r.recomp(v, rv)
+				return rv.Interface()
+			}
+		}
+		o := map[string]any{}
+		for k, m := range tv {
+			o[k] = r.recompAny(m)
+		}
+		v = o
+
+	case gen.Bool:
+		v = bool(tv)
+	case gen.Int:
+		v = int64(tv)
+	case gen.Float:
+		v = float64(tv)
+	case gen.String:
+		v = string(tv)
+	case gen.Time:
+		v = time.Time(tv)
+	case gen.Big:
+		v = string(tv)
+	case gen.Array:
+		a := make([]any, len(tv))
+		for i, m := range tv {
+			a[i] = r.recompAny(m)
+		}
+		v = a
+	case gen.Object:
+		if cv := tv[r.CreateKey]; cv != nil {
+			gn, _ := cv.(gen.String)
+			tn := string(gn)
+			if c := r.composers[tn]; c != nil {
+				simple, _ := tv.Simplify().(map[string]any)
+				if c.fun != nil {
+					val, err := c.fun(simple)
+					if err != nil {
+						panic(err)
+					}
+					return val
+				}
+				rv := reflect.New(c.rtype)
+				r.recomp(simple, rv)
+				return rv.Interface()
+			}
+		}
+		o := map[string]any{}
+		for k, m := range tv {
+			o[k] = r.recompAny(m)
+		}
+		v = o
+
+	default:
+		panic(fmt.Errorf("can not recompose a %T", v))
+	}
+	return v
+}
+
+func (r *Recomposer) recomp(v any, rv reflect.Value) {
+	as, _ := rv.Interface().(AttrSetter)
+	if rv.Kind() =
