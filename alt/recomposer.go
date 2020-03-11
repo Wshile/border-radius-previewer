@@ -298,4 +298,93 @@ func (r *Recomposer) recompAny(v any) any {
 
 func (r *Recomposer) recomp(v any, rv reflect.Value) {
 	as, _ := rv.Interface().(AttrSetter)
-	if rv.Kind() =
+	if rv.Kind() == reflect.Ptr {
+		if v == nil {
+			return
+		}
+		rv = rv.Elem()
+	}
+	switch rv.Kind() {
+	case reflect.Array, reflect.Slice:
+		va, ok := (v).([]any)
+		if !ok {
+			vv := reflect.ValueOf(v)
+			if vv.Kind() != reflect.Slice {
+				panic(fmt.Errorf("can only recompose a %s from a []any, not a %T", rv.Type(), v))
+			}
+			va = make([]any, vv.Len())
+			for i := len(va) - 1; 0 <= i; i-- {
+				va[i] = vv.Index(i).Interface()
+			}
+		}
+		size := len(va)
+		av := reflect.MakeSlice(rv.Type(), size, size)
+		et := av.Type().Elem()
+		if et.Kind() == reflect.Ptr {
+			et = et.Elem()
+			for i := 0; i < size; i++ {
+				ev := reflect.New(et)
+				r.recomp(va[i], ev)
+				av.Index(i).Set(ev)
+			}
+		} else {
+			for i := 0; i < size; i++ {
+				r.setValue(va[i], av.Index(i), nil)
+			}
+		}
+		rv.Set(av)
+	case reflect.Map:
+		if v == nil {
+			return
+		}
+		et := rv.Type().Elem()
+		vm, ok := (v).(map[string]any)
+		if !ok {
+			vv := reflect.ValueOf(v)
+			if vv.Kind() != reflect.Map {
+				panic(fmt.Errorf("can only recompose a map from a map[string]any, not a %T", v))
+			}
+			vm = map[string]any{}
+			iter := vv.MapRange()
+			for iter.Next() {
+				k := iter.Key().Interface().(string)
+				vm[k] = iter.Value().Interface()
+			}
+		}
+		if rv.IsNil() {
+			rv.Set(reflect.MakeMapWithSize(rv.Type(), len(vm)))
+		}
+		switch {
+		case et.Kind() == reflect.Interface:
+			for k, m := range vm {
+				rv.SetMapIndex(reflect.ValueOf(k), reflect.ValueOf(r.recompAny(m)))
+			}
+		case et.Kind() == reflect.Ptr:
+			et = et.Elem()
+			for k, m := range vm {
+				ev := reflect.New(et)
+				r.recomp(m, ev)
+				rv.SetMapIndex(reflect.ValueOf(k), ev)
+			}
+		default:
+			for k, m := range vm {
+				ev := reflect.New(et)
+				r.recomp(m, ev)
+				rv.SetMapIndex(reflect.ValueOf(k), ev.Elem())
+			}
+		}
+	case reflect.Struct:
+		vm, ok := (v).(map[string]any)
+		if !ok {
+			if c := r.composers[rv.Type().Name()]; c != nil && c.any != nil {
+				if val, err := c.any(v); err == nil {
+					if val == nil {
+						break
+					}
+					vv := reflect.ValueOf(val)
+					if vv.Type().Kind() == reflect.Ptr {
+						vv = vv.Elem()
+					}
+					rv.Set(vv)
+				} else {
+					panic(
