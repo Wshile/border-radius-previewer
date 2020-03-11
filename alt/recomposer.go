@@ -104,4 +104,91 @@ func (r *Recomposer) registerComposer(rt reflect.Type, fun RecomposeFunc) (*comp
 	for i := rt.NumField() - 1; 0 <= i; i-- {
 		f := rt.Field(i)
 		// Private fields should be skipped.
-		if len(f.Name) == 0 || ([]byte(f.Name)[0]&0x20) 
+		if len(f.Name) == 0 || ([]byte(f.Name)[0]&0x20) != 0 {
+			continue
+		}
+		ft := f.Type
+		switch ft.Kind() {
+		case reflect.Array, reflect.Slice, reflect.Map, reflect.Ptr:
+			ft = ft.Elem()
+		}
+		if _, has := r.composers[ft.Name()]; has {
+			continue
+		}
+		_, _ = r.registerComposer(ft, nil)
+	}
+	return c, nil
+}
+
+func (r *Recomposer) registerAnyComposer(rt reflect.Type, fun RecomposeAnyFunc) (*composer, error) {
+	if rt.Kind() == reflect.Ptr {
+		rt = rt.Elem()
+	}
+	full := rt.PkgPath() + "/" + rt.Name()
+	if rt.Kind() != reflect.Struct {
+		return nil, fmt.Errorf("only structs can be recomposed. %s is not a struct type", rt)
+	}
+	c := r.composers[full]
+	if c == nil {
+		c = &composer{
+			any:   fun,
+			short: rt.Name(),
+			full:  full,
+			rtype: rt,
+		}
+		c.indexes = indexType(c.rtype)
+		r.composers[c.short] = c
+		r.composers[c.full] = c
+	} else {
+		c.any = fun
+	}
+	return c, nil
+}
+
+// Recompose simple data into more complex go types.
+func (r *Recomposer) Recompose(v any, tv ...any) (out any, err error) {
+	defer func() {
+		if rec := recover(); rec != nil {
+			err = ojg.NewError(rec)
+			out = nil
+		}
+	}()
+	out = r.MustRecompose(v, tv...)
+	return
+}
+
+// MustRecompose simple data into more complex go types.
+func (r *Recomposer) MustRecompose(v any, tv ...any) (out any) {
+	if 0 < len(tv) {
+		if um, ok := tv[0].(json.Unmarshaler); ok {
+			if comp := r.composers["json.Unmarshaler"]; comp != nil {
+				b, _ := comp.any(v) // Special case. Must return []byte.
+				if err := um.UnmarshalJSON(b.([]byte)); err != nil {
+					panic(err)
+				}
+				return um
+			}
+		}
+		out = tv[0]
+		rv := reflect.ValueOf(tv[0])
+		switch rv.Kind() {
+		case reflect.Array, reflect.Slice:
+			rv = reflect.New(rv.Type())
+			r.recomp(v, rv)
+			out = rv.Elem().Interface()
+		case reflect.Map:
+			r.recomp(v, rv)
+		case reflect.Ptr:
+			r.recomp(v, rv)
+			switch rv.Elem().Kind() {
+			case reflect.Slice, reflect.Array, reflect.Map, reflect.Interface:
+				out = rv.Elem().Interface()
+			}
+		default:
+			panic(fmt.Errorf("only a slice, map, or pointer is allowed as an optional argument"))
+		}
+	} else {
+		out = r.recompAny(v)
+	}
+	return
+}
