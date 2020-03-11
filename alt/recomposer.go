@@ -387,4 +387,93 @@ func (r *Recomposer) recomp(v any, rv reflect.Value) {
 					}
 					rv.Set(vv)
 				} else {
-					panic(
+					panic(err)
+				}
+				break
+			}
+
+			vv := reflect.ValueOf(v)
+			if vv.Kind() != reflect.Map {
+				panic(fmt.Errorf("can only recompose a %s from a map[string]any, not a %T", rv.Type(), v))
+			}
+			vm = map[string]any{}
+			iter := vv.MapRange()
+			for iter.Next() {
+				k := iter.Key().Interface().(string)
+				vm[k] = iter.Value().Interface()
+			}
+		}
+		if as != nil {
+			for k, m := range vm {
+				if r.CreateKey == k {
+					continue
+				}
+				if err := as.SetAttr(k, m); err != nil {
+					panic(err)
+				}
+			}
+			return
+		}
+		var im map[string]reflect.StructField
+		if c := r.composers[rv.Type().Name()]; c != nil {
+			if c.fun != nil {
+				if val, err := c.fun(vm); err == nil {
+					vv := reflect.ValueOf(val)
+					if vv.Type().Kind() == reflect.Ptr {
+						vv = vv.Elem()
+					}
+					rv.Set(vv)
+				} else {
+					panic(err)
+				}
+				break
+			}
+			im = c.indexes
+		} else {
+			c, _ = r.registerComposer(rv.Type(), nil)
+			im = c.indexes
+		}
+		for k := range im {
+			sf := im[k]
+			f := rv.FieldByIndex(sf.Index)
+			var m any
+			var has bool
+			if m, has = vm[k]; !has {
+				if m, has = vm[sf.Name]; !has {
+					name := []byte(sf.Name)
+					name[0] |= 0x20
+					if m, has = vm[string(name)]; !has {
+						m, has = vm[strings.ToLower(string(name))]
+					}
+				}
+			}
+			if has && m != nil {
+				r.setValue(m, f, &sf)
+			}
+		}
+	case reflect.Interface:
+		v = r.recompAny(v)
+		rv.Set(reflect.ValueOf(v))
+
+	case reflect.Bool:
+		rv.Set(reflect.ValueOf(v))
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64,
+		reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64,
+		reflect.Float32, reflect.Float64,
+		reflect.String:
+		rv.Set(reflect.ValueOf(v).Convert(rv.Type()))
+
+	default:
+		panic(fmt.Errorf("can not convert (%T)%v to a %s", v, v, rv.Type()))
+	}
+}
+
+func (r *Recomposer) setValue(v any, rv reflect.Value, sf *reflect.StructField) {
+	switch rv.Kind() {
+	case reflect.Bool:
+		if s, ok := v.(string); ok && sf != nil && strings.Contains(sf.Tag.Get("json"), ",string") {
+			if b, err := strconv.ParseBool(s); err == nil {
+				rv.Set(reflect.ValueOf(b))
+			} else {
+				panic(err)
+			}
