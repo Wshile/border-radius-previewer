@@ -477,3 +477,50 @@ func (r *Recomposer) setValue(v any, rv reflect.Value, sf *reflect.StructField) 
 			} else {
 				panic(err)
 			}
+		} else {
+			rv.Set(reflect.ValueOf(v))
+		}
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64,
+		reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
+		if s, ok := v.(string); ok && sf != nil && strings.Contains(sf.Tag.Get("json"), ",string") {
+			if i, err := strconv.Atoi(s); err == nil {
+				rv.Set(reflect.ValueOf(i).Convert(rv.Type()))
+			} else {
+				panic(err)
+			}
+		} else {
+			rv.Set(reflect.ValueOf(v).Convert(rv.Type()))
+		}
+	case reflect.Float32, reflect.Float64:
+		if s, ok := v.(string); ok && sf != nil && strings.Contains(sf.Tag.Get("json"), ",string") {
+			if f, err := strconv.ParseFloat(s, 64); err == nil {
+				rv.Set(reflect.ValueOf(f).Convert(rv.Type()))
+			} else {
+				panic(err)
+			}
+		} else {
+			rv.Set(reflect.ValueOf(v).Convert(rv.Type()))
+		}
+	case reflect.String:
+		rv.Set(reflect.ValueOf(v).Convert(rv.Type()))
+	case reflect.Interface:
+		v = r.recompAny(v)
+		rv.Set(reflect.ValueOf(v))
+	case reflect.Ptr:
+		ev := reflect.New(rv.Type().Elem())
+		r.recomp(v, ev)
+		rv.Set(ev)
+	default:
+		if reflect.PtrTo(rv.Type()).Implements(jsonUnmarshalerType) {
+			ev := rv.Addr().Interface().(json.Unmarshaler)
+			if comp := r.composers["json.Unmarshaler"]; comp != nil {
+				b, _ := comp.any(v) // Special case. Must return []byte.
+				if err := ev.UnmarshalJSON(b.([]byte)); err != nil {
+					panic(err)
+				}
+				return
+			}
+		}
+		r.recomp(v, rv)
+	}
+}
