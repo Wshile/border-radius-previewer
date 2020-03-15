@@ -226,4 +226,111 @@ func TestDecomposeTagAsString(t *testing.T) {
 		}, out)
 	out = alt.Decompose(sample, &opt)
 	tt.Equal(t,
-		m
+		map[string]any{
+			"a":   "1",
+			"a16": "3",
+			"a32": "4",
+			"a64": "5",
+			"a8":  "2",
+			"b":   "6",
+			"b16": "8",
+			"b32": "9",
+			"b64": "10",
+			"b8":  "7",
+			"f32": "11.5",
+			"f64": "12.5",
+			"no":  "false",
+			"yes": "true",
+			"z":   "abc",
+		}, out)
+}
+
+func TestDecomposeTagOmitEmpty(t *testing.T) {
+	type Sample struct {
+		Yes bool    `json:"yes,omitempty"`
+		No  bool    `json:"no,omitempty"`
+		I   int     `json:"a,omitempty"`
+		I8  int8    `json:"a8,omitempty"`
+		I16 int16   `json:"a16,omitempty"`
+		I32 int32   `json:"a32,omitempty"`
+		I64 int64   `json:"a64,omitempty"`
+		U   uint    `json:"b,omitempty"`
+		U8  uint8   `json:"b8,omitempty"`
+		U16 uint16  `json:"b16,omitempty"`
+		U32 uint32  `json:"b32,omitempty"`
+		U64 uint64  `json:"b64,omitempty"`
+		F32 float32 `json:"f32,omitempty"`
+		F64 float64 `json:"f64,omitempty"`
+		Str string  `json:"z,omitempty"`
+	}
+	sample := Sample{
+		Yes: true,
+		No:  false,
+		I:   1,
+		I8:  2,
+		I16: 3,
+		I32: 4,
+		I64: 5,
+		U:   6,
+		U8:  7,
+		U16: 8,
+		U32: 9,
+		U64: 10,
+		F32: 11.5,
+		F64: 12.5,
+		Str: "abc",
+	}
+	opt := ojg.Options{UseTags: true}
+
+	out := alt.Decompose(&sample, &opt)
+	tt.Equal(t,
+		map[string]any{
+			"a":   1,
+			"a16": 3,
+			"a32": 4,
+			"a64": 5,
+			"a8":  2,
+			"b":   6,
+			"b16": 8,
+			"b32": 9,
+			"b64": 10,
+			"b8":  7,
+			"f32": 11.5,
+			"f64": 12.5,
+			"yes": true,
+			"z":   "abc",
+		}, out)
+	out = alt.Decompose(sample, &opt)
+	tt.Equal(t,
+		map[string]any{
+			"a":   1,
+			"a16": 3,
+			"a32": 4,
+			"a64": 5,
+			"a8":  2,
+			"b":   6,
+			"b16": 8,
+			"b32": 9,
+			"b64": 10,
+			"b8":  7,
+			"f32": 11.5,
+			"f64": 12.5,
+			"yes": true,
+			"z":   "abc",
+		}, out)
+
+	out = alt.Decompose(&Sample{}, &opt)
+	tt.Equal(t, map[string]any{}, out)
+
+	out = alt.Decompose(Sample{}, &opt)
+	tt.Equal(t, map[string]any{}, out)
+}
+
+func TestDecomposeTagOmitEmptyAsString(t *testing.T) {
+	type Sample struct {
+		Yes bool    `json:"yes,omitempty,string"`
+		No  bool    `json:"no,omitempty,string"`
+		I   int     `json:"a,omitempty,string"`
+		I8  int8    `json:"a8,omitempty,string"`
+		I16 int16   `json:"a16,omitempty,string"`
+		I32 int32   `js
