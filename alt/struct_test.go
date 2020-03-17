@@ -524,4 +524,6 @@ func TestDecomposeStructGenericer(t *testing.T) {
 		}, out)
 
 	gw = GenWrap{Gen: geni{val: 0}, Ptr: &geni{val: 0}}
-	out = alt.Decompose(&gw, &ojg.Options{Cr
+	out = alt.Decompose(&gw, &ojg.Options{CreateKey: ""})
+	tt.Equal(t, map[string]any{"ptr": nil, "gen": nil}, out)
+}
