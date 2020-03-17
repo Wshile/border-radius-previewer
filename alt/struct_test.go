@@ -333,4 +333,107 @@ func TestDecomposeTagOmitEmptyAsString(t *testing.T) {
 		I   int     `json:"a,omitempty,string"`
 		I8  int8    `json:"a8,omitempty,string"`
 		I16 int16   `json:"a16,omitempty,string"`
-		I32 int32   `js
+		I32 int32   `json:"a32,omitempty,string"`
+		I64 int64   `json:"a64,omitempty,string"`
+		U   uint    `json:"b,omitempty,string"`
+		U8  uint8   `json:"b8,omitempty,string"`
+		U16 uint16  `json:"b16,omitempty,string"`
+		U32 uint32  `json:"b32,omitempty,string"`
+		U64 uint64  `json:"b64,omitempty,string"`
+		F32 float32 `json:"f32,omitempty,string"`
+		F64 float64 `json:"f64,omitempty,string"`
+		Str string  `json:"z,omitempty,string"`
+	}
+	sample := Sample{
+		Yes: true,
+		No:  false,
+		I:   1,
+		I8:  2,
+		I16: 3,
+		I32: 4,
+		I64: 5,
+		U:   6,
+		U8:  7,
+		U16: 8,
+		U32: 9,
+		U64: 10,
+		F32: 11.5,
+		F64: 12.5,
+		Str: "abc",
+	}
+	opt := ojg.Options{UseTags: true}
+
+	out := alt.Decompose(&sample, &opt)
+	tt.Equal(t,
+		map[string]any{
+			"a":   "1",
+			"a16": "3",
+			"a32": "4",
+			"a64": "5",
+			"a8":  "2",
+			"b":   "6",
+			"b16": "8",
+			"b32": "9",
+			"b64": "10",
+			"b8":  "7",
+			"f32": "11.5",
+			"f64": "12.5",
+			"yes": "true",
+			"z":   "abc",
+		}, out)
+	out = alt.Decompose(sample, &opt)
+	tt.Equal(t,
+		map[string]any{
+			"a":   "1",
+			"a16": "3",
+			"a32": "4",
+			"a64": "5",
+			"a8":  "2",
+			"b":   "6",
+			"b16": "8",
+			"b32": "9",
+			"b64": "10",
+			"b8":  "7",
+			"f32": "11.5",
+			"f64": "12.5",
+			"yes": "true",
+			"z":   "abc",
+		}, out)
+
+	out = alt.Decompose(&Sample{}, &opt)
+	tt.Equal(t, map[string]any{}, out)
+
+	out = alt.Decompose(Sample{}, &opt)
+	tt.Equal(t, map[string]any{}, out)
+}
+
+func TestDecomposeTagPtrOmitEmpty(t *testing.T) {
+	type Bare struct {
+	}
+	type Sample struct {
+		Ptr    *Bare  `json:"p,omitempty"`
+		NilPtr *Bare  `json:"np,omitempty"`
+		Slice  []any  `json:"s,omitempty"`
+		Empty  []any  `json:"e,omitempty"`
+		Any    any    `json:"a,omitempty"`
+		NilAny any    `json:"na,omitempty"`
+		Bar    **Bare `json:"bar"`
+	}
+	sample := Sample{
+		Ptr:    &Bare{},
+		NilPtr: nil,
+		Slice:  []any{true},
+		Empty:  []any{},
+		Any:    &Bare{},
+		NilAny: nil,
+	}
+	opt := ojg.Options{UseTags: true}
+
+	out := alt.Decompose(&sample, &opt)
+	tt.Equal(t,
+		map[string]any{
+			"a":   map[string]any{},
+			"bar": nil,
+			"p":   map[string]any{},
+			"s":   []any{true},
+		}, ou
