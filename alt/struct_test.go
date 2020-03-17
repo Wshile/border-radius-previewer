@@ -436,4 +436,92 @@ func TestDecomposeTagPtrOmitEmpty(t *testing.T) {
 			"bar": nil,
 			"p":   map[string]any{},
 			"s":   []any{true},
-		}, ou
+		}, out)
+	out = alt.Decompose(sample, &opt)
+	tt.Equal(t,
+		map[string]any{
+			"a":   map[string]any{},
+			"bar": nil,
+			"p":   map[string]any{},
+			"s":   []any{true},
+		}, out)
+
+	opt.Indent = 2
+	out = alt.Decompose(&sample, &opt)
+	tt.Equal(t,
+		map[string]any{
+			"a":   map[string]any{},
+			"bar": nil,
+			"p":   map[string]any{},
+			"s":   []any{true},
+		}, out)
+}
+
+func TestDecomposeEmbedded(t *testing.T) {
+	type In struct {
+		X int
+	}
+	type Sample struct {
+		In In
+	}
+	sample := Sample{In: In{X: 3}}
+	out := alt.Decompose(&sample, &ojg.Options{CreateKey: ""})
+	tt.Equal(t, map[string]any{"in": map[string]any{"x": 3}}, out)
+}
+
+func TestDecomposeStructSimplifier(t *testing.T) {
+	type SillyWrap struct {
+		Sill silly
+		Ptr  *silly
+	}
+	sw := SillyWrap{Sill: silly{val: 3}, Ptr: &silly{val: 4}}
+	out := alt.Decompose(&sw, &ojg.Options{CreateKey: ""})
+	tt.Equal(t,
+		map[string]any{
+			"ptr":  map[string]any{"type": "silly", "val": 4},
+			"sill": map[string]any{"type": "silly", "val": 3},
+		}, out)
+
+	sw = SillyWrap{Sill: silly{val: 3}, Ptr: nil}
+	out = alt.Decompose(&sw, &ojg.Options{CreateKey: ""})
+	tt.Equal(t,
+		map[string]any{
+			"ptr":  nil,
+			"sill": map[string]any{"type": "silly", "val": 3},
+		}, out)
+}
+
+type geni struct {
+	val int
+}
+
+func (g *geni) Generic() gen.Node {
+	if g.val == 0 {
+		return nil
+	}
+	return gen.Object{"type": gen.String("geni"), "val": gen.Int(g.val)}
+}
+
+func TestDecomposeStructGenericer(t *testing.T) {
+	type GenWrap struct {
+		Gen geni
+		Ptr *geni
+	}
+	gw := GenWrap{Gen: geni{val: 3}, Ptr: &geni{val: 4}}
+	out := alt.Decompose(&gw, &ojg.Options{CreateKey: ""})
+	tt.Equal(t,
+		map[string]any{
+			"ptr": map[string]any{"type": "geni", "val": 4},
+			"gen": map[string]any{"type": "geni", "val": 3},
+		}, out)
+
+	gw = GenWrap{Gen: geni{val: 3}, Ptr: nil}
+	out = alt.Decompose(&gw, &ojg.Options{CreateKey: ""})
+	tt.Equal(t,
+		map[string]any{
+			"ptr": nil,
+			"gen": map[string]any{"type": "geni", "val": 3},
+		}, out)
+
+	gw = GenWrap{Gen: geni{val: 0}, Ptr: &geni{val: 0}}
+	out = alt.Decompose(&gw, &ojg.Options{Cr
