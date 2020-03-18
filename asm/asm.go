@@ -15,4 +15,7 @@ func init() {
 
 func asmEval(root map[string]any, at any, args ...any) any {
 	for _, a := range args {
-		at 
+		at = evalArg(root, at, a)
+	}
+	return at
+}
