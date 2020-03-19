@@ -26,4 +26,25 @@ func TestCond(t *testing.T) {
 	tt.Equal(t,
 		`{
   a: abc
-  b:
+  b: def
+  c: def
+  d: null
+  e: null
+}`, sen.String(root["asm"], &opt))
+}
+
+func TestCondArgType(t *testing.T) {
+	p := asm.NewPlan([]any{
+		[]any{"cond", 1, "x"},
+	})
+	err := p.Execute(map[string]any{})
+	tt.NotNil(t, err)
+}
+
+func TestCondArgElementCount(t *testing.T) {
+	p := asm.NewPlan([]any{
+		[]any{"cond", []any{true, 1, 2}},
+	})
+	err := p.Execute(map[string]any{})
+	tt.NotNil(t, err)
+}
