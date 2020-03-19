@@ -34,4 +34,17 @@ func TestDelallExprError(t *testing.T) {
 }
 
 func TestDelallArgCount(t *testing.T) {
-	p := as
+	p := asm.NewPlan([]any{
+		[]any{"delall"},
+	})
+	err := p.Execute(map[string]any{})
+	tt.NotNil(t, err)
+}
+
+func TestDelallArgNotExpr(t *testing.T) {
+	p := asm.NewPlan([]any{
+		[]any{"delall", 1},
+	})
+	err := p.Execute(map[string]any{})
+	tt.NotNil(t, err)
+}
