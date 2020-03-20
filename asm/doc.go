@@ -67,4 +67,50 @@ The functions available are:
 	     asm: Processes all arguments in order using the return of each as
 	          input for the next.
 
-	      at: Forms a path starting with @. The remaining 
+	      at: Forms a path starting with @. The remaining string arguments are
+	          joined with a '.' and parsed to form a jp.Expr.
+
+	   bool?: Returns true if the single required argumement is a boolean
+	          otherwise false is returned.
+
+	    cond: A conditional construct modeled after the LISP cond. All
+	          arguments must be array of two elements. The first element must
+	          evaluate to a boolean and the second can be any value. The value
+	          of the first true first argument is returned. If none match nil
+	          is returned.
+
+	     del: Deletes the first matching value in either the root ($) or
+	          local (@) data. Exactly one argument is required and it must be
+	          a path. The jp.DelOne() function is used to delete the value.
+	          The local (@) value is returned.
+
+	  delall: Deletes the all matching values in either the root ($) or
+	          local (@) data. Exactly one argument is required and it must be
+	          a path. The jp.DelOne() function is used to delete the value.
+	          The local (@) value is returned.
+
+	     dif: Returns the difference of all arguments. All arguments must be
+	          numbers. If any of the arguments are not a number an error is
+	          raised.
+
+	    each: Each .
+
+	      eq: Returns true if all the argument are equal. Aliases are eq, ==,
+	          and equal.
+
+	   equal: Returns true if all the argument are equal. Aliases are eq, ==,
+	          and equal.
+
+	   float: Converts a value into a float if possible. I no conversion is
+	          possible nil is returned.
+
+	     get: Gets the first matching value in either the root ($), local (@),
+	          or if present, the second argument. The required first argument
+	          must be a path and the option second argument is the
+	          data to apply the path to. The jp.First() function is used to
+	          get the results
+
+	  getall: Gets all matching values in either the root ($), or local (@),
+	          or if present, the second argument. The required first argument
+	          must be a path and the option second argument is the
+	          data to 
