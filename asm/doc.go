@@ -162,4 +162,50 @@ The functions available are:
 
 	     nth: Returns a nth element of an array. The second argument must be
 	          an integer that indicates the element of the array to return.
-	          If the index is less than 0 then 
+	          If the index is less than 0 then the index is from the end of
+	          the array.
+
+	   null?: Returns true if the single required argumement is null (JSON)
+	          or nil (golang) otherwise false is returned.
+
+	    num?: Returns true if the single required argumement is number
+	          otherwise false is returned.
+
+	      or: Returns true if any of the argument evaluate to true. Any
+	          arguments that do not evaluate to a boolean or null (false)
+	          raise an error.
+
+	 product: Returns the product of all arguments. All arguments must be
+	          numbers. If any of the arguments are not a number an error is
+	          raised.
+
+	   quote: Does not evaluate arguments. One argument is expected. Null is
+	          returned if no arguments are given while any arguments other
+	          than the first are ignored. An example for use would be to
+	          treats "@.x" as a string instead of as a path.
+
+	quotient: Returns the quotient of all arguments. All arguments must be
+	          numbers. If any of the arguments are not a number an error is
+	          raised. If an attempt is made to divide by zero and error will
+	          be raised.
+
+	 replace: Replace an occurrences the second argument with the third
+	          argument. All three arguments must be strings.
+
+	 reverse: Reverse the items in an array and return a copy of it.
+
+	    root: Forms a path starting with @. The remaining string arguments are
+	          joined with a '.' and parsed to form a jp.Expr.
+
+	     set: Sets a single value in either the root ($) or local (@) data. Two
+	          arguments are required, the first must be a path and the second
+	          argument is evaluate to a value and inserted using the
+	          jp.SetOne() function.
+
+	  setall: Sets multiple values in either the root ($) or local (@) data.
+	          Two arguments are required, the first must be a path and the
+	          second argument is evaluate to a value and inserted using the
+	          jp.Set() function.
+
+	    size: Returns the size or length of a string, array, or object (map).
+	          For all
