@@ -208,4 +208,50 @@ The functions available are:
 	          jp.Set() function.
 
 	    size: Returns the size or length of a string, array, or object (map).
-	          For all
+	          For all other types zero is returned
+
+	    sort: Sort the items in an array and return a copy of the array. Valid
+	          types for comparison are strings, numbers, and times. Any other
+	          type returned or a type mismatch will raise an error.
+
+	   split: Split a string on using a specified separator.
+
+	  string: Converts a value into a string.
+
+	 string?: Returns true if the single required argumement is a string
+	          otherwise false is returned.
+
+	  substr: Returns a substring of the input string. The second argument
+	          must be an integer that marks the start of the substring. The
+	          third integer argument indicates the length of the substring
+	          if provided. If the length argument is not provided the end of
+	          the substring is the end of the input string.
+
+	     sum: Returns the sum of all arguments. All arguments must be numbers
+	          or strings. If any argument is a string then the result will be
+	          a string otherwise the result will be a number. If any of the
+	          arguments are not a number or a string an error is raised.
+
+	    time: Converts the first argument to a time if possible otherwise
+	          an error is raised. The first argument can be a integer, float,
+	          or string and are converted as follows:
+	            integer < 10^10:  time in seconds since 1970-01-01 UTC
+	            integer >= 10^10: time in nanoseconds 1970-01-01 UTC
+	            decimal (float):  time in seconds 1970-01-01 UTC
+	            string:           assumed to be formated as RFC3339 unless a
+	                              format argument is provided
+
+	   time?: Returns true if the single required argumement is a time
+	          otherwise false is returned.
+
+	   title: Convert a string to capitalized string. There must be exactly
+	          one string argument.
+
+	 tolower: Convert a string to lowercase. There must be exactly one
+	          string argument.
+
+	 toupper: Convert a string to uppercase. There must be exactly one
+	          string argument.
+
+	    trim: Trim white space from both ends of a string unless a second
+	          argument provides 
