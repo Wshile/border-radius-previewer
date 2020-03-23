@@ -113,4 +113,53 @@ The functions available are:
 	  getall: Gets all matching values in either the root ($), or local (@),
 	          or if present, the second argument. The required first argument
 	          must be a path and the option second argument is the
-	          data to 
+	          data to apply the path to. The jp.Get() function is used to get
+	          the results
+
+	      gt: Returns true if each argument is greater than any subsequent
+	          argument. An alias is >.
+
+	     gte: Returns true if each argument is greater than or equal to any
+	          subsequent argument. An alias is >=.
+
+	 include: Returns true if a list first argument includes the second
+	          argument. It will also return true if the first argument is a
+	          string and the second string argument is included in the first.
+
+	 inspect: Print the arguments as JSON unless the argument is an integer.
+	          Integers are assumed to be the indentation for the arguments
+	          that follow.
+
+	     int: Converts a value into a integer if possible. I no conversion is
+	          possible nil is returned.
+
+	    join: Join an array of strings with the provided separator. If a
+	          separator is not provided as the second argument then an empty
+	          string is used.
+
+	    list: Creates a list from all the argument and return that list.
+
+	      lt: Returns true if each argument is less than any subsequent
+	          argument. An alias is <.
+
+	     lte: Returns true if each argument is less than or equal to any
+	          subsequent argument. An alias is <=.
+
+	    map?: Returns true if the single required argumement is a map
+	          otherwise false is returned.
+
+	     mod: Returns the remainer of a modulo operation on the first two
+	          argument. Both arguments must be integers and are both required.
+	          An error is raised if the wrong argument types are given.
+
+	     neq: Returns true if any the argument are not equal. An alias is !==.
+
+	    nil?: Returns true if the single required argumement is null (JSON)
+	          or nil (golang) otherwise false is returned.
+
+	     not: Returns the boolean NOT of the argument. Exactly one argument
+	          is expected and it must be a boolean.
+
+	     nth: Returns a nth element of an array. The second argument must be
+	          an integer that indicates the element of the array to return.
+	          If the index is less than 0 then 
