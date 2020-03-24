@@ -37,3 +37,27 @@ func TestEachArgCount(t *testing.T) {
 	err := p.Execute(map[string]any{})
 	tt.NotNil(t, err)
 }
+
+func TestEachArgList(t *testing.T) {
+	p := asm.NewPlan([]any{
+		[]any{"each", 1, []any{"list"}},
+	})
+	err := p.Execute(map[string]any{})
+	tt.NotNil(t, err)
+}
+
+func TestEachArgSecond(t *testing.T) {
+	p := asm.NewPlan([]any{
+		[]any{"each", []any{1, 2, 3}, true},
+	})
+	err := p.Execute(map[string]any{})
+	tt.NotNil(t, err)
+}
+
+func TestEachArgThird(t *testing.T) {
+	p := asm.NewPlan([]any{
+		[]any{"each", []any{1, 2, 3}, []any{"+"}, true},
+	})
+	err := p.Execute(map[string]any{})
+	tt.NotNil(t, err)
+}
