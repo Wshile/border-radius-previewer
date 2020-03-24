@@ -254,4 +254,12 @@ The functions available are:
 	          string argument.
 
 	    trim: Trim white space from both ends of a string unless a second
-	          argument provides 
+	          argument provides an alternative cut set.
+
+	    zone: Changes the timezone on a time to the location specified in the
+	          second argument. Raises an error if the first argument does not
+	          evaluate to a time or the location can not be determined.
+	          Location can be either a string or the number of minutes offset
+	          from UTC.
+*/
+package asm
