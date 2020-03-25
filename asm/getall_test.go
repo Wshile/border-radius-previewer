@@ -23,4 +23,49 @@ func TestGetall(t *testing.T) {
 	)
 	got, _ := root["at"].([]any)
 	sort.Slice(got, func(i, j int) bool {
-		a, _ := got[i].(in
+		a, _ := got[i].(int64)
+		b, _ := got[j].(int64)
+		return a < b
+	})
+	tt.Equal(t, "[1 2]", sen.String(got))
+
+	got, _ = root["root"].([]any)
+	sort.Slice(got, func(i, j int) bool {
+		a, _ := got[i].(int64)
+		b, _ := got[j].(int64)
+		return a < b
+	})
+	tt.Equal(t, "[1 2 3]", sen.String(got))
+
+	got, _ = root["arg"].([]any)
+	sort.Slice(got, func(i, j int) bool {
+		a, _ := got[i].(int64)
+		b, _ := got[j].(int64)
+		return a < b
+	})
+	tt.Equal(t, "[1 2]", sen.String(got))
+}
+
+func TestGetallArgCount(t *testing.T) {
+	p := asm.NewPlan([]any{
+		[]any{"getall"},
+	})
+	err := p.Execute(map[string]any{})
+	tt.NotNil(t, err)
+}
+
+func TestGetallArgNotExpr(t *testing.T) {
+	p := asm.NewPlan([]any{
+		[]any{"getall", 1},
+	})
+	err := p.Execute(map[string]any{})
+	tt.NotNil(t, err)
+}
+
+func TestGetallArgType(t *testing.T) {
+	p := asm.NewPlan([]any{
+		[]any{"getall", []any{"sum"}},
+	})
+	err := p.Execute(map[string]any{})
+	tt.NotNil(t, err)
+}
