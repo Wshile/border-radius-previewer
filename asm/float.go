@@ -34,3 +34,4 @@ func floatEval(root map[string]any, at any, args ...any) (f any) {
 		f = float64(v.UnixNano()) / 1000000000.0
 	}
 	return
+}
