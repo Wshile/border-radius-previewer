@@ -47,4 +47,11 @@ func gte(root map[string]any, at any, args ...any) any {
 					break
 				} else {
 					t0 = s
-			
+				}
+			}
+		default:
+			panic(fmt.Errorf("gte only applies to ints, floats, and strings, not %T", t0))
+		}
+	}
+	return answer
+}
