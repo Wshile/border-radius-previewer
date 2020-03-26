@@ -47,4 +47,14 @@ func TestJoinArgType2(t *testing.T) {
 	p := asm.NewPlan([]any{
 		[]any{"join", []any{}, 1},
 	})
-	err := p.Execute(map[string
+	err := p.Execute(map[string]any{})
+	tt.NotNil(t, err)
+}
+
+func TestJoinArgType3(t *testing.T) {
+	p := asm.NewPlan([]any{
+		[]any{"join", []any{"x", 3}},
+	})
+	err := p.Execute(map[string]any{})
+	tt.NotNil(t, err)
+}
