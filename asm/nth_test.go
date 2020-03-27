@@ -1,3 +1,4 @@
+
 // Copyright (c) 2021, Peter Ohler, All rights reserved.
 
 package asm_test
@@ -10,11 +11,12 @@ import (
 	"github.com/ohler55/ojg/tt"
 )
 
-func TestMod(t *testing.T) {
+func TestNth(t *testing.T) {
 	root := testPlan(t,
 		`[
-           [set $.asm.a [mod 7 3]]
-           [set $.asm.b [mod 6 3]]
+           [set $.asm.a [nth [a b c] 1]]
+           [set $.asm.b [nth [a b c] -1]]
+           [set $.asm.c [nth [a b c] 3]]
          ]`,
 		"{src: []}",
 	)
@@ -22,30 +24,31 @@ func TestMod(t *testing.T) {
 	opt.Indent = 2
 	tt.Equal(t,
 		`{
-  a: 1
-  b: 0
+  a: b
+  b: c
+  c: null
 }`, sen.String(root["asm"], &opt))
 }
 
-func TestModArgCount(t *testing.T) {
+func TestNthArgCount(t *testing.T) {
 	p := asm.NewPlan([]any{
-		[]any{"mod", 1, 2, 3},
+		[]any{"nth", []any{}, 1, 2},
 	})
 	err := p.Execute(map[string]any{})
 	tt.NotNil(t, err)
 }
 
-func TestModArgType(t *testing.T) {
+func TestNthArgType(t *testing.T) {
 	p := asm.NewPlan([]any{
-		[]any{"mod", 1, true},
+		[]any{"nth", 1, "x"},
 	})
 	err := p.Execute(map[string]any{})
 	tt.NotNil(t, err)
 }
 
-func TestModArgType2(t *testing.T) {
+func TestNthArgType2(t *testing.T) {
 	p := asm.NewPlan([]any{
-		[]any{"mod", true, 1},
+		[]any{"nth", []any{}, true},
 	})
 	err := p.Execute(map[string]any{})
 	tt.NotNil(t, err)
