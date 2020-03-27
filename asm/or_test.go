@@ -17,4 +17,33 @@ func TestOrTrue(t *testing.T) {
          ]`,
 		"{src: [true false]}",
 	)
-	tt.Equal(t, "true",
+	tt.Equal(t, "true", sen.String(root["asm"]))
+}
+
+func TestOrFalse(t *testing.T) {
+	root := testPlan(t,
+		`[
+           [set $.asm [or false "$.src[1]" false]]
+         ]`,
+		"{src: [true false]}",
+	)
+	tt.Equal(t, "false", sen.String(root["asm"]))
+}
+
+func TestOrNull(t *testing.T) {
+	root := testPlan(t,
+		`[
+           [set $.asm [or "$.src[2]"]]
+         ]`,
+		"{src: [true false]}",
+	)
+	tt.Equal(t, "false", sen.String(root["asm"]))
+}
+
+func TestOrNotBool(t *testing.T) {
+	p := asm.NewPlan([]any{
+		[]any{"or", 1, 2},
+	})
+	err := p.Execute(map[string]any{})
+	tt.NotNil(t, err)
+}
