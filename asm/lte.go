@@ -17,3 +17,41 @@ subsequent argument. An alias is <=.`,
 		Eval: lte,
 		Desc: `Returns true if each argument is less than or equal to any
 subsequent argument. An alias is lte.`,
+	})
+}
+
+func lte(root map[string]any, at any, args ...any) any {
+	answer := true
+	if 0 < len(args) {
+		switch t0 := args[0].(type) {
+		case float32, float64, int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64:
+			f0, _ := asFloat(t0)
+			for _, arg := range args[1:] {
+				v := evalArg(root, at, arg)
+				f, ok := asFloat(v)
+				if !ok {
+					panic(fmt.Errorf("lte of a number must be another number, not %T", v))
+				}
+				if f0 > f {
+					answer = false
+					break
+				} else {
+					f0 = f
+				}
+			}
+		case string:
+			for _, arg := range args[1:] {
+				v := evalArg(root, at, arg)
+				if s, _ := v.(string); t0 > s {
+					answer = false
+					break
+				} else {
+					t0 = s
+				}
+			}
+		default:
+			panic(fmt.Errorf("lte only applies to ints, floats, and strings, not %T", t0))
+		}
+	}
+	return answer
+}
