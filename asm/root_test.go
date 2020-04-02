@@ -1,3 +1,4 @@
+
 // Copyright (c) 2021, Peter Ohler, All rights reserved.
 
 package asm_test
@@ -10,28 +11,27 @@ import (
 	"github.com/ohler55/ojg/tt"
 )
 
-func TestReverse(t *testing.T) {
+func TestRoot(t *testing.T) {
 	root := testPlan(t,
 		`[
-           [set $.asm.a [reverse [a b c]]]
-           [set $.asm.b [reverse [1 b 3]]]
+           [set $.asm [get [root src x]]]
          ]`,
-		"{src: []}",
+		"{src: {x:3}}",
 	)
-	tt.Equal(t, `{a:[c b a] b:[3 b 1]}`, sen.String(root["asm"], &sopt))
+	tt.Equal(t, `3`, sen.String(root["asm"], &sopt))
 }
 
-func TestReverseArgCount(t *testing.T) {
+func TestRootArgNotString(t *testing.T) {
 	p := asm.NewPlan([]any{
-		[]any{"reverse", []any{}, 1},
+		[]any{"root", 1},
 	})
 	err := p.Execute(map[string]any{})
 	tt.NotNil(t, err)
 }
 
-func TestReverseArgType(t *testing.T) {
+func TestRootArgParseError(t *testing.T) {
 	p := asm.NewPlan([]any{
-		[]any{"reverse", 1},
+		[]any{"root", "[[["},
 	})
 	err := p.Execute(map[string]any{})
 	tt.NotNil(t, err)
