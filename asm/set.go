@@ -47,3 +47,4 @@ func set(root map[string]any, at any, args ...any) any {
 		panic(err)
 	}
 	return at
+}
