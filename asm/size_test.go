@@ -54,4 +54,6 @@ func TestSizeArgCount(t *testing.T) {
 	p := asm.NewPlan([]any{
 		[]any{"size", 1, 2},
 	})
-	err := p.Execute(map[string]a
+	err := p.Execute(map[string]any{})
+	tt.NotNil(t, err)
+}
