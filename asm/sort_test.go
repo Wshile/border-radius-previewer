@@ -92,3 +92,8 @@ func TestSortMixedTime(t *testing.T) {
 
 func TestSortWrongType(t *testing.T) {
 	p := asm.NewPlan([]any{
+		[]any{"sort", []any{true, false}, "@"},
+	})
+	err := p.Execute(map[string]any{})
+	tt.NotNil(t, err)
+}
