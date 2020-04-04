@@ -33,4 +33,26 @@ func TestSetallExprError(t *testing.T) {
 	tt.NotNil(t, err)
 }
 
-func TestSe
+func TestSetallArgCount(t *testing.T) {
+	p := asm.NewPlan([]any{
+		[]any{"setall", "@.x"},
+	})
+	err := p.Execute(map[string]any{})
+	tt.NotNil(t, err)
+}
+
+func TestSetallArgNotExpr(t *testing.T) {
+	p := asm.NewPlan([]any{
+		[]any{"setall", 1, 2},
+	})
+	err := p.Execute(map[string]any{})
+	tt.NotNil(t, err)
+}
+
+func TestSetallArgType(t *testing.T) {
+	p := asm.NewPlan([]any{
+		[]any{"setall", []any{"sum"}, 1},
+	})
+	err := p.Execute(map[string]any{})
+	tt.NotNil(t, err)
+}
