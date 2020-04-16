@@ -38,4 +38,56 @@ func sum(root map[string]any, at any, args ...any) any {
 	var fsum float64
 	for i, arg := range args {
 		switch v := evalArg(root, at, arg).(type) {
-		case int, int8, int16, int32, int64, uint, uint8, u
+		case int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64:
+			ii, _ := asInt(v)
+			if i == 0 {
+				kind = intSum
+			}
+			switch kind {
+			case intSum:
+				isum += ii
+			case floatSum:
+				fsum += float64(ii)
+			case strSum:
+				ssum = fmt.Sprintf("%s%d", ssum, ii)
+			}
+		case float32, float64:
+			if i == 0 {
+				kind = floatSum
+			}
+			f, _ := asFloat(v)
+			switch kind {
+			case intSum:
+				kind = floatSum
+				fsum = float64(isum) + f
+			case floatSum:
+				fsum += f
+			case strSum:
+				ssum = fmt.Sprintf("%s%g", ssum, f)
+			}
+		case string:
+			if i == 0 {
+				kind = strSum
+			}
+			switch kind {
+			case intSum:
+				kind = strSum
+				ssum = fmt.Sprintf("%d%s", isum, v)
+			case floatSum:
+				kind = strSum
+				ssum = fmt.Sprintf("%g%s", fsum, v)
+			case strSum:
+				ssum += v
+			}
+		default:
+			panic(fmt.Errorf("a %T argument can not be summed", v))
+		}
+	}
+	switch kind {
+	case intSum:
+		return isum
+	case floatSum:
+		return fsum
+	}
+	return ssum
+}
