@@ -1,3 +1,4 @@
+
 // Copyright (c) 2021, Peter Ohler, All rights reserved.
 
 package asm_test
@@ -10,11 +11,11 @@ import (
 	"github.com/ohler55/ojg/tt"
 )
 
-func TestTolower(t *testing.T) {
+func TestToupper(t *testing.T) {
 	root := testPlan(t,
 		`[
-           [set $.asm.a [tolower low]]
-           [set $.asm.b [tolower UP]]
+           [set $.asm.a [toupper low]]
+           [set $.asm.b [toupper UP]]
          ]`,
 		"{src: []}",
 	)
@@ -22,22 +23,22 @@ func TestTolower(t *testing.T) {
 	opt.Indent = 2
 	tt.Equal(t,
 		`{
-  a: low
-  b: up
+  a: LOW
+  b: UP
 }`, sen.String(root["asm"], &opt))
 }
 
-func TestTolowerArgCount(t *testing.T) {
+func TestToupperArgCount(t *testing.T) {
 	p := asm.NewPlan([]any{
-		[]any{"tolower", "x", "y"},
+		[]any{"toupper", "x", "y"},
 	})
 	err := p.Execute(map[string]any{})
 	tt.NotNil(t, err)
 }
 
-func TestTolowerArgType(t *testing.T) {
+func TestToupperArgType(t *testing.T) {
 	p := asm.NewPlan([]any{
-		[]any{"tolower", 1},
+		[]any{"toupper", 1},
 	})
 	err := p.Execute(map[string]any{})
 	tt.NotNil(t, err)
