@@ -1,0 +1,38 @@
+// Copyright (c) 2021, Peter Ohler, All rights reserved.
+
+package asm_test
+
+import (
+	"testing"
+
+	"github.com/ohler55/ojg/asm"
+	"github.com/ohler55/ojg/sen"
+	"github.com/ohler55/ojg/tt"
+)
+
+func TestTolower(t *testing.T) {
+	root := testPlan(t,
+		`[
+           [set $.asm.a [tolower low]]
+           [set $.asm.b [tolower UP]]
+         ]`,
+		"{src: []}",
+	)
+	opt := sopt
+	opt.Indent = 2
+	tt.Equal(t,
+		`{
+  a: low
+  b: up
+}`, sen.String(root["asm"], &opt))
+}
+
+func TestTolowerArgCount(t *testing.T) {
+	p := asm.NewPlan([]any{
+		[]any{"tolower", "x", "y"},
+	})
+	err := p.Execute(map[string]any{})
+	tt.NotNil(t, err)
+}
+
+func TestTolowerArgType(t *te
