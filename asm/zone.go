@@ -19,4 +19,29 @@ from UTC.`,
 	})
 }
 
-func zone
+func zone(root map[string]any, at any, args ...any) any {
+	if len(args) != 2 {
+		panic(fmt.Errorf("zone expects exactly two arguments. %d given", len(args)))
+	}
+	v := evalArg(root, at, args[0])
+	t, ok := v.(time.Time)
+	if !ok {
+		panic(fmt.Errorf("zone requires a time argument, not a %T", v))
+	}
+	var loc *time.Location
+	switch v := evalArg(root, at, args[1]).(type) {
+	case string:
+		var err error
+		if loc, err = time.LoadLocation(v); err != nil {
+			loc = time.FixedZone(v, 0)
+		}
+	case int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64:
+		i, _ := asInt(v)
+		loc = time.FixedZone("", int(i))
+	default:
+		panic(fmt.Errorf("zone location must be a string or number, not a %T", v))
+	}
+	t = t.In(loc)
+
+	return t
+}
