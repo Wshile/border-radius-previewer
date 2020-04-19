@@ -57,4 +57,5 @@ func TestZoneNotLoc(t *testing.T) {
 		[]any{"zone", time.Now(), true},
 	})
 	err := p.Execute(map[string]any{})
-	tt.N
+	tt.NotNil(t, err)
+}
