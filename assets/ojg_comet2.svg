@@ -1,3 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xl="http://www.w3.org/1999/xlink" version="1.1" xmlns:dc="http://purl.org/dc/elemen
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xl="http://www.w3.org/1999/xlink" version="1.1" xmlns:dc="http://purl.org/dc/elements/1.1/" viewBox="297.07107 285.10808 388.92893 281.82085" width="388.92893" height="281.82085">
+  <defs/>
+  <metadata> Produced by OmniGraffle 7.17.4\n2020-04-14 01:10:41 +0000</metadata>
+  <g id="Canvas_1" fill-opacity="1" stroke="none" stroke-dasharray="none" stroke-opacity="1" fill="none">
+    <title>Canvas 1</title>
+    <g id="Canvas_1_Layer_1">
+      <title>Layer 1</title>
+      <g id="Group_22">
+        <g id="Graphic_15">
+          <path d="M 386.42893 435.07106 L 320.57106 500.92893 C 316.6658 504.8342 310.33416 504.8342 306.42892 500.92893 L 306.42892 500.92893 C 302.52368 497.0237 302.52368 490.69204 306.42892 486.7868 L 372.2868 420.9289 C 376.19204 417.0237 382.5237 417.0237 386.42893 420.9289 L 386.42893 420.9289 C 390.33418 424.83416 390.33418 431.1658 386.42893 435.07106 Z" fill="#ff2600"/>
+        </g>
+        <g id="Graphic_2">
+          <title>Adjustable Arc</title>
+          <path d="M 624 400 L 671.2708 408.3351 C 666.6674 434.44204 641.7718 451.87413 615.6649 447.27077 C 589.55796 442.6674 572.1259 417.7718 576.7292 391.6649 C 581.3326 365.55796 606.2282 348.12587 632.3351 352.72923 C 639.2378 353.94635 645.7901 356.66042 651.5317 360.6807 L 624 400 Z" fill="white"/>
+          <path d="M 624 400 L 671.2708 408.3351 C 666.6674 434.44204 641.7718 451.87413 615.6649 447.27077 C 589.55796 442.6674 572.1259 417.7718 576.7292 391.6649 C 581.3326 365.55796 606.2282 348.12587 632.3351 352.72923 C 639.2378 353.94635 645.7901 356.66042 651.5317 360.6807 L 624 400 Z" stroke="#ff2600" stroke-linecap="round" stroke-linejoin="round" stroke-width="20"/>
+        </g>
+        <g id="Graphic_7">
+          <circle cx="464" cy="400" r="48.000076699291" stroke="#ff2600" stroke-linecap="round" stroke-linejoin="round" stroke-width="20"/>
+        </g>
+        <g id="Graphic_8">
+          <path d="M 544 379 L 544 379 C 549.52285 379 554 383.47715 554 389 L 554 433 C 554 438.52285 549.52285 443 544 443 L 544 443 C 538.47715 443 534 438.52285 534 433 L 534 389 C 534 383.47715 538.47715 379 544 379 Z" fill="#00a0ff"/>
+        </g>
+    
