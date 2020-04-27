@@ -52,4 +52,36 @@ func genParseReaderReuse(b *testing.B) {
 	p := gen.Parser{Reuse: true}
 	f, err := os.Open(filename)
 	if err != nil {
-		log.Fatalf("Failed 
+		log.Fatalf("Failed to read %s. %s\n", filename, err)
+	}
+	defer func() { _ = f.Close() }()
+	for n := 0; n < b.N; n++ {
+		_, _ = f.Seek(0, 0)
+		if _, err = p.ParseReader(f); err != nil {
+			panic(err)
+		}
+	}
+}
+
+func genParseChan(b *testing.B) {
+	sample, _ := ioutil.ReadFile(filename)
+	rc := make(chan gen.Node, b.N)
+	ready := make(chan bool)
+	go func() {
+		ready <- true
+		for {
+			if v := <-rc; v == nil {
+				break
+			}
+		}
+	}()
+	<-ready
+	b.ResetTimer()
+	var p gen.Parser
+	for n := 0; n < b.N; n++ {
+		if _, err := p.Parse(sample, rc); err != nil {
+			panic(err)
+		}
+	}
+	rc <- nil
+}
