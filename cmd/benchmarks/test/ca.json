@@ -1,0 +1,104 @@
+[
+  {
+    "city": "Toronto",
+    "admin": "Ontario",
+    "population_proper": 3934421,
+    "capital": "admin",
+    "lat": 43.666667,
+    "lng": -79.416667,
+    "population": 5213000
+  },
+  {
+    "city": "Montr\u00e9al",
+    "admin": "Qu\u00e9bec",
+    "population_proper": 2356556,
+    "capital": null,
+    "lat": 45.5,
+    "lng": -73.583333,
+    "population": 3678000
+  },
+  {
+    "city": "Vancouver",
+    "admin": "British Columbia",
+    "population_proper": 603502,
+    "capital": null,
+    "lat": 49.25,
+    "lng": -123.133333,
+    "population": 2313328
+  },
+  {
+    "city": "Ottawa",
+    "admin": "Ontario",
+    "population_proper": 812129,
+    "capital": "primary",
+    "lat": 45.416667,
+    "lng": -75.7,
+    "population": 1145000
+  },
+  {
+    "city": "Calgary",
+    "admin": "Alberta",
+    "population_proper": 915322,
+    "capital": null,
+    "lat": 51.083333,
+    "lng": -114.083333,
+    "population": 1110000
+  },
+  {
+    "city": "Edmonton",
+    "admin": "Alberta",
+    "population_proper": 712391,
+    "capital": "admin",
+    "lat": 53.55,
+    "lng": -113.5,
+    "population": 1058000
+  },
+  {
+    "city": "Hamilton",
+    "admin": "Ontario",
+    "population_proper": 519949,
+    "capital": null,
+    "lat": 43.256101,
+    "lng": -79.857484,
+    "population": 721053
+  },
+  {
+    "city": "Winnipeg",
+    "admin": "Manitoba",
+    "population_proper": 575313,
+    "capital": "admin",
+    "lat": 49.883333,
+    "lng": -97.166667,
+    "population": 632063
+  },
+  {
+    "city": "Qu\u00e9bec",
+    "admin": "Qu\u00e9bec",
+    "population_proper": 528595,
+    "capital": "admin",
+    "lat": 46.8,
+    "lng": -71.25,
+    "population": 624177
+  },
+  {
+    "city": "Oshawa",
+    "admin": "Ontario",
+    "population_proper": 247989,
+    "capital": null,
+    "lat": 43.9,
+    "lng": -78.866667,
+    "population": 450963
+  },
+  {
+    "city": "Kitchener",
+    "admin": "Ontario",
+    "population_proper": 409112,
+    "capital": null,
+    "lat": 43.446976,
+    "lng": -80.472484,
+    "population": 417001
+  },
+  {
+    "city": "Halifax",
+    "admin": "Nova Scotia",
+    "p

@@ -111,3 +111,87 @@ func senUnmarshalPatient(b *testing.B) {
 	p := sen.Parser{Reuse: true}
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
+		var out Patient
+		if err := p.Unmarshal(sample, &out); err != nil {
+			panic(err)
+		}
+	}
+}
+
+func senUnmarshalCatalog(b *testing.B) {
+	sample, _ := ioutil.ReadFile(catFilename)
+	p := sen.Parser{Reuse: true}
+	b.ResetTimer()
+	for n := 0; n < b.N; n++ {
+		var out Catalog
+		if err := p.Unmarshal(sample, &out); err != nil {
+			panic(err)
+		}
+	}
+}
+
+func senParseChan(b *testing.B) {
+	j, _ := ioutil.ReadFile(filename)
+	var sample []byte
+	if data, err := (&oj.Parser{}).Parse(j); err == nil {
+		sample = []byte(sen.String(data, &sen.Options{Indent: 2}))
+	} else {
+		panic(err)
+	}
+	rc := make(chan any, b.N)
+	ready := make(chan bool)
+	go func() {
+		ready <- true
+		for {
+			if v := <-rc; v == nil {
+				break
+			}
+		}
+	}()
+	<-ready
+	b.ResetTimer()
+	var p sen.Parser
+	for n := 0; n < b.N; n++ {
+		if _, err := p.Parse(sample, rc); err != nil {
+			panic(err)
+		}
+	}
+	rc <- nil
+}
+
+func senSEN(b *testing.B) {
+	data := loadSample()
+	wr := sen.Writer{Options: ojg.Options{OmitNil: true}}
+	b.ResetTimer()
+	for n := 0; n < b.N; n++ {
+		_ = wr.MustSEN(data)
+	}
+}
+
+func senSENIndent(b *testing.B) {
+	data := loadSample()
+	b.ResetTimer()
+	wr := sen.Writer{Options: ojg.Options{OmitNil: true, Indent: 2}}
+	for n := 0; n < b.N; n++ {
+		_ = wr.MustSEN(data)
+	}
+}
+
+func senSENSort(b *testing.B) {
+	data := loadSample()
+	wr := sen.Writer{Options: ojg.Options{OmitNil: true, Indent: 2, Sort: true}}
+	b.ResetTimer()
+	for n := 0; n < b.N; n++ {
+		_ = wr.MustSEN(data)
+	}
+}
+
+func senWriteIndent(b *testing.B) {
+	data := loadSample()
+	var w noWriter
+	b.ResetTimer()
+	wr := sen.Writer{Options: ojg.Options{OmitNil: true, Indent: 2}}
+	for n := 0; n < b.N; n++ {
+		wr.MustWrite(w, data)
+	}
+}
