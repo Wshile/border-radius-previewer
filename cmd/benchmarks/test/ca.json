@@ -101,4 +101,104 @@
   {
     "city": "Halifax",
     "admin": "Nova Scotia",
-    "p
+    "population_proper": 222874,
+    "capital": "admin",
+    "lat": 44.65,
+    "lng": -63.6,
+    "population": 359111
+  },
+  {
+    "city": "London",
+    "admin": "Ontario",
+    "population_proper": 335035,
+    "capital": null,
+    "lat": 42.983333,
+    "lng": -81.25,
+    "population": 346765
+  },
+  {
+    "city": "Windsor",
+    "admin": "Ontario",
+    "population_proper": 210891,
+    "capital": null,
+    "lat": 42.301649,
+    "lng": -83.030744,
+    "population": 319246
+  },
+  {
+    "city": "Victoria",
+    "admin": "British Columbia",
+    "population_proper": 251358,
+    "capital": "admin",
+    "lat": 48.450234,
+    "lng": -123.343529,
+    "population": 289625
+  },
+  {
+    "city": "Saskatoon",
+    "admin": "Saskatchewan",
+    "population_proper": 189193,
+    "capital": null,
+    "lat": 52.133333,
+    "lng": -106.666667,
+    "population": 198958
+  },
+  {
+    "city": "Barrie",
+    "admin": "Ontario",
+    "population_proper": 119732,
+    "capital": null,
+    "lat": 44.383333,
+    "lng": -79.7,
+    "population": 182041
+  },
+  {
+    "city": "Regina",
+    "admin": "Saskatchewan",
+    "population_proper": 176183,
+    "capital": "admin",
+    "lat": 50.45,
+    "lng": -104.616667,
+    "population": 176183
+  },
+  {
+    "city": "Sudbury",
+    "admin": "Ontario",
+    "population_proper": 80507,
+    "capital": null,
+    "lat": 46.5,
+    "lng": -80.966667,
+    "population": 157857
+  },
+  {
+    "city": "Abbotsford",
+    "admin": "British Columbia",
+    "population_proper": 151683,
+    "capital": null,
+    "lat": 49.05,
+    "lng": -122.3,
+    "population": 151683
+  },
+  {
+    "city": "Sarnia",
+    "admin": "Ontario",
+    "population_proper": 82998,
+    "capital": null,
+    "lat": 42.978417,
+    "lng": -82.388177,
+    "population": 144172
+  },
+  {
+    "city": "Sherbrooke",
+    "admin": "Qu\u00e9bec",
+    "population_proper": 129447,
+    "capital": null,
+    "lat": 45.4,
+    "lng": -71.9,
+    "population": 139652
+  },
+  {
+    "city": "Saint John\u2019s",
+    "admin": "Newfoundland and Labrador",
+    "population_proper": 99182,
+   
