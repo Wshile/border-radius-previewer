@@ -201,4 +201,112 @@
     "city": "Saint John\u2019s",
     "admin": "Newfoundland and Labrador",
     "population_proper": 99182,
-   
+    "capital": "admin",
+    "lat": 47.55,
+    "lng": -52.666667,
+    "population": 131469
+  },
+  {
+    "city": "Kelowna",
+    "admin": "British Columbia",
+    "population_proper": 95306,
+    "capital": null,
+    "lat": 49.9,
+    "lng": -119.483333,
+    "population": 125109
+  },
+  {
+    "city": "Trois-Rivi\u00e8res",
+    "admin": "Qu\u00e9bec",
+    "population_proper": 116409,
+    "capital": null,
+    "lat": 46.35,
+    "lng": -72.55,
+    "population": 119693
+  },
+  {
+    "city": "Kingston",
+    "admin": "Ontario",
+    "population_proper": 102400,
+    "capital": null,
+    "lat": 44.3,
+    "lng": -76.566667,
+    "population": 114195
+  },
+  {
+    "city": "Thunder Bay",
+    "admin": "Ontario",
+    "population_proper": 97374,
+    "capital": null,
+    "lat": 48.4,
+    "lng": -89.233333,
+    "population": 99334
+  },
+  {
+    "city": "Moncton",
+    "admin": "New Brunswick",
+    "population_proper": 87467,
+    "capital": null,
+    "lat": 46.09652,
+    "lng": -64.79757,
+    "population": 90635
+  },
+  {
+    "city": "Saint John",
+    "admin": "New Brunswick",
+    "population_proper": 54449,
+    "capital": null,
+    "lat": 45.230798,
+    "lng": -66.095316,
+    "population": 87857
+  },
+  {
+    "city": "Nanaimo",
+    "admin": "British Columbia",
+    "population_proper": 80491,
+    "capital": null,
+    "lat": 49.15,
+    "lng": -123.916667,
+    "population": 84905
+  },
+  {
+    "city": "Peterborough",
+    "admin": "Ontario",
+    "population_proper": 75877,
+    "capital": null,
+    "lat": 44.3,
+    "lng": -78.333333,
+    "population": 83627
+  },
+  {
+    "city": "Saint-J\u00e9r\u00f4me",
+    "admin": "Qu\u00e9bec",
+    "population_proper": 54948,
+    "capital": null,
+    "lat": 45.766667,
+    "lng": -74.0,
+    "population": 78439
+  },
+  {
+    "city": "Red Deer",
+    "admin": "Alberta",
+    "population_proper": 73593,
+    "capital": null,
+    "lat": 52.266667,
+    "lng": -113.8,
+    "population": 74857
+  },
+  {
+    "city": "Lethbridge",
+    "admin": "Alberta",
+    "population_proper": 58571,
+    "capital": null,
+    "lat": 49.7,
+    "lng": -112.833333,
+    "population": 70617
+  },
+  {
+    "city": "Kamloops",
+    "admin": "British Columbia",
+    "population_proper": 68628,
+    "capital"
