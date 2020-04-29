@@ -410,4 +410,111 @@
     "population_proper": 43990,
     "capital": null,
     "lat": 44.166667,
-    "lng": -77
+    "lng": -77.383333,
+    "population": 43990
+  },
+  {
+    "city": "Charlottetown",
+    "admin": "Prince Edward Island",
+    "population_proper": 31293,
+    "capital": "admin",
+    "lat": 46.238225,
+    "lng": -63.139481,
+    "population": 42402
+  },
+  {
+    "city": "Victoriaville",
+    "admin": "Qu\u00e9bec",
+    "population_proper": 34426,
+    "capital": null,
+    "lat": 46.063106,
+    "lng": -71.958802,
+    "population": 41500
+  },
+  {
+    "city": "Grande Prairie",
+    "admin": "Alberta",
+    "population_proper": 40845,
+    "capital": null,
+    "lat": 55.166667,
+    "lng": -118.8,
+    "population": 41462
+  },
+  {
+    "city": "Penticton",
+    "admin": "British Columbia",
+    "population_proper": 30349,
+    "capital": null,
+    "lat": 49.5,
+    "lng": -119.583333,
+    "population": 37721
+  },
+  {
+    "city": "Sydney",
+    "admin": "Nova Scotia",
+    "population_proper": 37538,
+    "capital": null,
+    "lat": 46.15,
+    "lng": -60.166667,
+    "population": 37538
+  },
+  {
+    "city": "Orillia",
+    "admin": "Ontario",
+    "population_proper": 30178,
+    "capital": null,
+    "lat": 44.6,
+    "lng": -79.416667,
+    "population": 37483
+  },
+  {
+    "city": "Rimouski",
+    "admin": "Qu\u00e9bec",
+    "population_proper": 35584,
+    "capital": null,
+    "lat": 48.433333,
+    "lng": -68.516667,
+    "population": 35584
+  },
+  {
+    "city": "Timmins",
+    "admin": "Ontario",
+    "population_proper": 32901,
+    "capital": null,
+    "lat": 48.466667,
+    "lng": -81.333333,
+    "population": 34974
+  },
+  {
+    "city": "Prince Albert",
+    "admin": "Saskatchewan",
+    "population_proper": 24678,
+    "capital": null,
+    "lat": 53.2,
+    "lng": -105.75,
+    "population": 34609
+  },
+  {
+    "city": "Campbell River",
+    "admin": "British Columbia",
+    "population_proper": 26453,
+    "capital": null,
+    "lat": 50.016667,
+    "lng": -125.25,
+    "population": 33430
+  },
+  {
+    "city": "Courtenay",
+    "admin": "British Columbia",
+    "population_proper": 25099,
+    "capital": null,
+    "lat": 49.683333,
+    "lng": -125.0,
+    "population": 32793
+  },
+  {
+    "city": "Orangeville",
+    "admin": "Ontario",
+    "population_proper": 28984,
+    "capital": null,
+    "lat"
