@@ -309,4 +309,105 @@
     "city": "Kamloops",
     "admin": "British Columbia",
     "population_proper": 68628,
-    "capital"
+    "capital": null,
+    "lat": 50.666667,
+    "lng": -120.333333,
+    "population": 68714
+  },
+  {
+    "city": "Prince George",
+    "admin": "British Columbia",
+    "population_proper": 62707,
+    "capital": null,
+    "lat": 53.916667,
+    "lng": -122.766667,
+    "population": 65558
+  },
+  {
+    "city": "Medicine Hat",
+    "admin": "Alberta",
+    "population_proper": 53626,
+    "capital": null,
+    "lat": 50.033333,
+    "lng": -110.683333,
+    "population": 63138
+  },
+  {
+    "city": "Drummondville",
+    "admin": "Qu\u00e9bec",
+    "population_proper": 54123,
+    "capital": null,
+    "lat": 45.883333,
+    "lng": -72.483333,
+    "population": 59489
+  },
+  {
+    "city": "Chicoutimi",
+    "admin": "Qu\u00e9bec",
+    "population_proper": 53940,
+    "capital": null,
+    "lat": 48.45,
+    "lng": -71.066667,
+    "population": 53940
+  },
+  {
+    "city": "Fredericton",
+    "admin": "New Brunswick",
+    "population_proper": 36713,
+    "capital": "admin",
+    "lat": 45.910648,
+    "lng": -66.658649,
+    "population": 52337
+  },
+  {
+    "city": "Chilliwack",
+    "admin": "British Columbia",
+    "population_proper": 51942,
+    "capital": null,
+    "lat": 49.166667,
+    "lng": -121.95,
+    "population": 51942
+  },
+  {
+    "city": "North Bay",
+    "admin": "Ontario",
+    "population_proper": 41807,
+    "capital": null,
+    "lat": 46.3,
+    "lng": -79.45,
+    "population": 50170
+  },
+  {
+    "city": "Shawinigan-Sud",
+    "admin": "Qu\u00e9bec",
+    "population_proper": 34342,
+    "capital": null,
+    "lat": 46.528557,
+    "lng": -72.751453,
+    "population": 49161
+  },
+  {
+    "city": "Cornwall",
+    "admin": "Ontario",
+    "population_proper": 46382,
+    "capital": null,
+    "lat": 45.016667,
+    "lng": -74.733333,
+    "population": 48821
+  },
+  {
+    "city": "Joliette",
+    "admin": "Qu\u00e9bec",
+    "population_proper": 34772,
+    "capital": null,
+    "lat": 46.034,
+    "lng": -73.441,
+    "population": 45361
+  },
+  {
+    "city": "Belleville",
+    "admin": "Ontario",
+    "population_proper": 43990,
+    "capital": null,
+    "lat": 44.166667,
+    "lng": -77
