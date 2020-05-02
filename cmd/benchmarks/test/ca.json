@@ -725,4 +725,117 @@
     "population_proper": 14703,
     "capital": null,
     "lat": 50.283333,
-    "lng": -1
+    "lng": -107.766667,
+    "population": 14906
+  },
+  {
+    "city": "Prince Rupert",
+    "admin": "British Columbia",
+    "population_proper": 14708,
+    "capital": null,
+    "lat": 54.316667,
+    "lng": -130.333333,
+    "population": 14708
+  },
+  {
+    "city": "Williams Lake",
+    "admin": "British Columbia",
+    "population_proper": 10554,
+    "capital": null,
+    "lat": 52.116667,
+    "lng": -122.15,
+    "population": 14168
+  },
+  {
+    "city": "Brooks",
+    "admin": "Alberta",
+    "population_proper": 12744,
+    "capital": null,
+    "lat": 50.566667,
+    "lng": -111.9,
+    "population": 14163
+  },
+  {
+    "city": "Quesnel",
+    "admin": "British Columbia",
+    "population_proper": 13788,
+    "capital": null,
+    "lat": 52.983333,
+    "lng": -122.483333,
+    "population": 13788
+  },
+  {
+    "city": "Thompson",
+    "admin": "Manitoba",
+    "population_proper": 12467,
+    "capital": null,
+    "lat": 55.75,
+    "lng": -97.866667,
+    "population": 13727
+  },
+  {
+    "city": "Dolbeau",
+    "admin": "Qu\u00e9bec",
+    "population_proper": 12916,
+    "capital": null,
+    "lat": 48.866667,
+    "lng": -72.233333,
+    "population": 13337
+  },
+  {
+    "city": "Powell River",
+    "admin": "British Columbia",
+    "population_proper": 3220,
+    "capital": null,
+    "lat": 49.883333,
+    "lng": -124.55,
+    "population": 12779
+  },
+  {
+    "city": "Wetaskiwin",
+    "admin": "Alberta",
+    "population_proper": 11302,
+    "capital": null,
+    "lat": 52.966667,
+    "lng": -113.383333,
+    "population": 11823
+  },
+  {
+    "city": "Nelson",
+    "admin": "British Columbia",
+    "population_proper": 9813,
+    "capital": null,
+    "lat": 49.483333,
+    "lng": -117.283333,
+    "population": 11779
+  },
+  {
+    "city": "Mont-Laurier",
+    "admin": "Qu\u00e9bec",
+    "population_proper": 11642,
+    "capital": null,
+    "lat": 46.55,
+    "lng": -75.5,
+    "population": 11642
+  },
+  {
+    "city": "Kenora",
+    "admin": "Ontario",
+    "population_proper": 10852,
+    "capital": null,
+    "lat": 49.766667,
+    "lng": -94.466667,
+    "population": 10852
+  },
+  {
+    "city": "Dawson Creek",
+    "admin": "British Columbia",
+    "population_proper": 10551,
+    "capital": null,
+    "lat": 55.766667,
+    "lng": -120.233333,
+    "population": 10802
+  },
+  {
+    "city": "Amos",
+    "admin": "Qu\u00e9bec"
