@@ -623,4 +623,106 @@
   {
     "city": "New Glasgow",
     "admin": "Nova Scotia",
-    "population_proper": 1
+    "population_proper": 19445,
+    "capital": null,
+    "lat": 45.583333,
+    "lng": -62.633333,
+    "population": 20322
+  },
+  {
+    "city": "Terrace",
+    "admin": "British Columbia",
+    "population_proper": 10101,
+    "capital": null,
+    "lat": 54.5,
+    "lng": -128.583333,
+    "population": 19443
+  },
+  {
+    "city": "North Battleford",
+    "admin": "Saskatchewan",
+    "population_proper": 12003,
+    "capital": null,
+    "lat": 52.766667,
+    "lng": -108.283333,
+    "population": 19440
+  },
+  {
+    "city": "Yellowknife",
+    "admin": "Northwest Territories",
+    "population_proper": 18083,
+    "capital": "admin",
+    "lat": 62.45,
+    "lng": -114.35,
+    "population": 19234
+  },
+  {
+    "city": "Fort Saint John",
+    "admin": "British Columbia",
+    "population_proper": 17402,
+    "capital": null,
+    "lat": 56.25,
+    "lng": -120.833333,
+    "population": 18776
+  },
+  {
+    "city": "Cranbrook",
+    "admin": "British Columbia",
+    "population_proper": 17370,
+    "capital": null,
+    "lat": 49.516667,
+    "lng": -115.766667,
+    "population": 18610
+  },
+  {
+    "city": "Edmundston",
+    "admin": "New Brunswick",
+    "population_proper": 17894,
+    "capital": null,
+    "lat": 47.36226,
+    "lng": -68.327874,
+    "population": 17894
+  },
+  {
+    "city": "Rivi\u00e8re-du-Loup",
+    "admin": "Qu\u00e9bec",
+    "population_proper": 16403,
+    "capital": null,
+    "lat": 47.833333,
+    "lng": -69.533333,
+    "population": 16403
+  },
+  {
+    "city": "Camrose",
+    "admin": "Alberta",
+    "population_proper": 15686,
+    "capital": null,
+    "lat": 53.016667,
+    "lng": -112.816667,
+    "population": 15808
+  },
+  {
+    "city": "Pembroke",
+    "admin": "Ontario",
+    "population_proper": 15551,
+    "capital": null,
+    "lat": 45.816667,
+    "lng": -77.116667,
+    "population": 15551
+  },
+  {
+    "city": "Yorkton",
+    "admin": "Saskatchewan",
+    "population_proper": 13583,
+    "capital": null,
+    "lat": 51.216667,
+    "lng": -102.466667,
+    "population": 15172
+  },
+  {
+    "city": "Swift Current",
+    "admin": "Saskatchewan",
+    "population_proper": 14703,
+    "capital": null,
+    "lat": 50.283333,
+    "lng": -1
