@@ -517,4 +517,110 @@
     "admin": "Ontario",
     "population_proper": 28984,
     "capital": null,
-    "lat"
+    "lat": 43.916366,
+    "lng": -80.096671,
+    "population": 32640
+  },
+  {
+    "city": "Moose Jaw",
+    "admin": "Saskatchewan",
+    "population_proper": 30707,
+    "capital": null,
+    "lat": 50.4,
+    "lng": -105.55,
+    "population": 32166
+  },
+  {
+    "city": "Brandon",
+    "admin": "Manitoba",
+    "population_proper": 26234,
+    "capital": null,
+    "lat": 49.833333,
+    "lng": -99.95,
+    "population": 28418
+  },
+  {
+    "city": "Brockville",
+    "admin": "Ontario",
+    "population_proper": 23886,
+    "capital": null,
+    "lat": 44.594958,
+    "lng": -75.682133,
+    "population": 26458
+  },
+  {
+    "city": "Saint-Georges",
+    "admin": "Qu\u00e9bec",
+    "population_proper": 26149,
+    "capital": null,
+    "lat": 46.116667,
+    "lng": -70.683333,
+    "population": 26149
+  },
+  {
+    "city": "Sept-\u00celes",
+    "admin": "Qu\u00e9bec",
+    "population_proper": 25686,
+    "capital": null,
+    "lat": 50.2,
+    "lng": -66.383333,
+    "population": 25686
+  },
+  {
+    "city": "Rouyn-Noranda",
+    "admin": "Qu\u00e9bec",
+    "population_proper": 24023,
+    "capital": null,
+    "lat": 48.25,
+    "lng": -79.016667,
+    "population": 24602
+  },
+  {
+    "city": "Whitehorse",
+    "admin": "Yukon",
+    "population_proper": 23272,
+    "capital": "admin",
+    "lat": 60.716667,
+    "lng": -135.05,
+    "population": 23276
+  },
+  {
+    "city": "Owen Sound",
+    "admin": "Ontario",
+    "population_proper": 22625,
+    "capital": null,
+    "lat": 44.566667,
+    "lng": -80.85,
+    "population": 22625
+  },
+  {
+    "city": "Fort McMurray",
+    "admin": "Alberta",
+    "population_proper": 21863,
+    "capital": null,
+    "lat": 56.733333,
+    "lng": -111.383333,
+    "population": 21863
+  },
+  {
+    "city": "Corner Brook",
+    "admin": "Newfoundland and Labrador",
+    "population_proper": 18693,
+    "capital": null,
+    "lat": 48.95,
+    "lng": -57.933333,
+    "population": 20791
+  },
+  {
+    "city": "Val-d\u2019Or",
+    "admin": "Qu\u00e9bec",
+    "population_proper": 20625,
+    "capital": null,
+    "lat": 48.116667,
+    "lng": -77.766667,
+    "population": 20625
+  },
+  {
+    "city": "New Glasgow",
+    "admin": "Nova Scotia",
+    "population_proper": 1
