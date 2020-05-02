@@ -838,4 +838,112 @@
   },
   {
     "city": "Amos",
-    "admin": "Qu\u00e9bec"
+    "admin": "Qu\u00e9bec",
+    "population_proper": 10435,
+    "capital": null,
+    "lat": 48.566667,
+    "lng": -78.116667,
+    "population": 10516
+  },
+  {
+    "city": "Baie-Comeau",
+    "admin": "Qu\u00e9bec",
+    "population_proper": 7181,
+    "capital": null,
+    "lat": 49.216667,
+    "lng": -68.15,
+    "population": 10435
+  },
+  {
+    "city": "Hinton",
+    "admin": "Alberta",
+    "population_proper": 9889,
+    "capital": null,
+    "lat": 53.4,
+    "lng": -117.583333,
+    "population": 10265
+  },
+  {
+    "city": "Selkirk",
+    "admin": "Manitoba",
+    "population_proper": 9653,
+    "capital": null,
+    "lat": 50.15,
+    "lng": -96.883333,
+    "population": 9986
+  },
+  {
+    "city": "Steinbach",
+    "admin": "Manitoba",
+    "population_proper": 9607,
+    "capital": null,
+    "lat": 49.516667,
+    "lng": -96.683333,
+    "population": 9729
+  },
+  {
+    "city": "Weyburn",
+    "admin": "Saskatchewan",
+    "population_proper": 9243,
+    "capital": null,
+    "lat": 49.666667,
+    "lng": -103.85,
+    "population": 9362
+  },
+  {
+    "city": "Amherst",
+    "admin": "Nova Scotia",
+    "population_proper": 7927,
+    "capital": null,
+    "lat": 45.830019,
+    "lng": -64.210024,
+    "population": 9336
+  },
+  {
+    "city": "Kapuskasing",
+    "admin": "Ontario",
+    "population_proper": 8224,
+    "capital": null,
+    "lat": 49.416667,
+    "lng": -82.433333,
+    "population": 9240
+  },
+  {
+    "city": "Dauphin",
+    "admin": "Manitoba",
+    "population_proper": 8418,
+    "capital": null,
+    "lat": 51.15,
+    "lng": -100.05,
+    "population": 9077
+  },
+  {
+    "city": "Dryden",
+    "admin": "Ontario",
+    "population_proper": 7862,
+    "capital": null,
+    "lat": 49.783333,
+    "lng": -92.833333,
+    "population": 7862
+  },
+  {
+    "city": "Revelstoke",
+    "admin": "British Columbia",
+    "population_proper": 7533,
+    "capital": null,
+    "lat": 51.0,
+    "lng": -118.183333,
+    "population": 7668
+  },
+  {
+    "city": "Happy Valley",
+    "admin": "Newfoundland and Labrador",
+    "population_proper": 1047,
+    "capital": null,
+    "lat": 53.3,
+    "lng": -60.3,
+    "population": 7572
+  },
+  {
+    "city": "Banff",
+    "
