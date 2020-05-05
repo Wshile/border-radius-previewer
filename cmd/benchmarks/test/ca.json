@@ -946,4 +946,107 @@
   },
   {
     "city": "Banff",
-    "
+    "admin": "Alberta",
+    "population_proper": 6292,
+    "capital": null,
+    "lat": 51.166667,
+    "lng": -115.566667,
+    "population": 7502
+  },
+  {
+    "city": "Yarmouth",
+    "admin": "Nova Scotia",
+    "population_proper": 7366,
+    "capital": null,
+    "lat": 43.833965,
+    "lng": -66.113926,
+    "population": 7500
+  },
+  {
+    "city": "La Sarre",
+    "admin": "Qu\u00e9bec",
+    "population_proper": 5527,
+    "capital": null,
+    "lat": 48.8,
+    "lng": -79.2,
+    "population": 7206
+  },
+  {
+    "city": "Parry Sound",
+    "admin": "Ontario",
+    "population_proper": 6469,
+    "capital": null,
+    "lat": 45.333333,
+    "lng": -80.033333,
+    "population": 7105
+  },
+  {
+    "city": "Stephenville",
+    "admin": "Newfoundland and Labrador",
+    "population_proper": 6278,
+    "capital": null,
+    "lat": 48.55,
+    "lng": -58.566667,
+    "population": 7054
+  },
+  {
+    "city": "Antigonish",
+    "admin": "Nova Scotia",
+    "population_proper": 5003,
+    "capital": null,
+    "lat": 45.616667,
+    "lng": -61.966667,
+    "population": 6739
+  },
+  {
+    "city": "Flin Flon",
+    "admin": "Manitoba",
+    "population_proper": 6002,
+    "capital": null,
+    "lat": 54.766667,
+    "lng": -101.883333,
+    "population": 6393
+  },
+  {
+    "city": "Fort Nelson",
+    "admin": "British Columbia",
+    "population_proper": 6315,
+    "capital": null,
+    "lat": 58.816667,
+    "lng": -122.533333,
+    "population": 6315
+  },
+  {
+    "city": "Smithers",
+    "admin": "British Columbia",
+    "population_proper": 5438,
+    "capital": null,
+    "lat": 54.766667,
+    "lng": -127.166667,
+    "population": 6245
+  },
+  {
+    "city": "Iqaluit",
+    "admin": "Nunavut",
+    "population_proper": 6124,
+    "capital": "admin",
+    "lat": 63.733333,
+    "lng": -68.5,
+    "population": 6124
+  },
+  {
+    "city": "Bathurst",
+    "admin": "New Brunswick",
+    "population_proper": 4496,
+    "capital": null,
+    "lat": 47.558376,
+    "lng": -65.656517,
+    "population": 6111
+  },
+  {
+    "city": "The Pas",
+    "admin": "Manitoba",
+    "population_proper": 3802,
+    "capital": null,
+    "lat": 53.816667,
+    "lng
