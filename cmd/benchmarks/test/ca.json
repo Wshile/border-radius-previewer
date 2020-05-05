@@ -1049,4 +1049,113 @@
     "population_proper": 3802,
     "capital": null,
     "lat": 53.816667,
-    "lng
+    "lng": -101.233333,
+    "population": 6055
+  },
+  {
+    "city": "Norway House",
+    "admin": "Manitoba",
+    "population_proper": 5000,
+    "capital": null,
+    "lat": 53.966667,
+    "lng": -97.833333,
+    "population": 6000
+  },
+  {
+    "city": "Meadow Lake",
+    "admin": "Saskatchewan",
+    "population_proper": 4281,
+    "capital": null,
+    "lat": 54.129722,
+    "lng": -108.434722,
+    "population": 5882
+  },
+  {
+    "city": "Vegreville",
+    "admin": "Alberta",
+    "population_proper": 5678,
+    "capital": null,
+    "lat": 53.5,
+    "lng": -112.05,
+    "population": 5813
+  },
+  {
+    "city": "Stettler",
+    "admin": "Alberta",
+    "population_proper": 5405,
+    "capital": null,
+    "lat": 52.333333,
+    "lng": -112.683333,
+    "population": 5494
+  },
+  {
+    "city": "Peace River",
+    "admin": "Alberta",
+    "population_proper": 4689,
+    "capital": null,
+    "lat": 56.233333,
+    "lng": -117.283333,
+    "population": 5340
+  },
+  {
+    "city": "New Liskeard",
+    "admin": "Ontario",
+    "population_proper": 5203,
+    "capital": null,
+    "lat": 47.5,
+    "lng": -79.666667,
+    "population": 5203
+  },
+  {
+    "city": "Hearst",
+    "admin": "Ontario",
+    "population_proper": 4746,
+    "capital": null,
+    "lat": 49.7,
+    "lng": -83.666667,
+    "population": 5043
+  },
+  {
+    "city": "Creston",
+    "admin": "British Columbia",
+    "population_proper": 4816,
+    "capital": null,
+    "lat": 49.1,
+    "lng": -116.516667,
+    "population": 4816
+  },
+  {
+    "city": "Marathon",
+    "admin": "Ontario",
+    "population_proper": 4627,
+    "capital": null,
+    "lat": 48.75,
+    "lng": -86.366667,
+    "population": 4627
+  },
+  {
+    "city": "Cochrane",
+    "admin": "Ontario",
+    "population_proper": 4441,
+    "capital": null,
+    "lat": 49.066667,
+    "lng": -81.016667,
+    "population": 4441
+  },
+  {
+    "city": "Kindersley",
+    "admin": "Saskatchewan",
+    "population_proper": 4249,
+    "capital": null,
+    "lat": 51.466667,
+    "lng": -109.133333,
+    "population": 4383
+  },
+  {
+    "city": "Liverpool",
+    "admin": "Nova Scotia",
+    "population_proper": 4331,
+    "capital": null,
+    "lat": 44.038414,
+    "lng": -64.718433,
+    "population
