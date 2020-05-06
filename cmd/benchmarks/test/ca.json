@@ -1263,4 +1263,114 @@
     "city": "Atikokan",
     "admin": "Ontario",
     "population_proper": 3625,
-    "capital
+    "capital": null,
+    "lat": 48.75,
+    "lng": -91.616667,
+    "population": 3625
+  },
+  {
+    "city": "Gander",
+    "admin": "Newfoundland and Labrador",
+    "population_proper": 3345,
+    "capital": null,
+    "lat": 48.95,
+    "lng": -54.55,
+    "population": 3345
+  },
+  {
+    "city": "Fort Chipewyan",
+    "admin": "Alberta",
+    "population_proper": 3222,
+    "capital": null,
+    "lat": 58.716667,
+    "lng": -111.15,
+    "population": 3222
+  },
+  {
+    "city": "Shelburne",
+    "admin": "Nova Scotia",
+    "population_proper": 1939,
+    "capital": null,
+    "lat": 43.753356,
+    "lng": -65.246074,
+    "population": 3167
+  },
+  {
+    "city": "Inuvik",
+    "admin": "Northwest Territories",
+    "population_proper": 3022,
+    "capital": null,
+    "lat": 68.35,
+    "lng": -133.7,
+    "population": 3022
+  },
+  {
+    "city": "Lac La Biche",
+    "admin": "Alberta",
+    "population_proper": 2919,
+    "capital": null,
+    "lat": 54.771944,
+    "lng": -111.964722,
+    "population": 2986
+  },
+  {
+    "city": "Lillooet",
+    "admin": "British Columbia",
+    "population_proper": 2893,
+    "capital": null,
+    "lat": 50.683333,
+    "lng": -121.933333,
+    "population": 2893
+  },
+  {
+    "city": "Chapleau",
+    "admin": "Ontario",
+    "population_proper": 2663,
+    "capital": null,
+    "lat": 47.833333,
+    "lng": -83.4,
+    "population": 2663
+  },
+  {
+    "city": "Burns Lake",
+    "admin": "British Columbia",
+    "population_proper": 2631,
+    "capital": null,
+    "lat": 54.216667,
+    "lng": -125.766667,
+    "population": 2635
+  },
+  {
+    "city": "Gimli",
+    "admin": "Manitoba",
+    "population_proper": 2009,
+    "capital": null,
+    "lat": 50.633333,
+    "lng": -97.0,
+    "population": 2623
+  },
+  {
+    "city": "Athabasca",
+    "admin": "Alberta",
+    "population_proper": 2260,
+    "capital": null,
+    "lat": 54.716667,
+    "lng": -113.266667,
+    "population": 2539
+  },
+  {
+    "city": "Nelson House",
+    "admin": "Manitoba",
+    "population_proper": 2500,
+    "capital": null,
+    "lat": 55.8,
+    "lng": -98.85,
+    "population": 2500
+  },
+  {
+    "city": "Rankin Inlet",
+    "admin": "Nunavut",
+    "population_proper": 2334,
+    "capital": null,
+    "lat": 62.816667,
+ 
