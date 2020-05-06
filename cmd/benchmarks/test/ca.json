@@ -1158,4 +1158,109 @@
     "capital": null,
     "lat": 44.038414,
     "lng": -64.718433,
-    "population
+    "population": 4331
+  },
+  {
+    "city": "Melville",
+    "admin": "Saskatchewan",
+    "population_proper": 4173,
+    "capital": null,
+    "lat": 50.933333,
+    "lng": -102.8,
+    "population": 4279
+  },
+  {
+    "city": "Channel-Port aux Basques",
+    "admin": "Newfoundland and Labrador",
+    "population_proper": 2244,
+    "capital": null,
+    "lat": 47.566667,
+    "lng": -59.15,
+    "population": 4220
+  },
+  {
+    "city": "Deer Lake",
+    "admin": "Newfoundland and Labrador",
+    "population_proper": 3743,
+    "capital": null,
+    "lat": 49.183333,
+    "lng": -57.433333,
+    "population": 4163
+  },
+  {
+    "city": "Saint-Augustin",
+    "admin": "Qu\u00e9bec",
+    "population_proper": 3961,
+    "capital": null,
+    "lat": 51.233333,
+    "lng": -58.65,
+    "population": 3961
+  },
+  {
+    "city": "Digby",
+    "admin": "Nova Scotia",
+    "population_proper": 2052,
+    "capital": null,
+    "lat": 44.578466,
+    "lng": -65.783525,
+    "population": 3949
+  },
+  {
+    "city": "Jasper",
+    "admin": "Alberta",
+    "population_proper": 3102,
+    "capital": null,
+    "lat": 52.883333,
+    "lng": -118.083333,
+    "population": 3907
+  },
+  {
+    "city": "Hay River",
+    "admin": "Northwest Territories",
+    "population_proper": 3648,
+    "capital": null,
+    "lat": 60.85,
+    "lng": -115.7,
+    "population": 3900
+  },
+  {
+    "city": "Windsor",
+    "admin": "Nova Scotia",
+    "population_proper": 3654,
+    "capital": null,
+    "lat": 44.958995,
+    "lng": -64.144786,
+    "population": 3864
+  },
+  {
+    "city": "La Ronge",
+    "admin": "Saskatchewan",
+    "population_proper": 3071,
+    "capital": null,
+    "lat": 55.1,
+    "lng": -105.3,
+    "population": 3783
+  },
+  {
+    "city": "Deer Lake",
+    "admin": "Ontario",
+    "population_proper": 3743,
+    "capital": null,
+    "lat": 52.616667,
+    "lng": -94.066667,
+    "population": 3743
+  },
+  {
+    "city": "Gasp\u00e9",
+    "admin": "Qu\u00e9bec",
+    "population_proper": 3331,
+    "capital": null,
+    "lat": 48.833333,
+    "lng": -64.483333,
+    "population": 3677
+  },
+  {
+    "city": "Atikokan",
+    "admin": "Ontario",
+    "population_proper": 3625,
+    "capital
