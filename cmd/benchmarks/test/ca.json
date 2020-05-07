@@ -1588,4 +1588,112 @@
     "admin": "Yukon",
     "population_proper": 1319,
     "capital": null,
- 
+    "lat": 64.066667,
+    "lng": -139.45,
+    "population": 1319
+  },
+  {
+    "city": "Kugluktuk",
+    "admin": "Nunavut",
+    "population_proper": 1302,
+    "capital": null,
+    "lat": 67.833333,
+    "lng": -115.083333,
+    "population": 1302
+  },
+  {
+    "city": "Geraldton",
+    "admin": "Ontario",
+    "population_proper": 1290,
+    "capital": null,
+    "lat": 49.716667,
+    "lng": -86.966667,
+    "population": 1290
+  },
+  {
+    "city": "Gillam",
+    "admin": "Manitoba",
+    "population_proper": 1281,
+    "capital": null,
+    "lat": 56.35,
+    "lng": -94.7,
+    "population": 1281
+  },
+  {
+    "city": "Kuujjuaq",
+    "admin": "Qu\u00e9bec",
+    "population_proper": 1273,
+    "capital": null,
+    "lat": 58.1,
+    "lng": -68.4,
+    "population": 1273
+  },
+  {
+    "city": "Lake Louise",
+    "admin": "Alberta",
+    "population_proper": 1248,
+    "capital": null,
+    "lat": 51.433333,
+    "lng": -116.183333,
+    "population": 1248
+  },
+  {
+    "city": "Nipigon",
+    "admin": "Ontario",
+    "population_proper": 1204,
+    "capital": null,
+    "lat": 49.016667,
+    "lng": -88.25,
+    "population": 1204
+  },
+  {
+    "city": "Nain",
+    "admin": "Newfoundland and Labrador",
+    "population_proper": 1151,
+    "capital": null,
+    "lat": 56.55,
+    "lng": -61.683333,
+    "population": 1151
+  },
+  {
+    "city": "Gjoa Haven",
+    "admin": "Nunavut",
+    "population_proper": 1109,
+    "capital": null,
+    "lat": 68.633333,
+    "lng": -95.916667,
+    "population": 1109
+  },
+  {
+    "city": "Fort McPherson",
+    "admin": "Northwest Territories",
+    "population_proper": 1069,
+    "capital": null,
+    "lat": 67.433333,
+    "lng": -134.866667,
+    "population": 1069
+  },
+  {
+    "city": "Argentia",
+    "admin": "Newfoundland and Labrador",
+    "population_proper": 1063,
+    "capital": null,
+    "lat": 47.3,
+    "lng": -54.0,
+    "population": 1063
+  },
+  {
+    "city": "Norman Wells",
+    "admin": "Northwest Territories",
+    "population_proper": 273,
+    "capital": null,
+    "lat": 65.283333,
+    "lng": -126.85,
+    "population": 1027
+  },
+  {
+    "city": "Churchill",
+    "admin": "Manitoba",
+    "population_proper": 923,
+    "capital": null,
+    "lat
