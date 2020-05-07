@@ -1373,4 +1373,111 @@
     "population_proper": 2334,
     "capital": null,
     "lat": 62.816667,
- 
+    "lng": -92.083333,
+    "population": 2472
+  },
+  {
+    "city": "Port Hardy",
+    "admin": "British Columbia",
+    "population_proper": 2295,
+    "capital": null,
+    "lat": 50.716667,
+    "lng": -127.5,
+    "population": 2295
+  },
+  {
+    "city": "Biggar",
+    "admin": "Saskatchewan",
+    "population_proper": 2068,
+    "capital": null,
+    "lat": 52.05,
+    "lng": -107.983333,
+    "population": 2192
+  },
+  {
+    "city": "Wiarton",
+    "admin": "Ontario",
+    "population_proper": 2182,
+    "capital": null,
+    "lat": 44.733333,
+    "lng": -81.133333,
+    "population": 2182
+  },
+  {
+    "city": "Wawa",
+    "admin": "Ontario",
+    "population_proper": 2174,
+    "capital": null,
+    "lat": 47.99473,
+    "lng": -84.77002,
+    "population": 2174
+  },
+  {
+    "city": "Hudson Bay",
+    "admin": "Saskatchewan",
+    "population_proper": 1661,
+    "capital": null,
+    "lat": 52.85,
+    "lng": -102.383333,
+    "population": 2157
+  },
+  {
+    "city": "Matagami",
+    "admin": "Qu\u00e9bec",
+    "population_proper": 1183,
+    "capital": null,
+    "lat": 49.75,
+    "lng": -77.633333,
+    "population": 1966
+  },
+  {
+    "city": "Arviat",
+    "admin": "Nunavut",
+    "population_proper": 1868,
+    "capital": null,
+    "lat": 61.116667,
+    "lng": -94.05,
+    "population": 1868
+  },
+  {
+    "city": "Attawapiskat",
+    "admin": "Ontario",
+    "population_proper": 1802,
+    "capital": null,
+    "lat": 52.916667,
+    "lng": -82.433333,
+    "population": 1802
+  },
+  {
+    "city": "Red Lake",
+    "admin": "Ontario",
+    "population_proper": 1765,
+    "capital": null,
+    "lat": 51.033333,
+    "lng": -93.833333,
+    "population": 1765
+  },
+  {
+    "city": "Moosonee",
+    "admin": "Ontario",
+    "population_proper": 1725,
+    "capital": null,
+    "lat": 51.266667,
+    "lng": -80.65,
+    "population": 1725
+  },
+  {
+    "city": "Tofino",
+    "admin": "British Columbia",
+    "population_proper": 1655,
+    "capital": null,
+    "lat": 49.133333,
+    "lng": -125.9,
+    "population": 1655
+  },
+  {
+    "city": "Igloolik",
+    "admin": "Nunavut",
+    "population_proper": 1612,
+    "capital": null,
+    "l
