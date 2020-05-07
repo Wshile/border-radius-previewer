@@ -1480,4 +1480,112 @@
     "admin": "Nunavut",
     "population_proper": 1612,
     "capital": null,
-    "l
+    "lat": 69.4,
+    "lng": -81.8,
+    "population": 1612
+  },
+  {
+    "city": "Inukjuak",
+    "admin": "Qu\u00e9bec",
+    "population_proper": 1597,
+    "capital": null,
+    "lat": 58.45334,
+    "lng": -78.102493,
+    "population": 1597
+  },
+  {
+    "city": "Little Current",
+    "admin": "Ontario",
+    "population_proper": 1595,
+    "capital": null,
+    "lat": 45.966667,
+    "lng": -81.933333,
+    "population": 1595
+  },
+  {
+    "city": "Baker Lake",
+    "admin": "Nunavut",
+    "population_proper": 1584,
+    "capital": null,
+    "lat": 64.316667,
+    "lng": -96.016667,
+    "population": 1584
+  },
+  {
+    "city": "Pond Inlet",
+    "admin": "Nunavut",
+    "population_proper": 1549,
+    "capital": null,
+    "lat": 72.7,
+    "lng": -78.0,
+    "population": 1549
+  },
+  {
+    "city": "Cap-Chat",
+    "admin": "Qu\u00e9bec",
+    "population_proper": 1466,
+    "capital": null,
+    "lat": 49.083333,
+    "lng": -66.683333,
+    "population": 1484
+  },
+  {
+    "city": "Cambridge Bay",
+    "admin": "Nunavut",
+    "population_proper": 1477,
+    "capital": null,
+    "lat": 69.116667,
+    "lng": -105.033333,
+    "population": 1477
+  },
+  {
+    "city": "Thessalon",
+    "admin": "Ontario",
+    "population_proper": 1369,
+    "capital": null,
+    "lat": 46.25,
+    "lng": -83.55,
+    "population": 1464
+  },
+  {
+    "city": "New Bella Bella",
+    "admin": "British Columbia",
+    "population_proper": 1400,
+    "capital": null,
+    "lat": 52.166667,
+    "lng": -128.133333,
+    "population": 1400
+  },
+  {
+    "city": "Cobalt",
+    "admin": "Ontario",
+    "population_proper": 1372,
+    "capital": null,
+    "lat": 47.383333,
+    "lng": -79.683333,
+    "population": 1372
+  },
+  {
+    "city": "Cape Dorset",
+    "admin": "Nunavut",
+    "population_proper": 1326,
+    "capital": null,
+    "lat": 64.233333,
+    "lng": -76.55,
+    "population": 1326
+  },
+  {
+    "city": "Pangnirtung",
+    "admin": "Nunavut",
+    "population_proper": 1320,
+    "capital": null,
+    "lat": 66.133333,
+    "lng": -65.75,
+    "population": 1320
+  },
+  {
+    "city": "West Dawson",
+    "admin": "Yukon",
+    "population_proper": 1319,
+    "capital": null,
+ 
