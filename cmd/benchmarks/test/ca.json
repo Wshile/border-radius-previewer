@@ -1696,4 +1696,110 @@
     "admin": "Manitoba",
     "population_proper": 923,
     "capital": null,
-    "lat
+    "lat": 58.766667,
+    "lng": -94.166667,
+    "population": 1000
+  },
+  {
+    "city": "Repulse Bay",
+    "admin": "Nunavut",
+    "population_proper": 748,
+    "capital": null,
+    "lat": 66.516667,
+    "lng": -86.233333,
+    "population": 1000
+  },
+  {
+    "city": "Tuktoyaktuk",
+    "admin": "Northwest Territories",
+    "population_proper": 870,
+    "capital": null,
+    "lat": 69.45,
+    "lng": -133.066667,
+    "population": 929
+  },
+  {
+    "city": "Berens River",
+    "admin": "Manitoba",
+    "population_proper": 153,
+    "capital": null,
+    "lat": 52.366667,
+    "lng": -97.033333,
+    "population": 892
+  },
+  {
+    "city": "Shamattawa",
+    "admin": "Manitoba",
+    "population_proper": 870,
+    "capital": null,
+    "lat": 55.85,
+    "lng": -92.083333,
+    "population": 870
+  },
+  {
+    "city": "Baddeck",
+    "admin": "Nova Scotia",
+    "population_proper": 852,
+    "capital": null,
+    "lat": 46.1,
+    "lng": -60.75,
+    "population": 852
+  },
+  {
+    "city": "Coral Harbour",
+    "admin": "Nunavut",
+    "population_proper": 834,
+    "capital": null,
+    "lat": 64.133333,
+    "lng": -83.166667,
+    "population": 834
+  },
+  {
+    "city": "La Scie",
+    "admin": "Newfoundland and Labrador",
+    "population_proper": 817,
+    "capital": null,
+    "lat": 49.966667,
+    "lng": -55.583333,
+    "population": 817
+  },
+  {
+    "city": "Watson Lake",
+    "admin": "Yukon",
+    "population_proper": 802,
+    "capital": null,
+    "lat": 60.116667,
+    "lng": -128.8,
+    "population": 802
+  },
+  {
+    "city": "Taloyoak",
+    "admin": "Nunavut",
+    "population_proper": 774,
+    "capital": null,
+    "lat": 69.533333,
+    "lng": -93.533333,
+    "population": 774
+  },
+  {
+    "city": "Natashquan",
+    "admin": "Qu\u00e9bec",
+    "population_proper": 722,
+    "capital": null,
+    "lat": 50.183333,
+    "lng": -61.816667,
+    "population": 722
+  },
+  {
+    "city": "Buchans",
+    "admin": "Newfoundland and Labrador",
+    "population_proper": 685,
+    "capital": null,
+    "lat": 48.816667,
+    "lng": -56.866667,
+    "population": 685
+  },
+  {
+    "city": "Hall Beach",
+    "admin": "Nunavut",
+    "populati
