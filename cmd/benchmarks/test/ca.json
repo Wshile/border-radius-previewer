@@ -1802,4 +1802,110 @@
   {
     "city": "Hall Beach",
     "admin": "Nunavut",
-    "populati
+    "population_proper": 654,
+    "capital": null,
+    "lat": 68.766667,
+    "lng": -81.2,
+    "population": 654
+  },
+  {
+    "city": "Arctic Bay",
+    "admin": "Nunavut",
+    "population_proper": 604,
+    "capital": null,
+    "lat": 73.033333,
+    "lng": -85.166667,
+    "population": 604
+  },
+  {
+    "city": "Fort Good Hope",
+    "admin": "Northwest Territories",
+    "population_proper": 597,
+    "capital": null,
+    "lat": 66.266667,
+    "lng": -128.633333,
+    "population": 597
+  },
+  {
+    "city": "Mingan",
+    "admin": "Qu\u00e9bec",
+    "population_proper": 588,
+    "capital": null,
+    "lat": 50.3,
+    "lng": -64.016667,
+    "population": 588
+  },
+  {
+    "city": "Kangirsuk",
+    "admin": "Qu\u00e9bec",
+    "population_proper": 549,
+    "capital": null,
+    "lat": 60.016667,
+    "lng": -70.033333,
+    "population": 549
+  },
+  {
+    "city": "Sandspit",
+    "admin": "British Columbia",
+    "population_proper": 538,
+    "capital": null,
+    "lat": 53.239111,
+    "lng": -131.818769,
+    "population": 538
+  },
+  {
+    "city": "D\u00e9l\u012fne",
+    "admin": "Northwest Territories",
+    "population_proper": 262,
+    "capital": null,
+    "lat": 65.183333,
+    "lng": -123.416667,
+    "population": 525
+  },
+  {
+    "city": "Fort Smith",
+    "admin": "Northwest Territories",
+    "population_proper": 518,
+    "capital": null,
+    "lat": 60.0,
+    "lng": -111.883333,
+    "population": 518
+  },
+  {
+    "city": "Cartwright",
+    "admin": "Newfoundland and Labrador",
+    "population_proper": 505,
+    "capital": null,
+    "lat": 53.7,
+    "lng": -57.016667,
+    "population": 505
+  },
+  {
+    "city": "Holman",
+    "admin": "Northwest Territories",
+    "population_proper": 398,
+    "capital": null,
+    "lat": 70.733333,
+    "lng": -117.75,
+    "population": 500
+  },
+  {
+    "city": "Lynn Lake",
+    "admin": "Manitoba",
+    "population_proper": 482,
+    "capital": null,
+    "lat": 56.85,
+    "lng": -101.05,
+    "population": 482
+  },
+  {
+    "city": "Schefferville",
+    "admin": "Qu\u00e9bec",
+    "population_proper": 471,
+    "capital": null,
+    "lat": 54.8,
+    "lng": -66.816667,
+    "population": 471
+  },
+  {
+    "city"
