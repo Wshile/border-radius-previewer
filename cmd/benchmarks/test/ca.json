@@ -1908,4 +1908,105 @@
     "population": 471
   },
   {
-    "city"
+    "city": "Trout River",
+    "admin": "Newfoundland and Labrador",
+    "population_proper": 452,
+    "capital": null,
+    "lat": 49.483333,
+    "lng": -58.116667,
+    "population": 452
+  },
+  {
+    "city": "Forteau Bay",
+    "admin": "Newfoundland and Labrador",
+    "population_proper": 448,
+    "capital": null,
+    "lat": 51.45,
+    "lng": -56.95,
+    "population": 448
+  },
+  {
+    "city": "Fort Resolution",
+    "admin": "Northwest Territories",
+    "population_proper": 448,
+    "capital": null,
+    "lat": 61.166667,
+    "lng": -113.683333,
+    "population": 448
+  },
+  {
+    "city": "Hopedale",
+    "admin": "Newfoundland and Labrador",
+    "population_proper": 442,
+    "capital": null,
+    "lat": 55.45,
+    "lng": -60.216667,
+    "population": 442
+  },
+  {
+    "city": "Pukatawagan",
+    "admin": "Manitoba",
+    "population_proper": 431,
+    "capital": null,
+    "lat": 55.733333,
+    "lng": -101.316667,
+    "population": 431
+  },
+  {
+    "city": "Trepassey",
+    "admin": "Newfoundland and Labrador",
+    "population_proper": 398,
+    "capital": null,
+    "lat": 46.733333,
+    "lng": -53.366667,
+    "population": 398
+  },
+  {
+    "city": "Kimmirut",
+    "admin": "Nunavut",
+    "population_proper": 385,
+    "capital": null,
+    "lat": 62.85,
+    "lng": -69.883333,
+    "population": 385
+  },
+  {
+    "city": "Chesterfield Inlet",
+    "admin": "Nunavut",
+    "population_proper": 374,
+    "capital": null,
+    "lat": 63.333333,
+    "lng": -90.7,
+    "population": 374
+  },
+  {
+    "city": "Eastmain",
+    "admin": "Qu\u00e9bec",
+    "population_proper": 335,
+    "capital": null,
+    "lat": 52.233333,
+    "lng": -78.516667,
+    "population": 335
+  },
+  {
+    "city": "Dease Lake",
+    "admin": "British Columbia",
+    "population_proper": 303,
+    "capital": null,
+    "lat": 58.476697,
+    "lng": -129.96146,
+    "population": 303
+  },
+  {
+    "city": "Paulatuk",
+    "admin": "Northwest Territories",
+    "population_proper": 294,
+    "capital": null,
+    "lat": 69.383333,
+    "lng": -123.983333,
+    "population": 294
+  },
+  {
+    "city": "Fort Simpson",
+    "admin": "Northwest Territories",
+    "population_proper": 283,
