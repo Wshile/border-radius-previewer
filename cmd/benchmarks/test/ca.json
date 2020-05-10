@@ -2010,3 +2010,105 @@
     "city": "Fort Simpson",
     "admin": "Northwest Territories",
     "population_proper": 283,
+    "capital": null,
+    "lat": 61.85,
+    "lng": -121.333333,
+    "population": 283
+  },
+  {
+    "city": "Brochet",
+    "admin": "Manitoba",
+    "population_proper": 278,
+    "capital": null,
+    "lat": 57.883333,
+    "lng": -101.666667,
+    "population": 278
+  },
+  {
+    "city": "Cat Lake",
+    "admin": "Ontario",
+    "population_proper": 277,
+    "capital": null,
+    "lat": 51.716667,
+    "lng": -91.8,
+    "population": 277
+  },
+  {
+    "city": "Radisson",
+    "admin": "Qu\u00e9bec",
+    "population_proper": 270,
+    "capital": null,
+    "lat": 53.783333,
+    "lng": -77.616667,
+    "population": 270
+  },
+  {
+    "city": "Port-Menier",
+    "admin": "Qu\u00e9bec",
+    "population_proper": 263,
+    "capital": null,
+    "lat": 49.816667,
+    "lng": -64.35,
+    "population": 263
+  },
+  {
+    "city": "Resolute",
+    "admin": "Nunavut",
+    "population_proper": 229,
+    "capital": null,
+    "lat": 74.683333,
+    "lng": -94.9,
+    "population": 250
+  },
+  {
+    "city": "Saint Anthony",
+    "admin": "Newfoundland and Labrador",
+    "population_proper": 224,
+    "capital": null,
+    "lat": 51.383333,
+    "lng": -55.6,
+    "population": 224
+  },
+  {
+    "city": "Port Hope Simpson",
+    "admin": "Newfoundland and Labrador",
+    "population_proper": 197,
+    "capital": null,
+    "lat": 52.533333,
+    "lng": -56.3,
+    "population": 197
+  },
+  {
+    "city": "Oxford House",
+    "admin": "Manitoba",
+    "population_proper": 184,
+    "capital": null,
+    "lat": 54.95,
+    "lng": -95.266667,
+    "population": 184
+  },
+  {
+    "city": "Tsiigehtchic",
+    "admin": "Northwest Territories",
+    "population_proper": 175,
+    "capital": null,
+    "lat": 67.433333,
+    "lng": -133.75,
+    "population": 175
+  },
+  {
+    "city": "Ivujivik",
+    "admin": "Qu\u00e9bec",
+    "population_proper": 156,
+    "capital": null,
+    "lat": 62.416667,
+    "lng": -77.9,
+    "population": 156
+  },
+  {
+    "city": "Stony Rapids",
+    "admin": "Saskatchewan",
+    "population_proper": 152,
+    "capital": null,
+    "lat": 59.266667,
+    "lng"
