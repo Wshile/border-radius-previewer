@@ -83,4 +83,106 @@
       "name": "Pittsburgh Symphony Orchestra",
       "subTopicIds": [
         337184268,
-        337184
+        337184283,
+        337184275
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586357": {
+      "description": null,
+      "id": 138586357,
+      "logo": "/images/UE0AAAAACEKo9QAAAAhDSVRN",
+      "name": "Orchestre Philharmonique de Radio France",
+      "subTopicIds": [
+        337184268,
+        337184283,
+        337184275
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586361": {
+      "description": null,
+      "id": 138586361,
+      "logo": "/images/UE0AAAAACEKo+QAAAAVDSVRN",
+      "name": "WDR Sinfonieorchester Köln",
+      "subTopicIds": [
+        337184268,
+        337184283,
+        337184275
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586365": {
+      "description": null,
+      "id": 138586365,
+      "logo": "/images/UE0AAAAACEKo/QAAAAVDSVRN",
+      "name": "Alessandro - G.F. Haendel",
+      "subTopicIds": [
+        337184284,
+        337184263,
+        337184298,
+        337184283,
+        337184275
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586369": {
+      "description": null,
+      "id": 138586369,
+      "logo": "/images/UE0AAAAACEKpAQAAAAVDSVRN",
+      "name": "Orchestre Colonne",
+      "subTopicIds": [
+        337184268,
+        337184288,
+        337184283,
+        337184275
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586373": {
+      "description": null,
+      "id": 138586373,
+      "logo": "/images/UE0AAAAACEKpBQAAAAdDSVRN",
+      "name": "Christophe",
+      "subTopicIds": [
+        337184280,
+        337184297,
+        337184283,
+        337184262
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        
