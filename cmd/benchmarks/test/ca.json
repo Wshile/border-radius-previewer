@@ -2111,4 +2111,113 @@
     "population_proper": 152,
     "capital": null,
     "lat": 59.266667,
-    "lng"
+    "lng": -105.833333,
+    "population": 152
+  },
+  {
+    "city": "Alert",
+    "admin": "Nunavut",
+    "population_proper": 70,
+    "capital": null,
+    "lat": 82.483333,
+    "lng": -62.25,
+    "population": 125
+  },
+  {
+    "city": "Fort Severn",
+    "admin": "Ontario",
+    "population_proper": 125,
+    "capital": null,
+    "lat": 55.983333,
+    "lng": -87.65,
+    "population": 125
+  },
+  {
+    "city": "Rigolet",
+    "admin": "Newfoundland and Labrador",
+    "population_proper": 124,
+    "capital": null,
+    "lat": 54.166667,
+    "lng": -58.433333,
+    "population": 124
+  },
+  {
+    "city": "Lansdowne House",
+    "admin": "Ontario",
+    "population_proper": 120,
+    "capital": null,
+    "lat": 52.216667,
+    "lng": -87.883333,
+    "population": 120
+  },
+  {
+    "city": "Salluit",
+    "admin": "Qu\u00e9bec",
+    "population_proper": 106,
+    "capital": null,
+    "lat": 62.2,
+    "lng": -75.633333,
+    "population": 106
+  },
+  {
+    "city": "\u0141utselk\u2019e",
+    "admin": "Northwest Territories",
+    "population_proper": 102,
+    "capital": null,
+    "lat": 62.4,
+    "lng": -110.733333,
+    "population": 102
+  },
+  {
+    "city": "Uranium City",
+    "admin": "Saskatchewan",
+    "population_proper": 89,
+    "capital": null,
+    "lat": 59.566667,
+    "lng": -108.616667,
+    "population": 89
+  },
+  {
+    "city": "Burwash Landing",
+    "admin": "Yukon",
+    "population_proper": 73,
+    "capital": null,
+    "lat": 61.35,
+    "lng": -139.0,
+    "population": 73
+  },
+  {
+    "city": "Grise Fiord",
+    "admin": "Nunavut",
+    "population_proper": 23,
+    "capital": null,
+    "lat": 76.416667,
+    "lng": -82.95,
+    "population": 23
+  },
+  {
+    "city": "Big Beaverhouse",
+    "admin": "Ontario",
+    "population_proper": 10,
+    "capital": null,
+    "lat": 52.95,
+    "lng": -89.883333,
+    "population": 10
+  },
+  {
+    "city": "Island Lake",
+    "admin": "Manitoba",
+    "population_proper": 10,
+    "capital": null,
+    "lat": 53.966667,
+    "lng": -94.766667,
+    "population": 10
+  },
+  {
+    "city": "Ennadai",
+    "admin": "Nunavut",
+    "population_proper": 0,
+    "capital": null,
+    "lat": 61.133333,
+    "lng": -100.883333,
+    "popul
