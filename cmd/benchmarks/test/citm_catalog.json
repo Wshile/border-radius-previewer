@@ -378,4 +378,100 @@
     "138586417": {
       "description": null,
       "id": 138586417,
-      "logo": "/images/UE0AAAAACEKp
+      "logo": "/images/UE0AAAAACEKpMQAAAAZDSVRN",
+      "name": "Bach, concertos pour piano",
+      "subTopicIds": [
+        337184281,
+        337184283,
+        337184273
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586421": {
+      "description": null,
+      "id": 138586421,
+      "logo": "/images/UE0AAAAACEKpNQAAAAVDSVRN",
+      "name": "Bach, concertos pour piano",
+      "subTopicIds": [
+        337184281,
+        337184283,
+        337184273
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586425": {
+      "description": null,
+      "id": 138586425,
+      "logo": null,
+      "name": "Orchestre National d'Île-de-France",
+      "subTopicIds": [
+        337184268,
+        337184283,
+        337184275
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586429": {
+      "description": null,
+      "id": 138586429,
+      "logo": "/images/UE0AAAAACEKpPQAAAAVDSVRN",
+      "name": "Gewandhausorchester Leipzig",
+      "subTopicIds": [
+        337184268,
+        337184283,
+        337184275
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586433": {
+      "description": null,
+      "id": 138586433,
+      "logo": "/images/UE0AAAAACEKpQQAAAAVDSVRN",
+      "name": "Gewandhausorchester Leipzig",
+      "subTopicIds": [
+        337184268,
+        337184283,
+        337184275
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586437": {
+      "description": null,
+      "id": 138586437,
+      "logo": "/images/UE0AAAAACEKpRQAAAAVDSVRN",
+      "name": "Budapest Festival Orchestra",
+      "subTopicIds": [
+        337184268,
+        337184283,
+        337184275
+      ],
