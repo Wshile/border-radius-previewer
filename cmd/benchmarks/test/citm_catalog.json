@@ -763,4 +763,101 @@
       "name": "Les Mystères d'Isis - W.A. Mozart (cersion de concert)",
       "subTopicIds": [
         337184284,
-   
+        337184298,
+        337184268,
+        337184283,
+        337184275
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586517": {
+      "description": null,
+      "id": 138586517,
+      "logo": "/images/UE0AAAAACEKplQAAAAdDSVRN",
+      "name": "Martha Argerich - Gidon Kremer",
+      "subTopicIds": [
+        337184281,
+        337184283,
+        337184273
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586521": {
+      "description": null,
+      "id": 138586521,
+      "logo": "/images/UE0AAAAACEKpmQAAAAVDSVRN",
+      "name": "Cecilia Bartoli - Mozart et la Vienne classique",
+      "subTopicIds": [
+        337184298,
+        337184268,
+        337184283,
+        337184292
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586525": {
+      "description": null,
+      "id": 138586525,
+      "logo": "/images/UE0AAAAACEKpnQAAAAVDSVRN",
+      "name": "Orchestre Philharmonique de Radio France",
+      "subTopicIds": [
+        337184268,
+        337184283,
+        337184275
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586529": {
+      "description": null,
+      "id": 138586529,
+      "logo": null,
+      "name": "Orchestre Pasdeloup",
+      "subTopicIds": [
+        337184268,
+        337184283,
+        337184275
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586533": {
+      "description": null,
+      "id": 138586533,
+      "logo": "/images/UE0AAAAACEKppQAAAAVDSVRN",
+      "name": "Orchestre du Théâtre Mariinsky",
+      "subTopicIds": [
+        337184268,
+        337184283,
+        337184275
+      ],
+      "subjectCode": null,
+  
