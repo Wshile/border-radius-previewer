@@ -666,4 +666,101 @@
     },
     "138586481": {
       "description": null,
-      "
+      "id": 138586481,
+      "logo": "/images/UE0AAAAACEKpcQAAAAVDSVRN",
+      "name": "Maurizio Pollini, piano",
+      "subTopicIds": [
+        337184281,
+        337184283,
+        337184273
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586485": {
+      "description": null,
+      "id": 138586485,
+      "logo": "/images/UE0AAAAACEKpdQAAAAZDSVRN",
+      "name": "Orchestre Philharmonique de Radio France",
+      "subTopicIds": [
+        337184288,
+        337184283,
+        337184275
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586501": {
+      "description": null,
+      "id": 138586501,
+      "logo": "/images/UE0AAAAACEKphQAAAAVDSVRN",
+      "name": "Antonio Meneses - Maria-João Pires",
+      "subTopicIds": [
+        337184268,
+        337184283,
+        337184273
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586505": {
+      "description": null,
+      "id": 138586505,
+      "logo": "/images/UE0AAAAACEKpiQAAAAVDSVRN",
+      "name": "Musiques pour la reine Caroline",
+      "subTopicIds": [
+        337184284,
+        337184263,
+        337184298,
+        337184283,
+        337184292
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586509": {
+      "description": null,
+      "id": 138586509,
+      "logo": null,
+      "name": "Orchestre National d'Île-de-France",
+      "subTopicIds": [
+        337184268,
+        337184283,
+        337184275
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586513": {
+      "description": null,
+      "id": 138586513,
+      "logo": "/images/UE0AAAAACEKpkQAAAAVDSVRN",
+      "name": "Les Mystères d'Isis - W.A. Mozart (cersion de concert)",
+      "subTopicIds": [
+        337184284,
+   
