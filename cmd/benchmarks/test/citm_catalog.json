@@ -961,3 +961,107 @@
     "138586557": {
       "description": null,
       "id": 138586557,
+      "logo": "/images/UE0AAAAACEKpvQAAAAVDSVRN",
+      "name": "Quatuor Hagen",
+      "subTopicIds": [
+        337184281,
+        337184283,
+        337184273
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586561": {
+      "description": null,
+      "id": 138586561,
+      "logo": "/images/UE0AAAAACEKpwQAAAAVDSVRN",
+      "name": "Sunwook Kim, piano",
+      "subTopicIds": [
+        337184281,
+        337184283,
+        337184273
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586565": {
+      "description": null,
+      "id": 138586565,
+      "logo": null,
+      "name": "Orchestre Colonne",
+      "subTopicIds": [
+        337184268,
+        337184288,
+        337184283,
+        337184275
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586569": {
+      "description": null,
+      "id": 138586569,
+      "logo": "/images/UE0AAAAACEKpyQAAAAVDSVRN",
+      "name": "Orchestre Philharmonique de Radio France",
+      "subTopicIds": [
+        337184268,
+        337184283,
+        337184275
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586581": {
+      "description": null,
+      "id": 138586581,
+      "logo": null,
+      "name": "Orchestre National de France",
+      "subTopicIds": [
+        337184268,
+        337184283,
+        337184275
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586585": {
+      "description": null,
+      "id": 138586585,
+      "logo": "/images/UE0AAAAACEKp2QAAAAVDSVRN",
+      "name": "Messe en si mineur - J.S. Bach",
+      "subTopicIds": [
+        337184296,
+        337184263,
+        337184298,
+        337184283,
+        337184275
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
