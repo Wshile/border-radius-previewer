@@ -1364,4 +1364,103 @@
         324846099,
         107888604,
         324846100
-    
+      ]
+    },
+    "138586661": {
+      "description": null,
+      "id": 138586661,
+      "logo": null,
+      "name": "Le Ramayana balinais - L'Enlèvement de Sita",
+      "subTopicIds": [
+        337184279,
+        337184283,
+        337184262
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586667": {
+      "description": null,
+      "id": 138586667,
+      "logo": null,
+      "name": "Dave Holland & friends",
+      "subTopicIds": [
+        337184269,
+        337184283,
+        337184262
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586671": {
+      "description": null,
+      "id": 138586671,
+      "logo": "/images/UE0AAAAACEKqLwAAAAlDSVRN",
+      "name": "Boris Godounov - M.Moussorgski (version de concert)",
+      "subTopicIds": [
+        337184284,
+        337184298,
+        337184268,
+        337184283,
+        337184275
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586675": {
+      "description": null,
+      "id": 138586675,
+      "logo": "/images/UE0AAAAACEKqMwAAAAVDSVRN",
+      "name": "Insula orchestra - Accentus",
+      "subTopicIds": [
+        337184298,
+        337184268,
+        337184283,
+        337184275
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586679": {
+      "description": null,
+      "id": 138586679,
+      "logo": "/images/UE0AAAAACEKqNwAAAAVDSVRN",
+      "name": "Orchestre Philharmonique de Radio France",
+      "subTopicIds": [
+        337184268,
+        337184283,
+        337184275
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586687": {
+      "description": null,
+      "id": 138586687,
+      "logo": "/images/UE0AAAAACEKqPwAAAAVDSVRN",
+     
