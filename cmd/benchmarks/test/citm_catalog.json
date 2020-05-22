@@ -1463,4 +1463,99 @@
       "description": null,
       "id": 138586687,
       "logo": "/images/UE0AAAAACEKqPwAAAAVDSVRN",
-     
+      "name": "Bryn Terfel - Héros légendaires",
+      "subTopicIds": [
+        337184284,
+        337184298,
+        337184283,
+        337184292
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586691": {
+      "description": null,
+      "id": 138586691,
+      "logo": null,
+      "name": "Les Siècles",
+      "subTopicIds": [
+        337184268,
+        337184283,
+        337184275
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586695": {
+      "description": null,
+      "id": 138586695,
+      "logo": "/images/UE0AAAAACEKqRwAAAAVDSVRN",
+      "name": "Gautier Capuçon - Frank Braley",
+      "subTopicIds": [
+        337184281,
+        337184283,
+        337184273
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586699": {
+      "description": null,
+      "id": 138586699,
+      "logo": null,
+      "name": "Festival Présences 2014 \"Paris Berlin\"",
+      "subTopicIds": [
+        337184288,
+        337184283,
+        337184275
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586703": {
+      "description": null,
+      "id": 138586703,
+      "logo": "/images/UE0AAAAACEKqTwAAAAZDSVRN",
+      "name": "Autour de Tristan",
+      "subTopicIds": [
+        337184284,
+        337184298,
+        337184268,
+        337184283,
+        337184275
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586707": {
+      "description": null,
+      "id": 138586707,
+      "logo": "/images/UE0AAAAACEKqUwAAAAVDSVRN",
+      "name": "Orchestre du Théâtre Mariinsky",
+      "subTopicIds": [
+        3371
