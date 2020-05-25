@@ -2059,4 +2059,108 @@
       "subTopicIds": [
         337184268,
         337184283,
-        3371842
+        337184275
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586843": {
+      "description": null,
+      "id": 138586843,
+      "logo": null,
+      "name": "Quatuor Artemis - Gautier Capuçon",
+      "subTopicIds": [
+        337184281,
+        337184283,
+        337184273
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586847": {
+      "description": null,
+      "id": 138586847,
+      "logo": null,
+      "name": "Quatuor Artemis - Quatuor Ébène",
+      "subTopicIds": [
+        337184281,
+        337184283,
+        337184273
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586851": {
+      "description": null,
+      "id": 138586851,
+      "logo": null,
+      "name": "Quatuor Artemis - Elisabeth Leonskaja",
+      "subTopicIds": [
+        337184281,
+        337184283,
+        337184273
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586855": {
+      "description": null,
+      "id": 138586855,
+      "logo": null,
+      "name": "Russian National Orchestra",
+      "subTopicIds": [
+        337184268,
+        337184283,
+        337184275
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586859": {
+      "description": null,
+      "id": 138586859,
+      "logo": null,
+      "name": "Passion selon saint Matthieu",
+      "subTopicIds": [
+        337184296,
+        337184263,
+        337184283,
+        337184275
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586863": {
+      "description": null,
+      "id": 138586863,
+      "log
