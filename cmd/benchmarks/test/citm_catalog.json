@@ -2163,4 +2163,101 @@
     "138586863": {
       "description": null,
       "id": 138586863,
-      "log
+      "logo": null,
+      "name": "Les Arts Florissants - Concert de Pâques",
+      "subTopicIds": [
+        337184263,
+        337184298,
+        337184283,
+        337184292
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586867": {
+      "description": null,
+      "id": 138586867,
+      "logo": null,
+      "name": "Orchestre Philharmonique de Radio France",
+      "subTopicIds": [
+        337184268,
+        337184283,
+        337184275
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586871": {
+      "description": null,
+      "id": 138586871,
+      "logo": null,
+      "name": "Leylâ et Majnûn ou L'Amour mystique",
+      "subTopicIds": [
+        337184279,
+        337184283,
+        337184262
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586875": {
+      "description": null,
+      "id": 138586875,
+      "logo": null,
+      "name": "Stephen Kovacevich, piano",
+      "subTopicIds": [
+        337184281,
+        337184283,
+        337184273
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586879": {
+      "description": null,
+      "id": 138586879,
+      "logo": null,
+      "name": "Orchestra Mozart Bologna - Mahler Chamber Orchestra",
+      "subTopicIds": [
+        337184268,
+        337184288,
+        337184283,
+        337184275
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586883": {
+      "description": null,
+      "id": 138586883,
+      "logo": null,
+      "name": "Ballet Royal du Cambodge",
+      "subTopicIds": [
+        337184279,
+        337184283,
+        3371842
