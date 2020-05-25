@@ -2260,4 +2260,110 @@
       "subTopicIds": [
         337184279,
         337184283,
-        3371842
+        337184262
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586889": {
+      "description": null,
+      "id": 138586889,
+      "logo": null,
+      "name": "MDR Sinfonieorchester Leipzig",
+      "subTopicIds": [
+        337184288,
+        337184283,
+        337184275
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586893": {
+      "description": null,
+      "id": 138586893,
+      "logo": null,
+      "name": "Orchestre Colonne",
+      "subTopicIds": [
+        337184268,
+        337184283,
+        337184275
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586897": {
+      "description": null,
+      "id": 138586897,
+      "logo": null,
+      "name": "Elisabeth Leonskaja, piano",
+      "subTopicIds": [
+        337184281,
+        337184283,
+        337184273
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586901": {
+      "description": null,
+      "id": 138586901,
+      "logo": null,
+      "name": "Yuja Wang, piano",
+      "subTopicIds": [
+        337184281,
+        337184283,
+        337184273
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586905": {
+      "description": null,
+      "id": 138586905,
+      "logo": null,
+      "name": "Orchestre Philharmonique de Radio France",
+      "subTopicIds": [
+        337184268,
+        337184288,
+        337184283,
+        337184275
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586909": {
+      "description": null,
+      "id": 138586909,
+      "logo": null,
+      "name": "Anne-Sophie Mutter - Lambert Orkis",
+      "subTop
