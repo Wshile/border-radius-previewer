@@ -2366,4 +2366,110 @@
       "id": 138586909,
       "logo": null,
       "name": "Anne-Sophie Mutter - Lambert Orkis",
-      "subTop
+      "subTopicIds": [
+        337184281,
+        337184283,
+        337184273
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586917": {
+      "description": null,
+      "id": 138586917,
+      "logo": null,
+      "name": "Orchestre National d'Île-de-France",
+      "subTopicIds": [
+        337184268,
+        337184288,
+        337184283,
+        337184275
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586921": {
+      "description": null,
+      "id": 138586921,
+      "logo": null,
+      "name": "Orchestre Philharmonique de Radio France",
+      "subTopicIds": [
+        337184268,
+        337184288,
+        337184283,
+        337184275
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586929": {
+      "description": null,
+      "id": 138586929,
+      "logo": null,
+      "name": "Orchestre Pasdeloup",
+      "subTopicIds": [
+        337184268,
+        337184283,
+        337184275
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586933": {
+      "description": null,
+      "id": 138586933,
+      "logo": null,
+      "name": "Gilberto Gil",
+      "subTopicIds": [
+        337184279,
+        337184283,
+        337184262
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586937": {
+      "description": null,
+      "id": 138586937,
+      "logo": null,
+      "name": "Nelson Freire, piano",
+      "subTopicIds": [
+        337184281,
+        337184283,
+        337184273
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586941": {
+      "descripti
