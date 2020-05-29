@@ -2472,4 +2472,103 @@
       ]
     },
     "138586941": {
-      "descripti
+      "description": null,
+      "id": 138586941,
+      "logo": null,
+      "name": "Orchestre Philharmonique de Radio France",
+      "subTopicIds": [
+        337184268,
+        337184288,
+        337184283,
+        337184275
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586945": {
+      "description": null,
+      "id": 138586945,
+      "logo": null,
+      "name": "Orfeo - C. Monteverdi (version de concert)",
+      "subTopicIds": [
+        337184284,
+        337184263,
+        337184298,
+        337184283,
+        337184292
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586949": {
+      "description": null,
+      "id": 138586949,
+      "logo": null,
+      "name": "Bamberger Symphoniker",
+      "subTopicIds": [
+        337184268,
+        337184283,
+        337184275
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586953": {
+      "description": null,
+      "id": 138586953,
+      "logo": null,
+      "name": "Murray Perahia, piano",
+      "subTopicIds": [
+        337184281,
+        337184283,
+        337184273
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586957": {
+      "description": null,
+      "id": 138586957,
+      "logo": null,
+      "name": "Orchestre National du Capitole de Toulouse",
+      "subTopicIds": [
+        337184268,
+        337184283,
+        337184275
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586961": {
+      "description": null,
+      "id": 138586961,
+      "logo": null,
+      "name": "Krystian Zimerman, piano",
+      "subTopicIds": [
+        337184281,
+ 
