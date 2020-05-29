@@ -2680,4 +2680,111 @@
       "description": null,
       "id": 138586989,
       "logo": null,
-      "name": "Otell
+      "name": "Otello - G. Verdi (version de concert)",
+      "subTopicIds": [
+        337184284,
+        337184298,
+        337184268,
+        337184283,
+        337184292
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586993": {
+      "description": null,
+      "id": 138586993,
+      "logo": null,
+      "name": "Staatskapelle Berlin",
+      "subTopicIds": [
+        337184268,
+        337184283,
+        337184275
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "138586997": {
+      "description": null,
+      "id": 138586997,
+      "logo": null,
+      "name": "Staatskapelle Berlin",
+      "subTopicIds": [
+        337184268,
+        337184283,
+        337184275
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "151183114": {
+      "description": null,
+      "id": 151183114,
+      "logo": null,
+      "name": "San Francisco Symphony",
+      "subTopicIds": [
+        337184298,
+        337184268,
+        337184283,
+        337184275
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "339420802": {
+      "description": null,
+      "id": 339420802,
+      "logo": null,
+      "name": "Lou Doillon",
+      "subTopicIds": [
+        337184280,
+        337184283,
+        337184262
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "339420805": {
+      "description": null,
+      "id": 339420805,
+      "logo": null,
+      "name": "Patrick Watson & Orchestre National d'Ile-de-France",
+      "subTopicIds": [
+        337184280,
+        337184283,
+        337184262
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "341069
