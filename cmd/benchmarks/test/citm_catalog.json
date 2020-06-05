@@ -3293,4 +3293,106 @@
       ],
       "subjectCode": null,
       "subtitle": null,
-      "topicIds": 
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "341181259": {
+      "description": null,
+      "id": 341181259,
+      "logo": null,
+      "name": "14052122 JARVI / GOERNE / SOLBERG / CHŒUR",
+      "subTopicIds": [
+        337184268,
+        337184288,
+        337184283,
+        337184275
+      ],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": [
+        324846099,
+        107888604,
+        324846100
+      ]
+    },
+    "342742592": {
+      "description": null,
+      "id": 342742592,
+      "logo": null,
+      "name": "event secret 2",
+      "subTopicIds": [],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": []
+    },
+    "342742593": {
+      "description": null,
+      "id": 342742593,
+      "logo": null,
+      "name": "event secret 3",
+      "subTopicIds": [],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": []
+    },
+    "342742594": {
+      "description": null,
+      "id": 342742594,
+      "logo": null,
+      "name": "event secret 4",
+      "subTopicIds": [],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": []
+    },
+    "342742595": {
+      "description": null,
+      "id": 342742595,
+      "logo": null,
+      "name": "event secret 5",
+      "subTopicIds": [],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": []
+    },
+    "342742596": {
+      "description": null,
+      "id": 342742596,
+      "logo": null,
+      "name": "event secret 6",
+      "subTopicIds": [],
+      "subjectCode": null,
+      "subtitle": null,
+      "topicIds": []
+    }
+  },
+  "performances": [
+    {
+      "eventId": 138586341,
+      "id": 339887544,
+      "logo": null,
+      "name": null,
+      "prices": [
+        {
+          "amount": 90250,
+          "audienceSubCategoryId": 337100890,
+          "seatCategoryId": 338937295
+        },
+        {
+          "amount": 66500,
+          "audienceSubCategoryId": 337100890,
+          "seatCategoryId": 338937296
+        }
+      ],
+      "seatCategories": [
+        {
+          "areas": [
+            {
+              "areaId": 205705999,
+              "blockIds": []
+            },
+            {
+   
