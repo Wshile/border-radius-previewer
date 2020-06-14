@@ -4047,4 +4047,97 @@
         },
         {
           "amount": 52250,
+          "audienceSubCategoryId": 337100890,
+          "seatCategoryId": 338937288
+        },
+        {
+          "amount": 10000,
+          "audienceSubCategoryId": 337100890,
+          "seatCategoryId": 338937283
+        }
+      ],
+      "seatCategories": [
+        {
+          "areas": [
+            {
+              "areaId": 205705994,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706006,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706005,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706007,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706009,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706008,
+              "blockIds": []
+            }
+          ],
+          "seatCategoryId": 338937284
+        },
+        {
+          "areas": [
+            {
+              "areaId": 205705999,
+              "blockIds": []
+            },
+            {
+              "areaId": 205705998,
+              "blockIds": []
+            },
+            {
+              "areaId": 205705994,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706006,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706005,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706004,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706003,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706002,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706007,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706009,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706008,
+              "blockIds": []
+            }
+          ],
+          "seatCategoryId": 338937285
+        },
+        {
+          "areas": [
+            {
+              "areaId": 205705998,
+              "blockIds": []
          
