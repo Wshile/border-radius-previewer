@@ -11993,4 +11993,100 @@
             },
             {
               "areaId": 205705996,
-              "
+              "blockIds": []
+            },
+            {
+              "areaId": 205706003,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706002,
+              "blockIds": []
+            },
+            {
+              "areaId": 205705993,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706007,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706009,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706008,
+              "blockIds": []
+            }
+          ],
+          "seatCategoryId": 338937287
+        },
+        {
+          "areas": [
+            {
+              "areaId": 205705994,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706006,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706005,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706004,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706003,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706002,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706001,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706000,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706009,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706008,
+              "blockIds": []
+            }
+          ],
+          "seatCategoryId": 338937288
+        }
+      ],
+      "seatMapImage": null,
+      "start": 1383332400000,
+      "venueCode": "PLEYEL_PLEYEL"
+    },
+    {
+      "eventId": 138586449,
+      "id": 138586451,
+      "logo": "/images/UE0AAAAACEKpUQAAAAVDSVRN",
+      "name": null,
+      "prices": [
+        {
+          "amount": 80750,
+          "audienceSubCategoryId": 337100890,
+          "seatCategoryId": 338937284
+        },
+        {
+          "amount": 61750,
+          "audienceSubCategoryId": 337100890,
+          "seatCategoryId": 338937285
+        },
+        {
+          
