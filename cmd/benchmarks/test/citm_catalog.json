@@ -18770,4 +18770,100 @@
             },
             {
               "areaId": 205706008,
-              "bl
+              "blockIds": []
+            }
+          ],
+          "seatCategoryId": 338937288
+        },
+        {
+          "areas": [
+            {
+              "areaId": 205706005,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706004,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706003,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706002,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706009,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706008,
+              "blockIds": []
+            }
+          ],
+          "seatCategoryId": 338937283
+        }
+      ],
+      "seatMapImage": null,
+      "start": 1386514800000,
+      "venueCode": "PLEYEL_PLEYEL"
+    },
+    {
+      "eventId": 342742593,
+      "id": 342742716,
+      "logo": null,
+      "name": null,
+      "prices": [
+        {
+          "amount": 180500,
+          "audienceSubCategoryId": 337100890,
+          "seatCategoryId": 342752792
+        }
+      ],
+      "seatCategories": [
+        {
+          "areas": [
+            {
+              "areaId": 342752287,
+              "blockIds": []
+            }
+          ],
+          "seatCategoryId": 342752792
+        }
+      ],
+      "seatMapImage": null,
+      "start": 1386579600000,
+      "venueCode": "PLEYEL_PLEYEL"
+    },
+    {
+      "eventId": 342742593,
+      "id": 342742717,
+      "logo": null,
+      "name": null,
+      "prices": [
+        {
+          "amount": 180500,
+          "audienceSubCategoryId": 337100890,
+          "seatCategoryId": 342752792
+        }
+      ],
+      "seatCategories": [
+        {
+          "areas": [
+            {
+              "areaId": 342752287,
+              "blockIds": []
+            }
+          ],
+          "seatCategoryId": 342752792
+        }
+      ],
+      "seatMapImage": null,
+      "start": 1386586800000,
+      "venueCode": "PLEYEL_PLEYEL"
+    },
+    {
+      "eventId": 138586561,
+      "id": 138586563,
+      "logo": "/images/UE0AAAAACEKpwQAAAAVDSVR
