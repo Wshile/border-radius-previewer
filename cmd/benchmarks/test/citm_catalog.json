@@ -28478,4 +28478,95 @@
               "areaId": 205706000,
               "blockIds": []
             },
-        
+            {
+              "areaId": 205706009,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706008,
+              "blockIds": []
+            }
+          ],
+          "seatCategoryId": 338937288
+        }
+      ],
+      "seatMapImage": null,
+      "start": 1391886000000,
+      "venueCode": "PLEYEL_PLEYEL"
+    },
+    {
+      "eventId": 138586691,
+      "id": 138586693,
+      "logo": null,
+      "name": null,
+      "prices": [
+        {
+          "amount": 28500,
+          "audienceSubCategoryId": 337100890,
+          "seatCategoryId": 338937284
+        },
+        {
+          "amount": 23750,
+          "audienceSubCategoryId": 337100890,
+          "seatCategoryId": 338937285
+        },
+        {
+          "amount": 19000,
+          "audienceSubCategoryId": 337100890,
+          "seatCategoryId": 338937287
+        },
+        {
+          "amount": 14250,
+          "audienceSubCategoryId": 337100890,
+          "seatCategoryId": 338937288
+        },
+        {
+          "amount": 10000,
+          "audienceSubCategoryId": 337100890,
+          "seatCategoryId": 338937283
+        }
+      ],
+      "seatCategories": [
+        {
+          "areas": [
+            {
+              "areaId": 205705994,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706006,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706005,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706007,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706009,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706008,
+              "blockIds": []
+            }
+          ],
+          "seatCategoryId": 338937284
+        },
+        {
+          "areas": [
+            {
+              "areaId": 205705999,
+              "blockIds": []
+            },
+            {
+              "areaId": 205705998,
+              "blockIds": []
+            },
+            {
+              "areaId": 205705994,
+              "blockIds": []
+     
