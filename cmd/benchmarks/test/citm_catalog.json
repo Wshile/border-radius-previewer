@@ -31826,4 +31826,93 @@
             },
             {
               "areaId": 205706001,
-              "bl
+              "blockIds": []
+            },
+            {
+              "areaId": 205706000,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706009,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706008,
+              "blockIds": []
+            }
+          ],
+          "seatCategoryId": 338937281
+        },
+        {
+          "areas": [
+            {
+              "areaId": 205706005,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706004,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706003,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706002,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706009,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706008,
+              "blockIds": []
+            }
+          ],
+          "seatCategoryId": 338937282
+        }
+      ],
+      "seatMapImage": null,
+      "start": 1393959600000,
+      "venueCode": "PLEYEL_PLEYEL"
+    },
+    {
+      "eventId": 341181249,
+      "id": 341181463,
+      "logo": "/images/UE0AAAAAFFYDQQAAAAdDSVRN",
+      "name": null,
+      "prices": [
+        {
+          "amount": 57000,
+          "audienceSubCategoryId": 337100890,
+          "seatCategoryId": 340826016
+        },
+        {
+          "amount": 42750,
+          "audienceSubCategoryId": 337100890,
+          "seatCategoryId": 340826017
+        },
+        {
+          "amount": 32300,
+          "audienceSubCategoryId": 337100890,
+          "seatCategoryId": 340826015
+        },
+        {
+          "amount": 20900,
+          "audienceSubCategoryId": 337100890,
+          "seatCategoryId": 340826018
+        },
+        {
+          "amount": 10000,
+          "audienceSubCategoryId": 337100890,
+          "seatCategoryId": 340826019
+        }
+      ],
+      "seatCategories": [
+        {
+          "areas": [
+            {
+              "areaId": 205705999,
+              "blockIds": []
+   
