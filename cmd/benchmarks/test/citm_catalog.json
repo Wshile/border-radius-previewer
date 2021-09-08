@@ -32287,4 +32287,97 @@
             },
             {
               "areaId": 205706004,
-              "blockIds":
+              "blockIds": []
+            },
+            {
+              "areaId": 205705995,
+              "blockIds": []
+            },
+            {
+              "areaId": 205705996,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706003,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706007,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706009,
+              "blockIds": []
+            }
+          ],
+          "seatCategoryId": 340826015
+        },
+        {
+          "areas": [
+            {
+              "areaId": 205706004,
+              "blockIds": []
+            },
+            {
+              "areaId": 205705996,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706003,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706002,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706009,
+              "blockIds": []
+            }
+          ],
+          "seatCategoryId": 340826018
+        },
+        {
+          "areas": [
+            {
+              "areaId": 205706004,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706003,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706002,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706007,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706009,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706008,
+              "blockIds": []
+            }
+          ],
+          "seatCategoryId": 340826019
+        }
+      ],
+      "seatMapImage": null,
+      "start": 1394132400000,
+      "venueCode": "PLEYEL_PLEYEL"
+    },
+    {
+      "eventId": 138586735,
+      "id": 138586737,
+      "logo": "/images/UE0AAAAACEKqbwAAAAVDSVRN",
+      "name": null,
+      "prices": [
+        {
+          "amount": 57000,
+          "audienceSubCategoryId": 337100890,
+          "seatCategoryId": 339086210
