@@ -44466,4 +44466,95 @@
           "seatCategoryId": 338937238
         },
         {
-          "areas"
+          "areas": [
+            {
+              "areaId": 205705994,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706006,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706005,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706004,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706003,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706002,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706001,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706000,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706009,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706008,
+              "blockIds": []
+            }
+          ],
+          "seatCategoryId": 338937239
+        },
+        {
+          "areas": [
+            {
+              "areaId": 205706005,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706004,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706003,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706002,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706009,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706008,
+              "blockIds": []
+            }
+          ],
+          "seatCategoryId": 338937240
+        }
+      ],
+      "seatMapImage": null,
+      "start": 1400421600000,
+      "venueCode": "PLEYEL_PLEYEL"
+    },
+    {
+      "eventId": 341181259,
+      "id": 341181480,
+      "logo": null,
+      "name": null,
+      "prices": [
+        {
+          "amount": 80750,
+          "audienceSubCategoryId": 337100890,
+          "seatCategoryId": 340826016
+        },
+        {
+          "amount": 61750,
+          "audienceSubCat
