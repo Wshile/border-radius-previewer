@@ -48268,4 +48268,96 @@
         {
           "areas": [
             {
-            
+              "areaId": 205705994,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706006,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706005,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706004,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706003,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706002,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706001,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706000,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706009,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706008,
+              "blockIds": []
+            }
+          ],
+          "seatCategoryId": 338937288
+        }
+      ],
+      "seatMapImage": null,
+      "start": 1402840800000,
+      "venueCode": "PLEYEL_PLEYEL"
+    },
+    {
+      "eventId": 138586977,
+      "id": 138586979,
+      "logo": null,
+      "name": null,
+      "prices": [
+        {
+          "amount": 42750,
+          "audienceSubCategoryId": 337100890,
+          "seatCategoryId": 338937277
+        },
+        {
+          "amount": 33250,
+          "audienceSubCategoryId": 337100890,
+          "seatCategoryId": 338937278
+        },
+        {
+          "amount": 23750,
+          "audienceSubCategoryId": 337100890,
+          "seatCategoryId": 338937280
+        },
+        {
+          "amount": 16150,
+          "audienceSubCategoryId": 337100890,
+          "seatCategoryId": 338937281
+        },
+        {
+          "amount": 10000,
+          "audienceSubCategoryId": 337100890,
+          "seatCategoryId": 338937282
+        }
+      ],
+      "seatCategories": [
+        {
+          "areas": [
+            {
+              "areaId": 205705994,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706006,
+              "blockIds": []
+            },
+            {
+              "areaId": 205706005,
+              "blockIds
