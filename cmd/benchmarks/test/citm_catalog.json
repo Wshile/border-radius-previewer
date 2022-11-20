@@ -50398,4 +50398,72 @@
     "341264860": "1ère catégorie",
     "341264861": "2ème catégorie",
     "341264863": "3ème catégorie",
-    "341264864": "4ème catégor
+    "341264864": "4ème catégorie",
+    "341264866": "1ère catégorie",
+    "341264867": "2ème catégorie",
+    "341264869": "3ème catégorie",
+    "341264870": "4ème catégorie",
+    "341264872": "1ère catégorie",
+    "342752792": "catétgorie unique"
+  },
+  "subTopicNames": {
+    "337184262": "Musique amplifiée",
+    "337184263": "Musique baroque",
+    "337184267": "Ciné-concert",
+    "337184268": "Musique classique",
+    "337184269": "Jazz",
+    "337184273": "Musique de chambre",
+    "337184275": "Musique dirigée",
+    "337184279": "Musique du monde",
+    "337184280": "Pop/rock",
+    "337184281": "Musique de chambre",
+    "337184282": "Famille",
+    "337184283": "Concert",
+    "337184284": "Opéra (version de concert)",
+    "337184288": "Musique contemporaine",
+    "337184292": "Musique vocale",
+    "337184296": "Musique ancienne",
+    "337184297": "Chanson",
+    "337184298": "Voix",
+    "337184299": "famille"
+  },
+  "subjectNames": {},
+  "topicNames": {
+    "107888604": "Activité",
+    "324846098": "Type de public",
+    "324846099": "Genre",
+    "324846100": "Formations musicales"
+  },
+  "topicSubTopics": {
+    "107888604": [
+      337184283,
+      337184267
+    ],
+    "324846098": [
+      337184299
+    ],
+    "324846099": [
+      337184268,
+      337184288,
+      337184284,
+      337184263,
+      337184298,
+      337184269,
+      337184280,
+      337184297,
+      337184281,
+      337184296,
+      337184279
+    ],
+    "324846100": [
+      337184275,
+      337184262,
+      337184292,
+      337184273,
+      337184282
+    ]
+  },
+  "venueNames": {
+    "PLEYEL_PLEYEL": "Salle Pleyel"
+  }
+}
