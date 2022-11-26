@@ -26,4 +26,22 @@ follows the oj.Script format.
 
   oj -m "(@.name == 'Pete')" myfile.json "(@.name == "Makie")"
 
-An argument that starts with a { or [ ma
+An argument that starts with a { or [ marks the start of a JSON document that
+is composed of the remaining argument concatenated together.
+
+  -b	bright color
+  -c	color
+  -i int
+    	indent (default 2)
+  -m value
+    	match equation/script
+  -s	sort
+  -sen
+    	outpit in Simple Encoding Notation
+  -w	wrap extracts in an array
+  -x value
+    	extract path
+  -z	lazy mode accepts Simple Encoding Notation (quotes and commas mostly optional)
+
+*/
+package main
