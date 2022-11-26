@@ -119,3 +119,47 @@
           ]
         }
       ]
+      name: {
+        family: "du Marché"
+        _family: {
+          extension: [
+            {
+              url: "http://hl7.org/fhir/StructureDefinition/humanname-own-prefix"
+              valueString: VV
+            }
+          ]
+        }
+        given: [
+          Bénédicte
+        ]
+      }
+      telecom: [
+        {
+          system: phone
+          value: "+33 (237) 998327"
+        }
+      ]
+      address: {
+        use: home
+        type: both
+        line: [
+          "534 Erewhon St"
+        ]
+        city: PleasantVille
+        district: Rainbow
+        state: Vic
+        postalCode: 3999
+        period: {
+          start: "1974-12-25"
+        }
+      }
+      gender: female
+      period: {
+        start: 2012
+      }
+    }
+  ]
+  managingOrganization: {
+    reference: "Organization/1"
+  }
+}
