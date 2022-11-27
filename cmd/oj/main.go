@@ -102,4 +102,73 @@ func main() {
 usage: %s [<options>] [@<extraction>]... [(<match>)]... [<json-file>]...
 
 The default behavior it to write the JSON formatted according to the color
-options and the indentation option. If no files are specified JSON 
+options and the indentation option. If no files are specified JSON input is
+expected from stdin.
+
+Filtering and extraction of elements is supported using JSONPath and the
+scripting that is part of JSONPath filters.
+
+Extraction paths can be provided either with the -x option or an argument
+starting with a $ or @. A Expr.Get() is executed and all the results are
+either written or wrapped with an array and written depending on the value of
+the wrap option (-w).
+
+  oj -x abc.def myfile.json "@.x[?(@.y > 1)]"
+
+To filter JSON documents the match option (-m) is used. If a JSON document
+matches at least one match option the JSON will be written. In addition to the
+-m option an argument starting with a '(' is assumed to be a match script that
+follows the oj.Script format.
+
+  oj -m "(@.name == 'Pete')" myfile.json "(@.name == "Makie")"
+
+An argument that starts with a { or [ marks the start of a JSON document that
+is composed of the remaining argument concatenated together. That document is
+then used as the input.
+
+  oj -i 0 -z {a:1, b:two}
+  => {"a":1,"b":"two"}
+
+Elements can be deleted from the JSON using the -d option. Multiple
+occurrences of -d are supported.
+
+Oj can also be used to assemble new JSON output from input data. An assembly
+plan that describes how to assemble the new JSON if specified by the -a
+option. The -fn option will display the documentation for assembly.
+
+Pretty mode output can be used with JSON or the -sen option. It indents
+according to a defined width and maximum depth in a best effort approach. The
+-p takes a pattern of <width>.<max-depth>.<align> where width and max-depth
+are integers and align is a boolean.
+
+`, filepath.Base(os.Args[0]))
+		flag.PrintDefaults()
+		fmt.Fprintln(os.Stderr)
+	}
+	flag.Parse() // get config file if specified
+	if showVersion {
+		fmt.Printf("oj %s\n", version)
+		os.Exit(0)
+	}
+	if showConf {
+		displayConf()
+		os.Exit(0)
+	}
+	if showFnDocs {
+		displayFnDocs()
+		os.Exit(0)
+	}
+	if showFilterDocs {
+		displayFilterDocs()
+		os.Exit(0)
+	}
+	extracts = extracts[:0]
+	matches = matches[:0]
+	dels = dels[:0]
+	if err := run(); err != nil {
+		fmt.Fprintf(os.Stderr, "*-*-* %s\n", err)
+		os.Exit(1)
+	}
+}
+
+fu
