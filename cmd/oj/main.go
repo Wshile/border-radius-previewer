@@ -171,4 +171,101 @@ are integers and align is a boolean.
 	}
 }
 
-fu
+func run() (err error) {
+	defer func() {
+		if r := recover(); r != nil {
+			err, _ = r.(error)
+		}
+	}()
+	loadConfig()
+
+	flag.Parse() // load again to over-ride loaded config
+
+	var input []byte
+	var files []string
+	for _, arg := range flag.Args() {
+		if len(arg) == 0 {
+			continue
+		}
+		if 0 < len(input) {
+			input = append(input, arg...)
+			continue
+		}
+		switch arg[0] {
+		case '@', '$':
+			x, err := jp.ParseString(arg)
+			if err == nil {
+				extracts = append(extracts, x)
+			}
+		case '(':
+			script, err := jp.NewScript(arg)
+			if err == nil {
+				matches = append(matches, script)
+			}
+		case '{', '[':
+			input = append(input, arg...)
+		default:
+			files = append(files, arg)
+		}
+	}
+	if 0 < len(convName) {
+		switch strings.ToLower(convName) {
+		case "nano":
+			conv = &alt.TimeNanoConverter
+		case "rfc3339":
+			conv = &alt.TimeRFC3339Converter
+		case "mongo":
+			conv = &alt.MongoConverter
+		default:
+			if strings.ContainsAny(convName, "0123456789") {
+				conv = &alt.Converter{
+					String: []func(val string) (any, bool){
+						func(val string) (any, bool) {
+							if len(val) == len(convName) {
+								if t, err := time.ParseInLocation(convName, val, time.UTC); err == nil {
+									return t, true
+								}
+							}
+							return val, false
+						},
+					},
+				}
+			} else {
+				conv = &alt.Converter{
+					Map: []func(val map[string]any) (any, bool){
+						func(val map[string]any) (any, bool) {
+							if len(val) == 1 {
+								switch tv := val[convName].(type) {
+								case string:
+									for _, layout := range []string{time.RFC3339Nano, time.RFC3339, "2006-01-02"} {
+										if t, err := time.ParseInLocation(layout, tv, time.UTC); err == nil {
+											return t, true
+										}
+									}
+								case int64:
+									return time.Unix(0, tv), true
+								}
+							}
+							return val, false
+						},
+					},
+				}
+			}
+		}
+	}
+	var p oj.SimpleParser
+	switch {
+	case mongo:
+		sp := &sen.Parser{}
+		sp.AddMongoFuncs()
+		p = sp
+		if conv == nil {
+			conv = &alt.MongoConverter
+		}
+	case lazy:
+		p = &sen.Parser{}
+	default:
+		p = &oj.Parser{Reuse: true}
+	}
+	planDef = strings.TrimSpace(planDef)
+	if 0 < len(planDef)
