@@ -268,4 +268,128 @@ func run() (err error) {
 		p = &oj.Parser{Reuse: true}
 	}
 	planDef = strings.TrimSpace(planDef)
-	if 0 < len(planDef)
+	if 0 < len(planDef) {
+		if planDef[0] != '[' {
+			var b []byte
+			if b, err = ioutil.ReadFile(planDef); err != nil {
+				return err
+			}
+			planDef = string(b)
+		}
+		var pd any
+		if pd, err = (&sen.Parser{}).Parse([]byte(planDef)); err != nil {
+			panic(err)
+		}
+		plist, _ := pd.([]any)
+		if len(plist) == 0 {
+			panic(fmt.Errorf("assembly plan not an array"))
+		}
+		plan = asm.NewPlan(plist)
+	}
+	if 0 < len(files) {
+		var f *os.File
+		for _, file := range files {
+			if f, err = os.Open(file); err == nil {
+				_, err = p.ParseReader(f, write)
+				_ = f.Close()
+			}
+			if err != nil {
+				panic(err)
+			}
+		}
+	}
+	if 0 < len(input) {
+		if _, err = p.Parse(input, write); err != nil {
+			panic(err)
+		}
+	}
+	if len(files) == 0 && len(input) == 0 {
+		if _, err = p.ParseReader(os.Stdin, write); err != nil {
+			panic(err)
+		}
+	}
+	if showRoot && plan != nil {
+		plan = nil
+		delete(root, "src")
+		delete(root, "asm")
+		write(root)
+	}
+	return
+}
+
+func write(v any) bool {
+	if conv != nil {
+		v = conv.Convert(v)
+	}
+	if 0 < len(matches) {
+		match := false
+		for _, m := range matches {
+			if m.Match(v) {
+				match = true
+				break
+			}
+		}
+		if !match {
+			return false
+		}
+	}
+	for _, x := range dels {
+		_ = x.Del(v)
+	}
+	switch {
+	case 0 < len(extracts):
+		if wrapExtract {
+			var w []any
+			for _, x := range extracts {
+				w = append(w, x.Get(v)...)
+			}
+			if senOut {
+				writeSEN(w)
+			} else {
+				writeJSON(w)
+			}
+		} else {
+			for _, x := range extracts {
+				for _, v2 := range x.Get(v) {
+					if senOut {
+						writeSEN(v2)
+					} else {
+						writeJSON(v2)
+					}
+				}
+			}
+		}
+	case senOut:
+		writeSEN(v)
+	default:
+		if plan != nil {
+			root["src"] = v
+			if err := plan.Execute(root); err != nil {
+				fmt.Fprintf(os.Stderr, "*-*-* %s\n", err)
+				os.Exit(1)
+			} else {
+				v = root["asm"]
+			}
+		}
+		writeJSON(v)
+	}
+	return false
+}
+
+func writeJSON(v any) {
+	if options == nil {
+		o := ojg.Options{}
+		if bright {
+			o = oj.BrightOptions
+			o.Color = true
+			o.Sort = sortKeys
+		} else if color || sortKeys || tab {
+			o = ojg.DefaultOptions
+			o.Color = color
+		}
+		o.Indent = indent
+		o.Tab = tab
+		o.HTMLUnsafe = !safe
+		o.TimeFormat = time.RFC3339Nano
+		o.Sort = sortKeys
+		if html {
