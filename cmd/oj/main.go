@@ -393,3 +393,90 @@ func writeJSON(v any) {
 		o.TimeFormat = time.RFC3339Nano
 		o.Sort = sortKeys
 		if html {
+			o.HTMLUnsafe = false
+			if color {
+				o.SyntaxColor = ojg.HTMLOptions.SyntaxColor
+				o.KeyColor = ojg.HTMLOptions.KeyColor
+				o.NullColor = ojg.HTMLOptions.NullColor
+				o.BoolColor = ojg.HTMLOptions.BoolColor
+				o.NumberColor = ojg.HTMLOptions.NumberColor
+				o.StringColor = ojg.HTMLOptions.StringColor
+				o.TimeColor = ojg.HTMLOptions.TimeColor
+				o.NoColor = ojg.HTMLOptions.NoColor
+			}
+		}
+		options = &o
+	}
+	if omit {
+		// Use alt.Alter to remove empty since it handles recursive removal.
+		v = alt.Alter(v, &ojg.Options{OmitNil: true, OmitEmpty: true})
+	}
+	if 0 < len(prettyOpt) {
+		parsePrettyOpt()
+	}
+	if prettyOn {
+		_ = pretty.WriteJSON(os.Stdout, v, options, float64(width)+float64(maxDepth)/10.0, align)
+	} else {
+		_ = oj.Write(os.Stdout, v, options)
+	}
+	_, _ = os.Stdout.Write([]byte{'\n'})
+}
+
+func writeSEN(v any) {
+	if options == nil {
+		o := ojg.Options{}
+		switch {
+		case html:
+			o = ojg.HTMLOptions
+			o.Color = true
+			o.HTMLUnsafe = false
+		case bright:
+			o = ojg.BrightOptions
+			o.Color = true
+		case color || sortKeys || tab:
+			o = ojg.DefaultOptions
+			o.Color = color
+		}
+		o.Indent = indent
+		o.Tab = tab
+		o.HTMLUnsafe = !safe
+		o.TimeFormat = time.RFC3339Nano
+		o.Sort = sortKeys
+		options = &o
+	}
+	if omit {
+		// Use alt.Alter to remove empty since it handles recursive removal.
+		v = alt.Alter(v, &ojg.Options{OmitNil: true, OmitEmpty: true})
+	}
+	if 0 < len(prettyOpt) {
+		parsePrettyOpt()
+	}
+	if prettyOn {
+		_ = pretty.WriteSEN(os.Stdout, v, options, float64(width)+float64(maxDepth)/10.0, align)
+	} else {
+		_ = sen.Write(os.Stdout, v, options)
+	}
+	_, _ = os.Stdout.Write([]byte{'\n'})
+}
+
+func parsePrettyOpt() {
+	if 0 < len(prettyOpt) {
+		parts := strings.Split(prettyOpt, ".")
+		if 0 < len(parts[0]) {
+			if i, err := strconv.ParseInt(parts[0], 10, 64); err == nil {
+				width = int(i)
+				prettyOn = true
+			} else {
+				panic(err)
+			}
+		}
+		if 1 < len(parts) && 0 < len(parts[1]) {
+			if i, err := strconv.ParseInt(parts[1], 10, 64); err == nil {
+				maxDepth = int(i)
+				prettyOn = true
+			} else {
+				panic(err)
+			}
+		}
+		if 2 < len(parts) && 0 < len(parts[2]) {
+			var 
