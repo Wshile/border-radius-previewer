@@ -590,4 +590,75 @@ func applyConf(conf any) {
 		align = alt.Bool(v)
 		prettyOn = true
 	}
-	safe, _ = jp.C
+	safe, _ = jp.C("html-safe").First(conf).(bool)
+	lazy, _ = jp.C("lazy").First(conf).(bool)
+	senOut, _ = jp.C("sen").First(conf).(bool)
+	convName, _ = jp.C("conv").First(conf).(string)
+	mongo, _ = jp.C("mongo").First(conf).(bool)
+
+	setOptionsColor(conf, "bool", setBoolColor)
+	setOptionsColor(conf, "key", setKeyColor)
+	setOptionsColor(conf, "no-color", setNoColor)
+	setOptionsColor(conf, "null", setNullColor)
+	setOptionsColor(conf, "number", setNumberColor)
+	setOptionsColor(conf, "string", setStringColor)
+	setOptionsColor(conf, "time", setTimeColor)
+	setOptionsColor(conf, "syntax", setSyntaxColor)
+
+	setHTMLColor(conf, "bool", &sen.HTMLOptions.BoolColor)
+	setHTMLColor(conf, "key", &sen.HTMLOptions.KeyColor)
+	setHTMLColor(conf, "no-color", &sen.HTMLOptions.NoColor)
+	setHTMLColor(conf, "null", &sen.HTMLOptions.NullColor)
+	setHTMLColor(conf, "number", &sen.HTMLOptions.NumberColor)
+	setHTMLColor(conf, "string", &sen.HTMLOptions.StringColor)
+	setHTMLColor(conf, "syntax", &sen.HTMLOptions.SyntaxColor)
+}
+
+func setOptionsColor(conf any, key string, fun func(color string)) {
+	for _, v := range jp.C("colors").C(key).Get(conf) {
+		fun(pickColor(alt.String(v)))
+	}
+}
+
+func setBoolColor(color string) {
+	ojg.DefaultOptions.BoolColor = color
+	ojg.BrightOptions.BoolColor = color
+}
+
+func setKeyColor(color string) {
+	ojg.DefaultOptions.KeyColor = color
+	ojg.BrightOptions.KeyColor = color
+}
+
+func setNoColor(color string) {
+	ojg.DefaultOptions.NoColor = color
+	ojg.BrightOptions.NoColor = color
+}
+
+func setNullColor(color string) {
+	ojg.DefaultOptions.NullColor = color
+	ojg.BrightOptions.NullColor = color
+}
+
+func setNumberColor(color string) {
+	ojg.DefaultOptions.NumberColor = color
+	ojg.BrightOptions.NumberColor = color
+}
+
+func setStringColor(color string) {
+	ojg.DefaultOptions.StringColor = color
+	ojg.BrightOptions.StringColor = color
+}
+
+func setTimeColor(color string) {
+	ojg.DefaultOptions.TimeColor = color
+	ojg.BrightOptions.TimeColor = color
+}
+
+func setSyntaxColor(color string) {
+	ojg.DefaultOptions.SyntaxColor = color
+	ojg.BrightOptions.SyntaxColor = color
+}
+
+func setHTMLColor(conf any, key string, sp *string) {
+	for _, v := range jp.C("colors").C(key).G
