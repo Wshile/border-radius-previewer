@@ -479,4 +479,115 @@ func parsePrettyOpt() {
 			}
 		}
 		if 2 < len(parts) && 0 < len(parts[2]) {
-			var 
+			var err error
+			if align, err = strconv.ParseBool(parts[2]); err != nil {
+				panic(err)
+			}
+			prettyOn = true
+		}
+	}
+}
+
+type exValue struct {
+}
+
+func (xv exValue) String() string {
+	return ""
+}
+
+func (xv exValue) Set(s string) error {
+	x, err := jp.ParseString(s)
+	if err == nil {
+		extracts = append(extracts, x)
+	}
+	return err
+}
+
+type matchValue struct {
+}
+
+func (mv matchValue) String() string {
+	return ""
+}
+
+func (mv matchValue) Set(s string) error {
+	script, err := jp.NewScript(s)
+	if err == nil {
+		matches = append(matches, script)
+	}
+	return err
+}
+
+type delValue struct {
+}
+
+func (dv delValue) String() string {
+	return ""
+}
+
+func (dv delValue) Set(s string) error {
+	x, err := jp.ParseString(s)
+	if err == nil {
+		dels = append(dels, x)
+	}
+	return err
+}
+
+func loadConfig() {
+	var conf any
+	if 0 < len(confFile) {
+		if confFile == "-" { // special case
+			return
+		}
+		f, err := os.Open(confFile)
+		if err != nil {
+			panic(err)
+		}
+		if conf, err = sen.ParseReader(f); err != nil {
+			panic(err)
+		}
+		applyConf(conf)
+	}
+	home := os.Getenv("HOME")
+	for _, path := range []string{
+		"./.oj-config.sen",
+		"./.oj-config.json",
+		home + "/.oj-config.sen",
+		home + "/.oj-config.json",
+	} {
+		f, err := os.Open(path)
+		if err == nil {
+			if conf, err = sen.ParseReader(f); err == nil {
+				applyConf(conf)
+				return
+			}
+		}
+	}
+}
+
+func applyConf(conf any) {
+	bright, _ = jp.C("bright").First(conf).(bool)
+	color, _ = jp.C("color").First(conf).(bool)
+	for _, v := range jp.C("format").C("indent").Get(conf) {
+		indent = int(alt.Int(v))
+	}
+	for _, v := range jp.C("format").C("tab").Get(conf) {
+		tab = alt.Bool(v)
+	}
+	for _, v := range jp.C("format").C("pretty").Get(conf) {
+		prettyOpt, _ = v.(string)
+		parsePrettyOpt()
+	}
+	for _, v := range jp.C("format").C("width").Get(conf) {
+		width = int(alt.Int(v))
+		prettyOn = true
+	}
+	for _, v := range jp.C("format").C("depth").Get(conf) {
+		maxDepth = int(alt.Int(v))
+		prettyOn = true
+	}
+	for _, v := range jp.C("format").C("align").Get(conf) {
+		align = alt.Bool(v)
+		prettyOn = true
+	}
+	safe, _ = jp.C
