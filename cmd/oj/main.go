@@ -661,4 +661,94 @@ func setSyntaxColor(color string) {
 }
 
 func setHTMLColor(conf any, key string, sp *string) {
-	for _, v := range jp.C("colors").C(key).G
+	for _, v := range jp.C("colors").C(key).Get(conf) {
+		*sp = pickColor(alt.String(v))
+	}
+}
+
+func pickColor(s string) (color string) {
+	switch strings.ToLower(s) {
+	case "normal":
+		color = "\x1b[m"
+	case "black":
+		color = "\x1b[30m"
+	case "red":
+		color = "\x1b[31m"
+	case "green":
+		color = "\x1b[32m"
+	case "yellow":
+		color = "\x1b[33m"
+	case "blue":
+		color = "\x1b[34m"
+	case "magenta":
+		color = "\x1b[35m"
+	case "cyan":
+		color = "\x1b[36m"
+	case "white":
+		color = "\x1b[37m"
+	case "gray":
+		color = "\x1b[90m"
+	case "bright-red":
+		color = "\x1b[91m"
+	case "bright-green":
+		color = "\x1b[92m"
+	case "bright-yellow":
+		color = "\x1b[93m"
+	case "bright-blue":
+		color = "\x1b[94m"
+	case "bright-magenta":
+		color = "\x1b[95m"
+	case "bright-cyan":
+		color = "\x1b[96m"
+	case "bright-white":
+		color = "\x1b[97m"
+	default:
+		panic(fmt.Errorf("%s is not a valid color choice", s))
+	}
+	return
+}
+
+func displayFnDocs() {
+	fmt.Printf(`
+An assembly plan is described by a JSON document or a SEN document. The format
+is much like LISP but with brackets instead of parenthesis. A plan is
+evaluated by evaluating the plan function which is usually an 'asm'
+function. The plan operates on a data map which is the root during
+evaluation. The source data is in the $.src and the expected assembled output
+should be in $.asm.
+
+An example of a plan in SEN format is (the first asm is optional):
+
+  [ asm
+    [set $.asm {good: bye}]  // set output to {good: bad}
+    [set $.asm.hello world]  // output is now {good: bad, hello: world}
+  ]
+
+The functions available are:
+
+`)
+	var b []byte
+	var keys []string
+	docs := asm.FnDocs()
+	for k := range docs {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+	for _, k := range keys {
+		b = append(b, fmt.Sprintf("  %10s: %s\n\n", k, strings.ReplaceAll(docs[k], "\n", "\n              "))...)
+	}
+	fmt.Println(string(b))
+}
+
+func displayFilterDocs() {
+	fmt.Printf(`
+
+JSONPaths can include filters such as $.x[?(@.y == 'z')].value. As with other
+square bracket operators it applies to arrays. The general form of a filter is
+[?(left operator right)]. Both left and right can be constants or JSONPaths
+where @ is each array element. Nested filter are supported. Operators
+supported are:
+
+ ==    returns true if left is equal to right.
+
+ !=    
