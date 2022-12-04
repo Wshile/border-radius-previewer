@@ -805,4 +805,73 @@ supported functions are:
                      path is not a string or does not exist then Nothing is
                      returned.
 
- search(path, regex) the path should retur
+ search(path, regex) the path should return a string which is then compared to
+                     the regex string. If there is a match to on a substring of
+                     the string at path then true is returned otherwise if the
+                     string does not match false is returned. I the value at
+                     path is not a string or does not exist then Nothing is
+                     returned.
+
+`)
+}
+
+func displayConf() {
+	fmt.Printf(`
+If an oj configuration file is present in the local directory or the home
+directory that file is used to set the defaults for oj. The file can be in
+either SEN or JSON format. The paths check, in order are:
+
+  ./.oj-config.sen
+  ./.oj-config.json
+  ~/.oj-config.sen
+  ~/.oj-config.json
+
+The file format (SEN with comments) is:
+
+{
+  bright: true // Color if true will colorize the output with bright colors.
+  color: false // Color if true will colorize the output. The bright option takes precedence.
+  colors: {
+    // Color values can be one of the following:
+    //   normal
+    //   black
+    //   red
+    //   green
+    //   yellow
+    //   blue
+    //   magenta
+    //   cyan
+    //   white
+    //   gray
+    //   bright-red
+    //   bright-green
+    //   bright-yellow
+    //   bright-blue
+    //   bright-magenta
+    //   bright-cyan
+    //   bright-white
+    syntax: normal
+    key: bright-blue
+    null: bright-red
+    bool: bright-yellow
+    number: bright-cyan
+    string: bright-green
+    time: bright-magenta
+    no-color: normal // NoColor turns the color off.
+  }
+  // Either the pretty element can be used or the individual width, depth, and
+  // align options can be specified separately.
+  format: {indent: 2 tab: false pretty: 80.3.false}
+  // format: {indent: 2 tab: false width: 80 depth: 3 align: false}
+  html: {
+    syntax: "<span>"
+    key: '<span style="color:#44f">'
+    null: '<span style="color:red">'
+    bool: '<span style="color:#a40">"
+    number: '<span style="color:#04a">'
+    string: '<span style="color:green">'
+    time: '<span style="color:#f0f">'
+    no-color: "</span>"
+  }
+  html-safe: false
+  lazy: true // -z option, laz
