@@ -751,4 +751,58 @@ supported are:
 
  ==    returns true if left is equal to right.
 
- !=    
+ !=    returns true if left is not equal to right.
+
+ <     returns true if left is less than right.
+
+ <=    returns true if left is less than or equal to right.
+
+ >     returns true if left is greater than right.
+
+ >=    returns true if left is greater than or equal to right.
+
+ ||    returns true if either left or right is true
+
+ &&    returns true if both left and right are true.
+
+ !     inverts the boolean value of the right. No left should be
+       present. Examples are !@.x or !(@.x == 2).
+
+ empty returns true if the left empty condition (length is zero) matches the
+       right which must be a boolean.
+
+ has   returns true if the left has condition is null or missing matches the
+       right which must be a boolean.
+
+ +     returns the sum of left and right.
+
+ -     returns the difference of left and right. (left - right)
+
+ *     returns the product of left and right.
+
+ /     returns left divided by right.
+
+ in    returns true if left is in right. Right must be an array either as a
+       constant of the form [1,'a'] or as a path that evaluates to an array.
+
+ =~    returns true if left is a string and matches the right regex which can be
+       either a regex delimited by / or a string.
+
+Functions are also support and take the for of [?length(@.x) == 3]. The
+supported functions are:
+
+ length(path)        returns the length of the list, object, or string at the
+                     path. If the element does not exist or is not a list,
+                     object, or string then Nothing is returned.
+
+ count(path)         returns the number of elements that match the path which
+                     should return a node list.
+
+ match(path, regex)  the path should return a string which is then compared to
+                     the regex string. If there is a match to on the entirety of
+                     the string at path then true is returned otherwise if the
+                     string does not match false is returned. I the value at
+                     path is not a string or does not exist then Nothing is
+                     returned.
+
+ search(path, regex) the path should retur
