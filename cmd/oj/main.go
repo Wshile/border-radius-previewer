@@ -874,4 +874,10 @@ The file format (SEN with comments) is:
     no-color: "</span>"
   }
   html-safe: false
-  lazy: true // -z option, laz
+  lazy: true // -z option, lazy read for SEN format
+  sen: true
+  conv: rfc3339
+  mongo: false
+}
+`)
+}
