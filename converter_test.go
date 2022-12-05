@@ -96,4 +96,56 @@ func TestConverterFloat(t *testing.T) {
 
 func TestConverterArray(t *testing.T) {
 	fun := func(val []any) (any, bool) {
-		if len(val) ==
+		if len(val) == 2 {
+			if k, _ := val[0].(string); 0 < len(k) {
+				return map[string]any{k: val[1]}, true
+			}
+		}
+		return val, false
+	}
+	val := []any{
+		[]any{"x", 2},
+		[]any{1, 2},
+		[]any{"x", 2, 3},
+	}
+	v2, _ := ojg.Convert(val, fun).([]any)
+	for i := 0; i < len(val); i++ {
+		tt.Equal(t, val[i], v2[i]) // verify they are the same
+		var ok bool
+		if 1 <= i { // should not be converted
+			_, ok = val[i].([]any)
+		} else {
+			_, ok = val[i].(map[string]any)
+		}
+		tt.Equal(t, true, ok, i, ":", val[i])
+	}
+}
+
+func TestConverterMixed(t *testing.T) {
+	val := []any{1, true, "ab"}
+	v2, _ := ojg.Convert(val,
+		func(val int64) (any, bool) { return val + 1, true },
+		func(val string) (any, bool) { return val + "c", true },
+		func(val map[string]any) (any, bool) { return true, true },
+	).([]any)
+	tt.Equal(t, []any{2, true, "abc"}, v2)
+}
+
+func TestConverterMongo(t *testing.T) {
+	val := []any{
+		map[string]any{"$oid": "507f191e810c19729de860ea"},
+		map[string]any{"$date": "2021-03-05T11:22:33.123Z"},
+		map[string]any{"$numberLong": "123456789"},
+		map[string]any{"$numberDecimal": "123.456"},
+		map[string]any{"$numberDecimal": "123.456", "x": 3},
+		map[string]any{"$numberDecimal": 3},
+	}
+	v2, _ := ojg.MongoConverter.Convert(val).([]any)
+	tt.Equal(t, 6, len(v2))
+	tt.Equal(t, "507f191e810c19729de860ea", v2[0])
+	tt.Equal(t, "time.Time 2021-03-05 11:22:33.123 +0000 UTC", fmt.Sprintf("%T %s", v2[1], v2[1]))
+	tt.Equal(t, 123456789, v2[2])
+	tt.Equal(t, 123.456, v2[3])
+	tt.Equal(t, map[string]any{"$numberDecimal": "123.456", "x": 3}, v2[4])
+	tt.Equal(t, map[string]any{"$numberDecimal": 3}, v2[5])
+}
