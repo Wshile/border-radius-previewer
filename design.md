@@ -53,4 +53,50 @@ is frustrating to see an argument type of `any` in an API and
 then no documentation describing that the supported types are.
 
 There is another approach though: Define a set of types that can be in
-a collection an
+a collection and use those types. With this approach, the generic data
+implementation has to support the basic JSON types of `null`,
+`boolean`, `int64`, `float64`, `string`, array, and object. In
+addition time should be supported. From experience in both JSON use in
+Ruby and Go time has always been needed. Time is just too much a part
+of any set of data to leave it out.
+
+The generic data had to be type safe. It would not do to have an
+element that could not be encoded as JSON in the data.
+
+A frequent operation for generic data is to store that data into a
+JSON database or similar. That meant converting to simple Go types of
+`nil`, `bool`, `int64`, `float64`, `string`, `[]any`, and
+`map[string]any` had to be fast.
+
+Also planned for this part of the journey was methods on the types to
+support getting, setting, and deleting elements using JSONPath. The
+hope was to have an object based approach to the generic nodes so
+something like the following could be used but keeping generic data,
+JSONPath, and parsing in separate packages.
+
+```golang
+    var n gen.Node
+    n = gen.Int(123)
+    i, ok := n.AsInt()
+```
+
+Unfortunately that part of the journey had to be cancelled as the Go
+travel guide refuses to let packages talk back and forth. Imports are
+one way only. After trying to put all the code in one package it
+eventually got unwieldy. Function names started being prefixed with
+what should really have been package names so the object and method
+approach was dropped. A change in API but the journey would continue.
+
+### JSON Parser and Validator
+
+The next stop was the parser and validator. After some consideration
+it seemed like starting with the validator would be best way to become
+familiar with the territory. The JSON parser and validator need not be
+the same and each should be as performant as possible. The parsers
+needed to support parsing into simple Go types as well as the generic
+data types.
+
+When parsing files that include millions or more JSON elements in
+files that might be over 100GB a streaming parser is necessary. It
+would be nice to share some code with both the streaming and string
+parsers of course. It
