@@ -99,4 +99,58 @@ data types.
 When parsing files that include millions or more JSON elements in
 files that might be over 100GB a streaming parser is necessary. It
 would be nice to share some code with both the streaming and string
-parsers of course. It
+parsers of course. It's easier to pack light when the areas are
+similar.
+
+The parser must also allow parsing into native Go types. Furthermore
+interfaces must be supported even though Go unmarshalling does not
+support interface fields. Many data types make use of interfaces
+that limitation was not acceptable for the OjG parser. A different
+approach to support interfaces was possible.
+
+JSON documents of any non-trivial size, especially if hand-edited, are
+likely to have errors at some point. Parse errors must identify where
+in the document the error occurred.
+
+### JSONPath
+
+Saving the most interesting part of the trip for last, the JSONPath
+implementation promised to have all sorts of interesting problems to
+solve with descents, wildcards, and especially filters.
+
+A JSONPath is used to extract elements from data. That part of the
+implementation had to be fast. Parsing really didn't have to be fast
+but it would be nice to have a way of building a JSONPath in a
+performant manner even if it was not as convenient as parsing a
+string.
+
+The JSONPath implementation had to implement all the features
+described by the [Goessner
+article](https://goessner.net/articles/JsonPath). There are other
+descriptions of JSONPath but the Goessner description is the most
+referenced. Since the implementation is in Go the scripting feature
+described could be left out as long as similar functionality could be
+provided for array indexes relative to the length of the
+array. Borrowing from Ruby, using negative indexes would provide that
+functionality.
+
+## The Journey
+
+The journey unfolded as planned to a degree. There were some false
+starts and revisits but eventually each destination was reached and
+the journey completed.
+
+### Generic Data (`gen` package)
+
+What better way to make generic type fast than to just define generic
+types from simple Go types and then add methods on those types? A
+`gen.Int` is just an `int64` and a `gen.Array` is just a
+`[]gen.Node`. With that approach there are no extra allocations.
+
+```golang
+type Node any
+type Int int64
+type Array []Node
+```
+
+Si
