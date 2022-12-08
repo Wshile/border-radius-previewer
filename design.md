@@ -194,4 +194,42 @@ profiling.
 
 Not knowing at the time that function calls were so expensive but
 anticipating that there was some overhead in function calls I moved
-some of the
+some of the code from a few frequently called functions to be inline
+in the calling function. That made much more of a difference than I
+expected. At that point I looked at the Go code for the core
+validation code. I was surprised to see that it used lots of functions
+but not functions attached to a type. I gave that approach a try but
+with functions on the parser type. The results were not good
+either. Simply changing the functions to take the parser as an
+argument made a big difference though. Another lesson learned.
+
+Next was to remove function calls as much as possible since they did
+seem to be expensive. The code was no longer elegant and had lots of
+duplicated blocks but it ran much faster. At this point the code
+performance was getting closer to clearing the Go validator bar.
+
+When parsing in a single pass a conceptual state machine is generally
+used. When branching with functions there is still a state machine but
+the states are limited for each function making it much easier to
+follow. Moving into a single function meant tracking many more states
+in single state machine. Implementation was with lengthy switch
+statements. One problem remained though. Array and Object had to be
+tracked to know when a closing `]` or `}` was allowed. Since function
+calls were being avoided that meant maintaining a stack in the single
+parser function. That approach worked well with very little overhead.
+
+Another tweak was to reuse memory. At this point the parser only
+allocated a few objects but why would it need to allocate any if the
+buffers for the stack could be reused. That prompted a change in the
+API. The initial API was for a single `Validate()` function. If the
+validator was made public it could be reused. That made a lot of sense
+since often similar data is parsed or validated by the same
+application. That change was enough to reduce the allocations per
+validation to zero and brought the performance under the Go
+`json.Valid()` bar.
+
+#### Parser
+
+With the many optimum techniques identified while visiting the
+validator, the next part of the journey was to use those same
+technique on the parse
