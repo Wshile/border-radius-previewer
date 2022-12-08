@@ -153,4 +153,45 @@ type Int int64
 type Array []Node
 ```
 
-Si
+Since generic arrays and objects restrict the type of the values in
+each collection to `gen.Node` types the collections are assured to
+contain only elements that can be encoded as JSON.
+
+Methods on the `Node` could not be implemented without import loops so
+the number of functions in the `Node` interface were limited. It was
+clear a parser specific to the generic data type would be needed but
+that would have to wait until the parser part of the journey was
+completed. Then the generic data package could be revisited and the
+parser explored.
+
+Peeking at the future to the generic data parser revisit it was not
+very interesting after the deep dive into the simple data parser. The
+parser for generic types is a copy of the oj package parser but
+instead of simple types being created instances that support the
+`gen.Node` interface are created.
+
+### Simple Parser (`oj` package)
+
+Looking back its hard to say what was the most interesting part of the
+journey, the parser or JSONPath. Each had their own unique set of
+issues. The parser was the best place to start though as some valuable
+lessons were learned about what to avoid and what to gravitate toward
+in trying to achieve high performance Go code.
+
+#### Validator
+
+From the start I knew that a single pass parser would be more
+efficient than building tokens and then making a second pass to decide
+what the tokens means. At least that approach as worked well in the
+past. I dived in and used a `readValue` function that branched
+depending on the next character read. It worked but it was slower than
+the target of being on par with the Go `json.Validate`. That was the
+bar to clear. The first attempt was off by a lot. Of course a
+benchmark was needed to verify that so the `cmd/benchmark` command was
+started. Profiling didn't help much. It turned out since much of the
+overhead was in the function call setup which isn't obvious when
+profiling.
+
+Not knowing at the time that function calls were so expensive but
+anticipating that there was some overhead in function calls I moved
+some of the
