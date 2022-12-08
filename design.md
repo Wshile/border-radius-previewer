@@ -232,4 +232,43 @@ validation to zero and brought the performance under the Go
 
 With the many optimum techniques identified while visiting the
 validator, the next part of the journey was to use those same
-technique on the parse
+technique on the parser.
+
+The difference between the validator and the parser is that the parser
+needs to build up data elements. The first attempt was to add the
+bytes associated with a value to a reusable buffer and then parse that
+buffer at the end of the value bytes in the source. It worked and was
+as fast as the `json.Unmarshall` function but that was not enough as
+there were still more allocations than seemed necessary.
+
+By expanding the state machine `null`, `true`, and `false` could be
+identified as values without adding to the buffer. That gave a
+bit of improvement.
+
+Numbers, specifically integers, were another value type that really
+didn't need to be parsed from a buffer so instead of appending bytes
+to a buffer and calling `strconv.ParseInt()`, integer values were
+built as an `int64` and grown as bytes were read. If a `.` character
+is encountered then the number is a decimal so the type expected is
+changed and each part of a float is captured as integers and finally a
+float64 is created when done. This was another improvement in
+performance.
+
+Not much could be done to improve string parsing since it is really
+just appending bytes to a buffer and making them a string at the final
+`"`. Each byte being appended needed to be checked though. A byte map
+in the form of a 256 long bytes array is used for that purpose.
+
+Going back to the stack used in the validator, instead of putting a
+simple marker on the stack like the validator, when an Object start
+character, a `{` is encountered a new `map[string]any` is put
+on the stack. Values and keys are then used to set members of the
+map. Nothing special there.
+
+Saving the best for last, arrays were tougher to deal with. A value is
+not just added to an array but rather appended to an array and a
+potentially new array is returned. Thats not a terribly efficient way to
+build a slice as it will go through multiple reallocations. Instead, a
+second slice index stack is kept. As an array is to be created, a spot
+is reserved on the stack and the index of that stack location is
+placed on the slice index stack. After that values are pushed onto th
