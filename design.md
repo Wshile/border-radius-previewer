@@ -314,4 +314,51 @@ The first step was to get a language and cultural refresher on
 JSONPath terms and behavior. From that it was decided that a JSONPath
 would be represented by a `jp.Expr` which is composed of fragments or
 `jp.Frag` objects. Keeping with the guideline of minimizing
-allocations the `jp.Expr` is just 
+allocations the `jp.Expr` is just a slice of `jp.Frag`. In most cases
+expressions are defined statically so the parser need not be fast. No
+special care was taken to make the JSONPath parser fast. Instead
+functions are used in an approach that is easier to understand. I said
+easier, not easy. There are a fair number of dangerous curves with
+trying to support bracketed notation as well as dot notation and how
+that all plays nicely with the script parser so that one can call the
+other to support nested filters. It was rewarding to see it all come
+together though.
+
+If the need exists to create expressions at run time then functions
+are used that allow them to be constructed more easily. That makes for
+a lot of functions. I also like to be able to keep code compact and
+figured others might too so each fragment type can also be created
+with a single letter function. They don't have to be used but they
+exist to support building expressions as a chain.
+
+```golang
+    x := jp.R().D().C("abc").W().C("xyz").N(3)
+    fmt.Println(x.String())
+    // $..abc.*.xyz[3]
+```
+
+contrasted with the use of the JSONPath parser:
+
+```golang
+    x, err := jp.ParseString("$..abc.*.xyz[3]")
+    // check err first
+    fmt.Println(x.String())
+    // $..abc.*.xyz[3]
+```
+
+Evaluating an expression against data involves walking down the data
+tree to find one or more elements. Conceptually each fragment of a
+path sets up zero or more paths to follow through the data. When the
+last fragment is reached the search is done. A recursive approach
+would be ideal where the evaluation of one fragment then invokes the
+next fragment's eval function with as many paths it matches. Great on
+paper but for something like a descent fragment (`..`) that is a lot
+of function calls.
+
+Given that function calls are expensive and slices are cheap a Forth
+(the language) evaluation stack approach is used. Not exactly Forth
+but a similar concept mixing data and operators. Each fragment takes
+its matches and those matches already on the stack. Then the next
+fragment evaluates each in turn. This continues until the stack
+shrinks back to one element indicating the evaluation is complete. The
+last fragment put
