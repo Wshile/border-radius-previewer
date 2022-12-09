@@ -403,4 +403,55 @@ up side to that as well though. Now any simple or generic data can be
 used to recompose objects and not just JSON strings.
 
 The `alt.GenAlter()` function was interesting in that it is possible
-to modify a slice type and then reset the mem
+to modify a slice type and then reset the members without
+reallocating.
+
+Thats the last stop of the journey.
+
+## Lessons Learned
+
+Benchmarking was instrumental to tuning and picking the most favorable
+approach to the implementation. Through those benchmarks a number of
+lessons were learned.  The final benchmarks results can be viewed by
+running the `cmd/benchmark` command. See the results at
+[benchmarks.md](benchmarks.md).
+
+Here is a snippet from the benchmarks. Note higher is better for the
+numbers in parenthesis which is a ratio of the OjG component to Go
+json package component.
+
+```
+Parse JSON
+json.Unmarshal:           7104 ns/op (1.00x)    4808 B/op (1.00x)      90 allocs/op (1.00x)
+  oj.Parse:               4518 ns/op (1.57x)    3984 B/op (1.21x)      86 allocs/op (1.05x)
+  oj.GenParse:            4623 ns/op (1.54x)    3984 B/op (1.21x)      86 allocs/op (1.05x)
+
+json.Marshal:             2616 ns/op (1.00x)     992 B/op (1.00x)      22 allocs/op (1.00x)
+  oj.JSON:                 436 ns/op (6.00x)     131 B/op (7.57x)       4 allocs/op (5.50x)
+  oj.Write:                455 ns/op (5.75x)     131 B/op (7.57x)       4 allocs/op (5.50x)
+```
+
+### Functions Add Overhead
+
+Sure we all know a function call add some overhead in any language. In
+C that overhead is pretty small or nonexistent with inline
+functions. That is not true for Go. There is considerable overhead in
+making a function call and if that functional call included any kind
+of context such as being the function of a type the overhead is even
+higher. That observation (while disappointing) drove a lot of the
+parser and JSONPath evaluation code. For nice looking and well
+organized code using functions are highly recommended but for high
+perfomance find a way to reduce function calls.
+
+The implementation of the parser included a lot of duplicate code to
+reduce function calls and it did make a significant difference in
+performance.
+
+The JSONPath evaluation takes an additional approach. It includes a
+fair amount of code duplication but it also implements its own stack
+to avoid nested functional calls even though the nature of the
+evaluation is a better match for a recursive implementation.
+
+### Slices are Nice
+
+Sl
