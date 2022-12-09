@@ -271,4 +271,47 @@ potentially new array is returned. Thats not a terribly efficient way to
 build a slice as it will go through multiple reallocations. Instead, a
 second slice index stack is kept. As an array is to be created, a spot
 is reserved on the stack and the index of that stack location is
-placed on the slice index stack. After that values are pushed onto th
+placed on the slice index stack. After that values are pushed onto the
+stack until an array close character `]` is reached. The slice index
+is then referenced and a new `[]any` is allocated for all the
+values from the arry index on the stack to the end of the
+stack. Values are copied to the new array and the stack is collapsed
+to the index. A bit complicated but it does save multiple object
+allocations.
+
+After some experimentation it turned out that the overhead of some
+operations such as creating a slice or adding a number were not
+impacted to any large extent by making a function call since it does
+not happen as frequently as processing each byte. Some use of
+functions could therefor be used to remove duplicate code without
+incurring a significant performance impact.
+
+One stop left at the parser package tour. Streaming had to be
+supported. At this point there were already plans on how to deal with
+streaming which was to load up a buffer and iterate over that buffer
+using the exact same code as for parsing bytes and repeat until there
+was nothing left to read. It seemed like using an index into the
+buffer would be easier to keep track of but switching from a `for`
+`range` to `for i = 0; i < size; i++ {` dropped the performance
+considerably. Clearly staying with the `range` approach was
+better. Once that was working a quick trip back to the validator to
+allow it to support streams was made.
+
+Stream parsing or parsing a string with multiple JSON documents in it
+is best handled with a callback function. That allows the caller to
+process the parsed document and move on without incurring any
+additional memory allocations unless needed.
+
+The stay at the validator and parser was fairly lengthy at a bit over
+a month of evening coding.
+
+### JSONPath (`jp` package)
+
+The visit to JSONPath would prove to be a long stay as well with a lot
+more creativity for some tantalizing problems.
+
+The first step was to get a language and cultural refresher on
+JSONPath terms and behavior. From that it was decided that a JSONPath
+would be represented by a `jp.Expr` which is composed of fragments or
+`jp.Frag` objects. Keeping with the guideline of minimizing
+allocations the `jp.Expr` is just 
