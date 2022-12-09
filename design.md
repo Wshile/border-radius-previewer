@@ -361,4 +361,46 @@ but a similar concept mixing data and operators. Each fragment takes
 its matches and those matches already on the stack. Then the next
 fragment evaluates each in turn. This continues until the stack
 shrinks back to one element indicating the evaluation is complete. The
-last fragment put
+last fragment puts any matches on a results list which is returned
+instead of on the stack.
+
+ | Stack  | Frag  |
+ | ------ | ----- |
+ | {a:3}  | data  |
+ | 'a'    | Child |
+
+One fragment type is a filter which looks like `[?(@.x == 3)]`. This
+requires a script or function evaluation. A similar stack based
+approach is used for evaluating scripts. Note that scripts can and
+almost always contain a JSONPath expression starting with a `@`
+character. An interesting aspect of this is that a filter can contain
+other filters. OjG supports nested filters.
+
+The most memorable part of the JSONPath part of the journey had to be
+the evaluation stack. That worked out great and was able to support
+all the various fragment types.
+
+### Converting or Altering Data (`alt` package)
+
+A little extra was added to the journey once it was clear the generic
+data types would not support JSONPath directly. The original plan was
+to has functions like `AsInt()` as part of the `Node` interface. With
+that no longer reasonable an `alt` package became part of the
+journey. It would be used for converting types as well as altering
+existing ones. To make the last part of the trip even more interesting
+the `alt` package is where marshalling and unmarshalling types came
+into play but under the names of recompose and decompose since
+operations were to take Go types and decompose those objects into
+simple or generic data. The reverse is to recompose the simple data
+back into their original types. This takes an approach used in Oj for
+Ruby when the type name is encoded in the decomposed data. Since the
+data type is included in the data itself it is self describing and can
+be used to recompose types that include interface members.
+
+There is a trade off in that JSON is not parsed directly to a Go type
+by must go through an intermediate data structure first. There is an
+up side to that as well though. Now any simple or generic data can be
+used to recompose objects and not just JSON strings.
+
+The `alt.GenAlter()` function was interesting in that it is possible
+to modify a slice type and then reset the mem
