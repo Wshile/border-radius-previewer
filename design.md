@@ -454,4 +454,47 @@ evaluation is a better match for a recursive implementation.
 
 ### Slices are Nice
 
-Sl
+Slices are implemented very efficiently in Go. Appending to a slice
+has very little overhead. Reusing slices by collapsing them to zero
+length is a great way to avoid allocating additional memory. Care has
+to be taken when collapsing though as any cells in the slice that
+point to objects will now leave those objects dangling or rather
+referenced but not reachable and they will never be garbage
+collected. Simply setting the slice slot to `nil` will avoid memory
+leaks.
+
+### Memory Allocation
+
+Like most languages, memory allocation adds overhead. It's best to avoid
+when possible. A good example of that is in the `alt` package. The
+`Alter()` function replaces slice and map members instead of
+allocating a new slice or map when possible.
+
+Parsers take advantage by reusing buffers and avoiding allocation of
+token during possible when possible.
+
+### Range Has Been Optimized
+
+Using a `for` `range` loop is better than incrementing an index. The
+difference was not huge but was noticable.
+
+### APIs Matter
+
+It's important to define an API that is easy to use as well as one
+that allows for the best performance. The parser as well as the
+JSONPath builders attempt to do both. An even better example is the
+[GGql](https://github.com/uhn/ggql) GraphQL package. It provides a
+very simple API when compared to previous Go GraphQL packages and it
+is many times
+[faster](https://github.com/the-benchmarker/graphql-benchmarks).
+
+## Whats Next?
+
+Theres alway something new ready to be explored. For OjG there are a few things in the planning stage.
+
+ - A short trip to Regex filters for JSONPath.
+ - A construction project to add JSON building to the **oj** command which is an alternative to jq but using JSONPath.
+ - Explore new territory by implementing a Simple Encoding Notation which mixes GraphQL syntax with JSON for simpler more forgiving format.
+ - A callback parser along the lines of the Go json.Decoder or more likely like the Oj [Simple Callback Parser](http://ohler.com/oj/doc/Oj.html#sc_parse-class_method).
+
+Discuss this on [Changelog News](https://changelog.com/news/a-journey-building-a-fast-json-parser-and-full-jsonpath-oj-for-go-YRXJ).
