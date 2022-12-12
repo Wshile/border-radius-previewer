@@ -71,4 +71,13 @@ The alt package contains functions and types for altering values. It includes fu
 # Asm
 
 The asm package provides a means of building JSON or the corresponding simple
-types based on a JSON script represented by the Plan t
+types based on a JSON script represented by the Plan type.
+
+# Cmd oj
+
+The oj command is a general purpose tool for processing JSON
+documents. Features include reformatting JSON, colorizing JSON, extracting
+parts of a JSON document, and filtering. JSONPath is used for both extracting
+and filtering.
+*/
+package ojg
