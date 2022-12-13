@@ -63,4 +63,24 @@ func (n Array) Simplify() any {
 	return dup
 }
 
-// Dup creates a deep dupl
+// Dup creates a deep duplicate of the Node.
+func (n Array) Dup() Node {
+	var a Array
+
+	if n != nil {
+		a = make(Array, 0, len(n))
+		for _, m := range n {
+			if m == nil {
+				a = append(a, nil)
+			} else {
+				a = append(a, m.Dup())
+			}
+		}
+	}
+	return a
+}
+
+// Empty returns true if the Array is empty.
+func (n Array) Empty() bool {
+	return len(n) == 0
+}
