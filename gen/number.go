@@ -155,4 +155,23 @@ func (n *Number) AsNode() (num Node) {
 		if n.Neg {
 			i = -i
 		}
-	
+		num = Int(i)
+	default:
+		f := float64(n.I)
+		if 0 < n.Frac {
+			f += float64(n.Frac) / float64(n.Div)
+		}
+		if n.Neg {
+			f = -f
+		}
+		if 0 < n.Exp {
+			x := int(n.Exp)
+			if n.NegExp {
+				x = -x
+			}
+			f *= math.Pow10(x)
+		}
+		num = Float(f)
+	}
+	return
+}
