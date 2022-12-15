@@ -24,3 +24,58 @@ type Time time.Time
 
 // String returns a string representation of the Node.
 func (n Time) String() string {
+	var b strings.Builder
+
+	n.buildString(&b)
+
+	return b.String()
+}
+
+// Alter returns the backing time.Time value of the Node.
+func (n Time) Alter() any {
+	return time.Time(n)
+}
+
+// Simplify returns the backing time.Time value of the Node.
+func (n Time) Simplify() any {
+	return time.Time(n)
+}
+
+// Dup returns the backing time.Time value of the Node.
+func (n Time) Dup() Node {
+	return n
+}
+
+// Empty returns false.
+func (n Time) Empty() bool {
+	return false
+}
+
+func (n Time) buildString(b *strings.Builder) {
+	if 0 < len(TimeWrap) {
+		b.WriteString(`{"`)
+		b.WriteString(TimeWrap)
+		b.WriteString(`":`)
+	}
+	switch TimeFormat {
+	case "", "nano":
+		b.WriteString(strconv.FormatInt(time.Time(n).UnixNano(), 10))
+	case "second":
+		// Decimal format but float is not accurate enough so build the output
+		// in two parts.
+		nano := time.Time(n).UnixNano()
+		secs := nano / int64(time.Second)
+		if 0 < nano {
+			b.WriteString(fmt.Sprintf("%d.%09d", secs, nano-(secs*int64(time.Second))))
+		} else {
+			b.WriteString(fmt.Sprintf("%d.%09d", secs, -nano+(secs*int64(time.Second))))
+		}
+	default:
+		b.WriteString(`"`)
+		b.WriteString(time.Time(n).Format(TimeFormat))
+		b.WriteString(`"`)
+	}
+	if 0 < len(TimeWrap) {
+		b.WriteString("}")
+	}
+}
