@@ -20,4 +20,46 @@ func (f Child) Append(buf []byte, bracket, first bool) []byte {
 		buf = append(buf, "']"...)
 	} else {
 		if !first {
-			buf = append(b
+			buf = append(buf, '.')
+		}
+		buf = append(buf, string(f)...)
+	}
+	return buf
+}
+
+func (f Child) tokenOk() bool {
+	for _, b := range []byte(f) {
+		if tokenMap[b] == '.' {
+			return false
+		}
+	}
+	return true
+}
+
+func (f Child) remove(value any) (out any, changed bool) {
+	out = value
+	key := string(f)
+	switch tv := value.(type) {
+	case map[string]any:
+		if _, changed = tv[key]; changed {
+			delete(tv, key)
+		}
+	case gen.Object:
+		if _, changed = tv[key]; changed {
+			delete(tv, key)
+		}
+	default:
+		if rt := reflect.TypeOf(value); rt != nil {
+			// Can't remove a field from a struct so only a map can be modified.
+			if rt.Kind() == reflect.Map {
+				rv := reflect.ValueOf(value)
+				rk := reflect.ValueOf(key)
+				if rv.MapIndex(rk).IsValid() {
+					rv.SetMapIndex(rk, reflect.Value{})
+					changed = true
+				}
+			}
+		}
+	}
+	return
+}
