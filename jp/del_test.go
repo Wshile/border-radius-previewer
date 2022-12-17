@@ -99,4 +99,46 @@ func TestExprDel(t *testing.T) {
 func TestExprDelOne(t *testing.T) {
 	for i, d := range delOneTestData {
 		if testing.Verbose() {
-			fmt.Printf("... %d: %s\n", i, d.path
+			fmt.Printf("... %d: %s\n", i, d.path)
+		}
+		x, err := jp.ParseString(d.path)
+		tt.Nil(t, err, i, " : ", x)
+
+		var data any
+		if !d.noSimple {
+			data, err = oj.ParseString(d.data)
+			tt.Nil(t, err, i, " : ", x)
+			err = x.DelOne(data)
+			if 0 < len(d.err) {
+				tt.NotNil(t, err, i, " : ", x)
+				tt.Equal(t, d.err, err.Error(), i, " : ", x)
+			} else {
+				result := oj.JSON(data, &oj.Options{Sort: true})
+				tt.Equal(t, d.expect, result, i, " : ", x)
+			}
+		}
+		if !d.noNode {
+			var p gen.Parser
+			data, err = p.Parse([]byte(d.data))
+			tt.Nil(t, err, i, " : ", x)
+			err = x.DelOne(data)
+			if 0 < len(d.err) {
+				tt.NotNil(t, err, i, " : ", x)
+				tt.Equal(t, d.err, err.Error(), i, " : ", x)
+			} else {
+				result := oj.JSON(data, &oj.Options{Sort: true})
+				tt.Equal(t, d.expect, result, i, " : ", x)
+			}
+		}
+	}
+}
+
+func TestExprMustDel(t *testing.T) {
+	data := map[string]any{"a": 1, "b": 2, "c": 3}
+	tt.Panic(t, func() { jp.C("b").N(0).MustDel(data) })
+}
+
+func TestExprMustDelOne(t *testing.T) {
+	data := map[string]any{"a": 1, "b": 2, "c": 3}
+	tt.Panic(t, func() { jp.C("b").N(0).MustDelOne(data) })
+}
