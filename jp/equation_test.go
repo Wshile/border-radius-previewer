@@ -84,4 +84,10 @@ func TestEquation(t *testing.T) {
 	tt.Equal(t, "search(@.xyz, 'xy.')", eq.String())
 }
 
-func TestEquationScript
+func TestEquationScript(t *testing.T) {
+	eq := jp.And(nil, nil)
+	tt.Equal(t, "(null && null)", eq.Script().String())
+
+	eq = jp.Not(nil)
+	tt.Equal(t, "(!null)", eq.Script().String())
+}
