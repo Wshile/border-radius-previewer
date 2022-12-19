@@ -180,4 +180,54 @@ var (
 		{path: "$.*.a", expect: []any{3}, data: map[string]any{"x": &Sample{A: 3, B: "sample"}}},
 		{path: "$..a", expect: []any{3}, data: map[string]any{"x": &Sample{A: 3, B: "sample"}}},
 		{path: "$..a", expect: []any{3}, data: []any{&Sample{A: 3, B: "sample"}}},
-		{path: "$[1:2].a", expect: []any{2}, data: []any{&On
+		{path: "$[1:2].a", expect: []any{2}, data: []any{&One{A: 1}, &One{A: 2}, &One{A: 3}}},
+		{path: "$[2:1:-1].a", expect: []any{3}, data: []any{&One{A: 1}, &One{A: 2}, &One{A: 3}}},
+		{path: "[0::2].a", expect: []any{1, 3}, data: []*One{{A: 1}, {A: 2}, {A: 3}}},
+		{path: "[-1:0:-2].a", expect: []any{3}, data: []*One{{A: 1}, {A: 2}, {A: 3}}},
+		{path: "[4:0:-2].a", expect: []any{}, data: []*One{{A: 1}, {A: 2}, {A: 3}}},
+		{path: "$.*[0]", expect: []any{3}, data: &Any{X: []any{3}}},
+		{path: "$[1:2]", expect: []any{2}, data: []int{1, 2, 3}},
+		{path: "$[1:2][0]", expect: []any{gen.Int(2)},
+			data: []gen.Array{{gen.Int(1)}, {gen.Int(2)}, {gen.Int(3)}}},
+		{path: "$[-10:]", expect: []any{1, 2, 3}, data: []int{1, 2, 3}},
+		{path: "$[1:-10:-1]", expect: []any{1, 2}, data: []int{1, 2, 3}},
+		{path: "$[2:10]", expect: []any{3}, data: []int{1, 2, 3}},
+		// filter with map
+		{
+			path:   "$.x[?(@.b=='sample1')].a",
+			expect: []any{3},
+			data:   map[string]any{"x": []any{map[string]any{"a": 3, "b": "sample1"}}},
+		},
+		{
+			path:   "$.x[?(@.a==3)].b",
+			expect: []any{"sample1"},
+			data:   map[string]any{"x": []any{map[string]any{"a": 3, "b": "sample1"}}},
+		},
+		// filter with struct
+		{
+			path:   "$.x[?(@.b=='sample2')].a",
+			expect: []any{3},
+			data:   Any{X: []*Sample{{A: 3, B: "sample2"}}},
+		},
+		{
+			path:   "$.x[?(@.a==4)].b",
+			expect: []any{"sample2"},
+			data:   Any{X: []*Sample{{A: 4, B: "sample2"}}},
+		},
+		{path: "$.*", expect: []any{}, data: &one},
+		{path: "['a',-1]", expect: []any{3}, data: []any{1, 2, 3}},
+		{path: "['a','b']", expect: []any{}, data: []any{1, 2, 3}},
+		{path: "$.*.x", expect: []any{}, data: &Any{X: 5}},
+		{path: "$.*.x", expect: []any{}, data: &Any{X: 5}},
+		{path: "[0:1].z", expect: []any{}, data: []*Any{nil, {X: 5}}},
+		{path: "[0:1].z", expect: []any{}, data: []int{1}},
+	}
+)
+
+var (
+	firstData1    = map[string]any{"a": []any{map[string]any{"b": 2}}}
+	one           = &One{A: 3}
+	firstTestData = []*getData{
+		{path: "", expect: []any{nil}, data: map[string]any{"x": 1}},
+		{path: "$", expect: []any{map[string]any{"x": 1}}, data: map[string]any{"x": 1}},
+		{path: "@", expect: []any{map[string]any{"x": 1}}, da
