@@ -299,4 +299,96 @@ var (
 		{path: "['a','b']", expect: []any{nil}, data: []any{1, 2, 3}},
 		{path: "$.*.x", expect: []any{nil}, data: &Any{X: 5}},
 		{path: "$.*.x", expect: []any{nil}, data: &Any{X: 5}},
-		{path: "[0:1].z", expect: []any{nil}, d
+		{path: "[0:1].z", expect: []any{nil}, data: []*Any{nil, {X: 5}}},
+		{path: "[0:1].z", expect: []any{nil}, data: []int{1}},
+	}
+)
+
+func TestExprGet(t *testing.T) {
+	data := buildTree(4, 3, 0)
+	for i, d := range append(getTestData, getTestReflectData...) {
+		if testing.Verbose() {
+			fmt.Printf("... %d: %s\n", i, d.path)
+		}
+		x, err := jp.ParseString(d.path)
+		tt.Nil(t, err)
+		var results []any
+		if d.data == nil {
+			results = x.Get(data)
+		} else {
+			results = x.Get(d.data)
+		}
+		sort.Slice(results, func(i, j int) bool {
+			iv, _ := results[i].(int)
+			jv, _ := results[j].(int)
+			return iv < jv
+		})
+		tt.Equal(t, d.expect, results, i, " : ", x)
+	}
+}
+
+func TestExprGetOnNode(t *testing.T) {
+	data := buildNodeTree(4, 3, 0)
+	for i, d := range getTestData {
+		if testing.Verbose() {
+			fmt.Printf("... %d: %s\n", i, d.path)
+		}
+		x, err := jp.ParseString(d.path)
+		tt.Nil(t, err)
+		var results []any
+		if d.data == nil {
+			results = x.Get(data)
+		} else {
+			results = x.Get(alt.Generify(d.data))
+		}
+		sort.Slice(results, func(i, j int) bool {
+			iv, _ := results[i].(gen.Int)
+			jv, _ := results[j].(gen.Int)
+			return iv < jv
+		})
+		var expect []any
+		for _, n := range d.expect {
+			expect = append(expect, alt.Generify(n))
+		}
+		tt.Equal(t, expect, results, i, " : ", x)
+	}
+}
+
+func TestExprFirst(t *testing.T) {
+	data := buildTree(4, 3, 0)
+	for i, d := range append(firstTestData, firstTestReflectData...) {
+		if testing.Verbose() {
+			fmt.Printf("... %d: %s\n", i, d.path)
+		}
+		x, err := jp.ParseString(d.path)
+		tt.Nil(t, err)
+		var result any
+		if d.data == nil {
+			result = x.First(data)
+		} else {
+			result = x.First(d.data)
+		}
+		tt.Equal(t, d.expect[0], result, i, " : ", x)
+	}
+}
+
+func TestExprFirstOnNode(t *testing.T) {
+	data := buildNodeTree(4, 3, 0)
+	for i, d := range firstTestData {
+		if testing.Verbose() {
+			fmt.Printf("... %d: %s\n", i, d.path)
+		}
+		x, err := jp.ParseString(d.path)
+		tt.Nil(t, err)
+		var result any
+		if d.data == nil {
+			result = x.First(data)
+		} else {
+			result = x.First(alt.Generify(d.data))
+		}
+		tt.Equal(t, alt.Generify(d.expect[0]), result, i, " : ", x)
+	}
+}
+
+func TestExprGetNodes(t *testing.T) {
+	data := buildNodeTree(4, 
