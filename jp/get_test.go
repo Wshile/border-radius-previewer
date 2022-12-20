@@ -391,4 +391,101 @@ func TestExprFirstOnNode(t *testing.T) {
 }
 
 func TestExprGetNodes(t *testing.T) {
-	data := buildNodeTree(4, 
+	data := buildNodeTree(4, 3, 0)
+	for i, d := range getTestData {
+		if testing.Verbose() {
+			fmt.Printf("... %d: %s\n", i, d.path)
+		}
+		x, err := jp.ParseString(d.path)
+		tt.Nil(t, err)
+		var results []gen.Node
+		if d.data == nil {
+			results = x.GetNodes(data)
+		} else {
+			results = x.GetNodes(alt.Generify(d.data))
+		}
+		sort.Slice(results, func(i, j int) bool {
+			iv, _ := results[i].(gen.Int)
+			jv, _ := results[j].(gen.Int)
+			return iv < jv
+		})
+		ar := gen.Array{}
+		for _, r := range results {
+			ar = append(ar, r)
+		}
+		tt.Equal(t, alt.Generify(d.expect), ar, i, " : ", x, " on ", oj.JSON(d.data), " - ", oj.JSON(results))
+	}
+}
+
+func TestExprFirstNode(t *testing.T) {
+	data := buildNodeTree(4, 3, 0)
+	for i, d := range firstTestData {
+		if testing.Verbose() {
+			fmt.Printf("... %d: %s\n", i, d.path)
+		}
+		x, err := jp.ParseString(d.path)
+		tt.Nil(t, err)
+		var result gen.Node
+		if d.data == nil {
+			result = x.FirstNode(data)
+		} else {
+			result = x.FirstNode(alt.Generify(d.data))
+		}
+		tt.Equal(t, alt.Generify(d.expect[0]), result, i, " : ", x)
+	}
+}
+
+func buildTree(size, depth, iv int) any {
+	if depth%2 == 0 {
+		list := []any{}
+		for i := 0; i < size; i++ {
+			nv := iv*10 + i + 1
+			if 1 < depth {
+				list = append(list, buildTree(size, depth-1, nv))
+			} else {
+				list = append(list, nv)
+			}
+		}
+		return list
+	}
+	obj := map[string]any{}
+	for i := 0; i < size; i++ {
+		k := string([]byte{'a' + byte(i)})
+		nv := iv*10 + i + 1
+		if 1 < depth {
+			obj[k] = buildTree(size, depth-1, nv)
+		} else {
+			obj[k] = nv
+		}
+	}
+	return obj
+}
+
+func buildNodeTree(size, depth, iv int) gen.Node {
+	if depth%2 == 0 {
+		list := gen.Array{}
+		for i := 0; i < size; i++ {
+			nv := iv*10 + i + 1
+			if 1 < depth {
+				list = append(list, buildNodeTree(size, depth-1, nv))
+			} else {
+				list = append(list, gen.Int(nv))
+			}
+		}
+		return list
+	}
+	obj := gen.Object{}
+	for i := 0; i < size; i++ {
+		k := string([]byte{'a' + byte(i)})
+		nv := iv*10 + i + 1
+		if 1 < depth {
+			obj[k] = buildNodeTree(size, depth-1, nv)
+		} else {
+			obj[k] = gen.Int(nv)
+		}
+	}
+	return obj
+}
+
+func TestExprGetWildArray(t *testing.T) {
+	obj, err := oj.ParseStr
