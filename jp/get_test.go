@@ -488,4 +488,106 @@ func buildNodeTree(size, depth, iv int) gen.Node {
 }
 
 func TestExprGetWildArray(t *testing.T) {
-	obj, err := oj.ParseStr
+	obj, err := oj.ParseString(`{
+  "a":[
+    {"x":1,"y":2,"z":3},
+    {"x":2,"y":4,"z":6}
+  ]
+}`)
+	tt.Nil(t, err)
+	x, _ := jp.ParseString("$.a[*].y")
+	ys := x.Get(obj)
+	tt.Equal(t, "[2,4]", oj.JSON(ys))
+	y := x.First(obj)
+	tt.Equal(t, "2", oj.JSON(y))
+
+	obj, err = oj.ParseString(`{"a":[2,4]}`)
+	tt.Nil(t, err)
+	x, _ = jp.ParseString("$.a[*]")
+	ys = x.Get(obj)
+	tt.Equal(t, "[2,4]", oj.JSON(ys))
+	y = x.First(obj)
+	tt.Equal(t, "2", oj.JSON(y))
+}
+
+func TestExprGetWildGenArray(t *testing.T) {
+	p := gen.Parser{}
+	obj, err := p.Parse([]byte(`{
+  "a":[
+    {"x":1,"y":2,"z":3},
+    {"x":2,"y":4,"z":6}
+  ]
+}`))
+	tt.Nil(t, err)
+	x, _ := jp.ParseString("$.a[*].y")
+	ys := x.GetNodes(obj)
+	tt.Equal(t, "[2,4]", oj.JSON(ys))
+	y := x.FirstNode(obj)
+	tt.Equal(t, "2", oj.JSON(y))
+
+	obj, err = p.Parse([]byte(`{"a":[2,4]}`))
+	tt.Nil(t, err)
+	x, _ = jp.ParseString("$.a[*]")
+	ys = x.GetNodes(obj)
+	tt.Equal(t, "[2,4]", oj.JSON(ys))
+	y = x.FirstNode(obj)
+	tt.Equal(t, "2", oj.JSON(y))
+}
+
+func TestExprGetUnionArray(t *testing.T) {
+	obj, err := oj.ParseString(`{
+  "a":[
+    {"x":1,"y":2,"z":3},
+    {"x":2,"y":4,"z":6}
+  ]
+}`)
+	tt.Nil(t, err)
+	x, _ := jp.ParseString("$.a[0,1].y")
+	ys := x.Get(obj)
+	tt.Equal(t, "[2,4]", oj.JSON(ys))
+	y := x.First(obj)
+	tt.Equal(t, "2", oj.JSON(y))
+
+	obj, err = oj.ParseString(`{"a":[2,4]}`)
+	tt.Nil(t, err)
+	x, _ = jp.ParseString("$.a[0,1]")
+	ys = x.Get(obj)
+	tt.Equal(t, "[2,4]", oj.JSON(ys))
+	y = x.First(obj)
+	tt.Equal(t, "2", oj.JSON(y))
+}
+
+func TestExprGetUnionGenArray(t *testing.T) {
+	p := gen.Parser{}
+	obj, err := p.Parse([]byte(`{
+  "a":[
+    {"x":1,"y":2,"z":3},
+    {"x":2,"y":4,"z":6}
+  ]
+}`))
+	tt.Nil(t, err)
+	x, _ := jp.ParseString("$.a[0,1].y")
+	ys := x.GetNodes(obj)
+	tt.Equal(t, "[2,4]", oj.JSON(ys))
+	y := x.First(obj)
+	tt.Equal(t, "2", oj.JSON(y))
+
+	obj, err = p.Parse([]byte(`{"a":[2,4,6]}`))
+	tt.Nil(t, err)
+	x, _ = jp.ParseString("$.a[0,1]")
+	ys = x.GetNodes(obj)
+	tt.Equal(t, "[2,4]", oj.JSON(ys))
+	y = x.First(obj)
+	tt.Equal(t, "2", oj.JSON(y))
+}
+
+func TestExprGetSlice(t *testing.T) {
+	obj, err := oj.ParseString(`{
+  "a":[
+    {"x":1,"y":2,"z":3},
+    {"x":2,"y":4,"z":6}
+  ]
+}`)
+	tt.Nil(t, err)
+	x, _ := jp.ParseString("$.a[0:1].y")
+	
