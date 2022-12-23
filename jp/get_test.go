@@ -590,4 +590,118 @@ func TestExprGetSlice(t *testing.T) {
 }`)
 	tt.Nil(t, err)
 	x, _ := jp.ParseString("$.a[0:1].y")
-	
+	ys := x.Get(obj)
+	tt.Equal(t, "[2]", oj.JSON(ys))
+	y := x.First(obj)
+	tt.Equal(t, "2", oj.JSON(y))
+
+	obj, err = oj.ParseString(`{"a":[2,4]}`)
+	tt.Nil(t, err)
+	x, _ = jp.ParseString("$.a[0:1]")
+	ys = x.Get(obj)
+	tt.Equal(t, "[2]", oj.JSON(ys))
+	y = x.First(obj)
+	tt.Equal(t, "2", oj.JSON(y))
+}
+
+func TestExprGetGenSlice(t *testing.T) {
+	p := gen.Parser{}
+	obj, err := p.Parse([]byte(`{
+  "a":[
+    {"x":1,"y":2,"z":3},
+    {"x":2,"y":4,"z":6}
+  ]
+}`))
+	tt.Nil(t, err)
+	x, _ := jp.ParseString("$.a[0:1].y")
+	ys := x.GetNodes(obj)
+	tt.Equal(t, "[2]", oj.JSON(ys))
+	y := x.FirstNode(obj)
+	tt.Equal(t, "2", oj.JSON(y))
+
+	obj, err = p.Parse([]byte(`{"a":[2,4]}`))
+	tt.Nil(t, err)
+	x, _ = jp.ParseString("$.a[0:1]")
+	ys = x.GetNodes(obj)
+	tt.Equal(t, "[2]", oj.JSON(ys))
+	y = x.FirstNode(obj)
+	tt.Equal(t, "2", oj.JSON(y))
+}
+
+func TestExprGetBadPath(t *testing.T) {
+	type Instance struct {
+		ID          string
+		BackendName string
+		Name        string
+		Type        string
+		Status      string
+		PrivateIP   string
+		PublicIP    string
+	}
+	items := []*Instance{
+		{
+			Name:        "sds-sds",
+			BackendName: "sd",
+			ID:          "i-0sdsd44c0",
+			PublicIP:    "23.23.23.23",
+			PrivateIP:   "12.12.2.2",
+			Status:      "Running",
+			Type:        "r5d.large",
+		},
+	}
+	expr, err := jp.ParseString("$[*].{}")
+	tt.Nil(t, err)
+	tt.Equal(t, []any{}, expr.Get(items))
+}
+
+func TestFilterAt(t *testing.T) {
+	jsondoc := `{
+			"item1": {
+				"id": "item1",
+				"type": "type1",
+				"@type": "attype1"
+			},
+			"item2": {
+				"id": "item2",
+				"type": "type2",
+				"@type": "attype2"
+			}
+		}`
+	store := oj.MustParseString(jsondoc)
+	x := jp.MustParseString(`$[?(@['@type']=="attype1")]`)
+	result := x.Get(store)
+	tt.Equal(t, 1, len(result))
+}
+
+func TestAncesterFilter(t *testing.T) {
+	json := `{
+  "list": {
+    "x": "a",
+    "y": "b",
+    "sublist": [
+      {
+        "x": "a",
+        "y": "d",
+        "subs": [
+          {
+            "x": "a",
+            "y": "c"
+          }
+        ]
+      }
+    ]
+  }
+}`
+	doc := oj.MustParseString(json)
+	x := jp.MustParseString(`$..subs[?(@.x == 'a')].y`)
+	result := x.Get(doc)
+	tt.Equal(t, []any{"c"}, result)
+}
+
+func TestGetFilterOrder(t *testing.T) {
+	jsondoc := `[
+			{
+				"id": "item1",
+				"type": "good"
+			},
+			
