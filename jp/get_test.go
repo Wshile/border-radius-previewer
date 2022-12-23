@@ -704,4 +704,70 @@ func TestGetFilterOrder(t *testing.T) {
 				"id": "item1",
 				"type": "good"
 			},
-			
+			{
+				"id": "item2",
+				"type": "good"
+			}
+		]`
+	store := oj.MustParseString(jsondoc)
+
+	x := jp.MustParseString(`$[?(@.type == 'good')]`)
+	result := x.Get(store)
+	tt.Equal(t, "[{id: item1 type: good} {id: item2 type: good}]", pretty.SEN(result))
+	tt.Equal(t, "{id: item1 type: good}", pretty.SEN(x.First(store)))
+
+	x = jp.MustParseString(`$[?(@.type == 'good')].id`)
+	result = x.Get(store)
+	tt.Equal(t, "[item1 item2]", pretty.SEN(result))
+	tt.Equal(t, "item1", pretty.SEN(x.First(store)))
+}
+
+func TestGetFilterRoot(t *testing.T) {
+	jsondoc := `{
+  "key": "item2",
+  "data": [
+    {"id": "item1", "type": "good1"},
+    {"id": "item2", "type": "good2"}
+  ]
+}`
+	store := oj.MustParseString(jsondoc)
+
+	x := jp.MustParseString(`$.data[?(@.id == $.key)]`)
+	result := x.Get(store)
+	tt.Equal(t, "[{id: item2 type: good2}]", pretty.SEN(result))
+}
+
+func TestGetWildReflectOrder(t *testing.T) {
+	type Element struct {
+		Value string
+	}
+	type Root struct {
+		Elements []Element
+	}
+	data := Root{
+		Elements: []Element{
+			{Value: "e1"},
+			{Value: "e2"},
+			{Value: "e3"},
+		},
+	}
+	path := jp.MustParseString("$.elements[*]")
+	tt.Equal(t, "[{value: e1} {value: e2} {value: e3}]", pretty.SEN(path.Get(data)))
+	tt.Equal(t, "{value: e1}", pretty.SEN(path.First(data)))
+
+	path = jp.MustParseString("$.elements[*].value")
+	tt.Equal(t, "[e1 e2 e3]", pretty.SEN(path.Get(data)))
+	tt.Equal(t, "e1", pretty.SEN(path.First(data)))
+}
+
+func TestGetSliceReflect(t *testing.T) {
+	src := "$.vals[-3:]"
+	data := map[string]any{"vals": []int{10, 20, 30, 40, 50, 60}}
+	x := jp.MustParseString(src)
+	tt.Equal(t, "[40 50 60]", pretty.SEN(x.Get(data)))
+
+	src = "$.vals[-3:].x"
+	data = map[string]any{"vals": []map[string]int{{"x": 10}, {"x": 20}, {"x": 30}, {"x": 40}, {"x": 50}, {"x": 60}}}
+	x = jp.MustParseString(src)
+	tt.Equal(t, "[40 50 60]", pretty.SEN(x.Get(data)))
+}
