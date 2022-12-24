@@ -106,4 +106,21 @@ func TestExprModifyDescent(t *testing.T) {
 	})
 	tt.Nil(t, err)
 	tt.Equal(t, "{a: [{key: 4}]}", string(pw.Encode(result)))
-	tt.Equal(t, "
+	tt.Equal(t, "{a: [{key: 4}]}", string(pw.Encode(data)))
+
+	data = map[string]any{"a": []any{map[string]int{"key": 1}}}
+	result, err = x.Modify(data, func(_ any) (any, bool) {
+		return 4, true
+	})
+	tt.Nil(t, err)
+	tt.Equal(t, "{a: [{key: 4}]}", string(pw.Encode(result)))
+	tt.Equal(t, "{a: [{key: 4}]}", string(pw.Encode(data)))
+
+	data = map[string]any{"a": map[string]int{"key": 1}}
+	result, err = x.Modify(data, func(_ any) (any, bool) {
+		return 4, true
+	})
+	tt.Nil(t, err)
+	tt.Equal(t, "{a: {key: 4}}", string(pw.Encode(result)))
+	tt.Equal(t, "{a: {key: 4}}", string(pw.Encode(data)))
+}
