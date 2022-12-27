@@ -45,4 +45,43 @@ func (f Nth) remove(value any) (out any, changed bool) {
 	switch tv := value.(type) {
 	case []any:
 		if i < 0 {
-			i = len(
+			i = len(tv) + i
+		}
+		if 0 <= i && i < len(tv) {
+			out = append(tv[:i], tv[i+1:]...)
+			changed = true
+		}
+	case gen.Array:
+		if i < 0 {
+			i = len(tv) + i
+		}
+		if 0 <= i && i < len(tv) {
+			out = append(tv[:i], tv[i+1:]...)
+			changed = true
+		}
+	default:
+		if rt := reflect.TypeOf(value); rt != nil {
+			if rt.Kind() == reflect.Slice {
+				rv := reflect.ValueOf(value)
+				cnt := rv.Len()
+				if 0 < cnt {
+					if i < 0 {
+						i = cnt + i
+					}
+					if 0 <= i && i < cnt {
+						nv := reflect.MakeSlice(rt, cnt-1, cnt-1)
+						for j := 0; j < i; j++ {
+							nv.Index(j).Set(rv.Index(j))
+						}
+						for j := i + 1; j < cnt; j++ {
+							nv.Index(j - 1).Set(rv.Index(j))
+						}
+						out = nv.Interface()
+						changed = true
+					}
+				}
+			}
+		}
+	}
+	return
+}
