@@ -41,4 +41,121 @@ const (
 // once if performance is important. Alternatively, an Expr can be built using
 // function calls or bare structs. Parsing is more for convenience. Using this
 // approach over modes only adds 10% so a reasonable penalty for
-/
+// maintainability.
+type parser struct {
+	buf []byte
+	pos int
+}
+
+// ParseString parses a string into an Expr.
+func ParseString(s string) (x Expr, err error) {
+	return Parse([]byte(s))
+}
+
+// MustParseString parses a string into an Expr and panics on error.
+func MustParseString(s string) (x Expr) {
+	return MustParse([]byte(s))
+}
+
+// Parse parses a []byte into an Expr.
+func Parse(buf []byte) (x Expr, err error) {
+	defer func() {
+		if r := recover(); r != nil {
+			err = ojg.NewError(r)
+		}
+	}()
+	x = MustParse(buf)
+
+	return
+}
+
+// MustParse parses a []byte into an Expr and panics on error.
+func MustParse(buf []byte) (x Expr) {
+	p := &parser{buf: buf}
+	x = p.readExpr()
+	if p.pos < len(buf) {
+		p.raise("parse error")
+	}
+	return
+}
+
+func (p *parser) readExpr() (x Expr) {
+	x = Expr{}
+	var f Frag
+	first := true
+	lastDescent := false
+	for {
+		if f = p.nextFrag(first, lastDescent); f == nil {
+			return
+		}
+		first = false
+		if _, ok := f.(Descent); ok {
+			lastDescent = true
+		} else {
+			lastDescent = false
+		}
+		x = append(x, f)
+	}
+}
+
+func (p *parser) nextFrag(first, lastDescent bool) (f Frag) {
+	if p.pos < len(p.buf) {
+		b := p.buf[p.pos]
+		p.pos++
+		switch b {
+		case '$':
+			if first {
+				f = Root('$')
+			}
+		case '@':
+			if first {
+				f = At('@')
+			}
+		case '.':
+			f = p.afterDot()
+		case '*':
+			return Wildcard('*')
+		case '[':
+			f = p.afterBracket()
+		case ']':
+			p.pos--
+			// done
+		default:
+			p.pos--
+			if tokenMap[b] == 'o' {
+				if first {
+					f = p.afterDot()
+				} else if lastDescent {
+					f = p.afterDotDot()
+				}
+			}
+		}
+		// Any other character is the end of the Expr, figure out later if
+		// that is an error.
+	}
+	return
+}
+
+func (p *parser) afterDot() Frag {
+	if len(p.buf) <= p.pos {
+		p.raise("not terminated")
+	}
+	var token []byte
+	b := p.buf[p.pos]
+	p.pos++
+	switch b {
+	case '*':
+		return Wildcard('*')
+	case '.':
+		return Descent('.')
+	default:
+		if tokenMap[b] == '.' {
+			p.raise("an expression fragment can not start with a '%c'", b)
+		}
+		token = append(token, b)
+	}
+	for p.pos < len(p.buf) {
+		b := p.buf[p.pos]
+		p.pos++
+		if tokenMap[b] == '.' {
+			
