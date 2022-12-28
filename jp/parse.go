@@ -410,4 +410,130 @@ func (p *parser) readUnion(v any, b byte) Frag {
 		b = p.skipSpace()
 		switch b {
 		case '\'', '"':
-			var s
+			var s string
+			s = p.readStr(b)
+			b = p.skipSpace()
+			f = append(f, s)
+		case '-', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9':
+			var i int
+			i, b = p.readInt(b)
+			f = append(f, int64(i))
+			if b == ' ' {
+				b = p.skipSpace()
+			}
+		default:
+			p.raise("invalid union syntax")
+		}
+	}
+}
+
+func (p *parser) readStr(term byte) string {
+	start := p.pos
+	esc := false
+	for p.pos < len(p.buf) {
+		b := p.buf[p.pos]
+		p.pos++
+		if b == term && !esc {
+			break
+		}
+		if b == '\\' {
+			esc = !esc
+		} else {
+			esc = false
+		}
+	}
+	return string(p.buf[start : p.pos-1])
+}
+
+func (p *parser) readRegex() *regexp.Regexp {
+	start := p.pos
+	esc := false
+	for p.pos < len(p.buf) {
+		b := p.buf[p.pos]
+		p.pos++
+		if b == '/' && !esc {
+			break
+		}
+		if b == '\\' {
+			esc = !esc
+		} else {
+			esc = false
+		}
+	}
+	rx, err := regexp.Compile(string(p.buf[start : p.pos-1]))
+	if err != nil {
+		p.raise(err.Error())
+	}
+	return rx
+}
+
+func (p *parser) readFilter() *Filter {
+	if len(p.buf) <= p.pos {
+		p.raise("not terminated")
+	}
+	b := p.buf[p.pos]
+	if b == '(' {
+		p.pos++
+	}
+	eq := p.readEquation()
+	if len(p.buf) <= p.pos || p.buf[p.pos] != ']' {
+		p.raise("not terminated")
+	}
+	p.pos++
+
+	return eq.Filter()
+}
+
+func (p *parser) readEquation() (eq *Equation) {
+	if len(p.buf) <= p.pos {
+		p.raise("not terminated")
+	}
+	eq = &Equation{}
+
+	b := p.nextNonSpace()
+	switch b {
+	case '!':
+		eq.o = not
+		p.pos++
+		eq.left = p.readEqValue()
+		b := p.nextNonSpace()
+		if b != ')' {
+			p.raise("not terminated")
+		}
+		p.pos++
+		return
+	case 'l':
+		p.readFunc(length, eq)
+	case 'c':
+		p.readFunc(count, eq)
+	case 'm':
+		p.readFunc(match, eq)
+	case 's':
+		p.readFunc(search, eq)
+	default:
+		eq.left = p.readEqValue()
+		eq.o = p.readEqOp()
+		eq.right = p.readEqValue()
+	}
+	for p.pos < len(p.buf) {
+		b = p.nextNonSpace()
+		switch b {
+		case ')':
+			p.pos++
+			return
+		case ']':
+			return
+		}
+		o := p.readEqOp()
+		if eq.o.prec <= o.prec {
+			eq = &Equation{left: eq, o: o}
+			eq.right = p.readEqValue()
+		} else {
+			eq.right = &Equation{left: eq.right, o: o}
+			eq.right.right = p.readEqValue()
+		}
+	}
+	return
+}
+
+func (p *parser) readEqValue() 
