@@ -281,3 +281,133 @@ func (p *parser) readInt(b byte) (int, byte) {
 
 func (p *parser) readNum(b byte) any {
 	var num []byte
+
+	num = append(num, b)
+	// Read digits first
+	for p.pos < len(p.buf) {
+		b = p.buf[p.pos]
+		if b < '0' || '9' < b {
+			break
+		}
+		num = append(num, b)
+		p.pos++
+	}
+	switch b {
+	case '.':
+		num = append(num, b)
+		p.pos++
+		for p.pos < len(p.buf) {
+			b = p.buf[p.pos]
+			if b < '0' || '9' < b {
+				break
+			}
+			num = append(num, b)
+			p.pos++
+		}
+		if b == 'e' || b == 'E' {
+			p.pos++
+			num = append(num, b)
+			if len(p.buf) <= p.pos {
+				p.raise("expected a number")
+			}
+			b = p.buf[p.pos]
+		} else {
+			f, _ := strconv.ParseFloat(string(num), 64)
+			return f
+		}
+	case 'e', 'E':
+		p.pos++
+		if len(p.buf) <= p.pos {
+			p.raise("expected a number")
+		}
+		num = append(num, b)
+		b = p.buf[p.pos]
+	default:
+		i, err := strconv.ParseInt(string(num), 10, 64)
+		if err != nil {
+			p.raise(err.Error())
+		}
+		return i
+	}
+	if b == '+' || b == '-' {
+		num = append(num, b)
+		p.pos++
+		if len(p.buf) <= p.pos {
+			p.raise("expected a number")
+		}
+	}
+	for p.pos < len(p.buf) {
+		b = p.buf[p.pos]
+		if b < '0' || '9' < b {
+			break
+		}
+		num = append(num, b)
+		p.pos++
+	}
+	f, _ := strconv.ParseFloat(string(num), 64)
+	return f
+}
+
+func (p *parser) readSlice(i int) Frag {
+	if len(p.buf) <= p.pos {
+		p.raise("not terminated")
+	}
+	f := Slice{i}
+	b := p.buf[p.pos]
+	if b == ']' {
+		f = append(f, maxEnd)
+		p.pos++
+		return f
+	}
+	b = p.skipSpace()
+	// read the end
+	if b == ':' {
+		f = append(f, maxEnd)
+		if len(p.buf) <= p.pos {
+			p.raise("not terminated")
+		}
+		b = p.buf[p.pos]
+		p.pos++
+		if b != ']' {
+			i, b = p.readInt(b)
+			f = append(f, i)
+		}
+	} else {
+		i, b = p.readInt(b)
+		f = append(f, i)
+		if b == ':' {
+			if len(p.buf) <= p.pos {
+				p.raise("not terminated")
+			}
+			b = p.buf[p.pos]
+			p.pos++
+			if b != ']' {
+				i, b = p.readInt(b)
+				f = append(f, i)
+			}
+		}
+	}
+	if b != ']' {
+		p.raise("invalid slice syntax")
+	}
+	return f
+}
+
+func (p *parser) readUnion(v any, b byte) Frag {
+	if len(p.buf) <= p.pos {
+		p.raise("not terminated")
+	}
+	f := Union{v}
+	for {
+		switch b {
+		case ',':
+			// next union member
+		case ']':
+			return f
+		default:
+			p.raise("invalid union syntax")
+		}
+		b = p.skipSpace()
+		switch b {
+		case '\'', '"':
+			var s
