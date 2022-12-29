@@ -645,3 +645,58 @@ func partialOp(token []byte, b byte) bool {
 		}
 	}
 	return false
+}
+
+func (p *parser) readEqOp() (o *op) {
+	var token []byte
+	b := p.nextNonSpace()
+	for {
+		if eqMap[b] != 'o' {
+			if len(token) == 0 || !partialOp(token, b) {
+				break
+			}
+		}
+		token = append(token, b)
+		if b == '-' && 1 < len(token) {
+			p.raise("'%s' is not a valid operation", token)
+			return
+		}
+		p.pos++
+		if len(p.buf) <= p.pos {
+			p.raise("equation not terminated")
+		}
+		b = p.buf[p.pos]
+	}
+	o = opMap[string(token)]
+	if o == nil {
+		p.raise("'%s' is not a valid operation", token)
+	}
+	return
+}
+
+func (p *parser) skipSpace() (b byte) {
+	for p.pos < len(p.buf) {
+		b = p.buf[p.pos]
+		p.pos++
+		if b != ' ' {
+			break
+		}
+	}
+	return
+}
+
+func (p *parser) nextNonSpace() (b byte) {
+	for p.pos < len(p.buf) {
+		b = p.buf[p.pos]
+		if b != ' ' {
+			break
+		}
+		p.pos++
+	}
+	return
+}
+
+func (p *parser) raise(format string, args ...any) {
+	msg := fmt.Sprintf(format, args...)
+	panic(fmt.Errorf("%s at %d in %s", msg, p.pos+1, p.buf))
+}
