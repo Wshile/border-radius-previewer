@@ -536,4 +536,112 @@ func (p *parser) readEquation() (eq *Equation) {
 	return
 }
 
-func (p *parser) readEqValue() 
+func (p *parser) readEqValue() (eq *Equation) {
+	b := p.nextNonSpace()
+	switch b {
+	case '-', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9':
+		var v any
+		p.pos++
+		v = p.readNum(b)
+		eq = &Equation{result: v}
+	case '\'', '"':
+		p.pos++
+		s := p.readStr(b)
+		eq = &Equation{result: s}
+	case 'n':
+		p.readEqToken([]byte("null"))
+		eq = &Equation{result: nil}
+	case 'N':
+		p.readEqToken([]byte("Nothing"))
+		eq = &Equation{result: Nothing}
+	case 't':
+		p.readEqToken([]byte("true"))
+		eq = &Equation{result: true}
+
+	case 'f':
+		p.readEqToken([]byte("false"))
+		eq = &Equation{result: false}
+	case '@', '$':
+		x := p.readExpr()
+		eq = &Equation{result: x}
+	case '(':
+		p.pos++
+		eq = p.readEquation()
+	case '[':
+		eq = &Equation{result: p.readEqList()}
+	case '/':
+		p.pos++
+		rx := p.readRegex()
+		eq = &Equation{result: rx}
+	case 'l':
+		eq = &Equation{}
+		p.readFunc(length, eq)
+	case 'c':
+		eq = &Equation{}
+		p.readFunc(count, eq)
+	case 'm':
+		eq = &Equation{}
+		p.readFunc(match, eq)
+	case 's':
+		eq = &Equation{}
+		p.readFunc(search, eq)
+	default:
+		p.raise("expected a value")
+	}
+	return
+}
+
+func (p *parser) readFunc(o *op, eq *Equation) {
+	if bytes.HasPrefix(p.buf[p.pos:], []byte(o.name)) && p.buf[p.pos+len(o.name)] == '(' {
+		eq.o = o
+		p.pos += len(o.name) + 1
+		eq.left = p.readEqValue()
+		b := p.nextNonSpace()
+		if b == ',' {
+			p.pos++
+			eq.right = p.readEqValue()
+			b = p.nextNonSpace()
+		}
+		if b != ')' {
+			p.raise("not terminated")
+		}
+		p.pos++
+		return
+	}
+	p.raise("expected a %s function", o.name)
+}
+
+func (p *parser) readEqToken(token []byte) {
+	for _, t := range token {
+		if len(p.buf) <= p.pos || p.buf[p.pos] != t {
+			p.raise("expected %s", token)
+		}
+		p.pos++
+	}
+}
+
+func (p *parser) readEqList() (list []any) {
+	p.pos++
+List:
+	for p.pos < len(p.buf) {
+		eq := p.readEqValue()
+		list = append(list, eq.result)
+		b := p.skipSpace()
+		switch b {
+		case ',':
+		case ']':
+			break List
+		default:
+			p.raise("expected a comma")
+		}
+	}
+	return
+}
+
+func partialOp(token []byte, b byte) bool {
+	for k := range opMap {
+		if len(token) < len(k) && bytes.HasPrefix([]byte(k), token) && b == k[len(token)] {
+			return true
+		}
+	}
+	return false
