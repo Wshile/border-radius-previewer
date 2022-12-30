@@ -427,3 +427,243 @@ func TestExprRemoveWildObjectInSimple(t *testing.T) {
 	result := x.MustRemove(data)
 	tt.Equal(t, "[[] {}]", string(pw.Encode(result)))
 	tt.Equal(t, "[[] {}]", string(pw.Encode(data)))
+
+	data = []any{[]any{}, gen.Object{"one": gen.Int(1), "two": gen.Int(2), "three": gen.Int(3)}}
+	result = x.MustRemoveOne(data)
+	tt.Equal(t, "[[] {three: 3 two: 2}]", string(pw.Encode(result)))
+	tt.Equal(t, "[[] {three: 3 two: 2}]", string(pw.Encode(data)))
+}
+
+func TestExprRemoveDescent(t *testing.T) {
+	x, err := jp.ParseString("..[1]")
+	tt.Nil(t, err)
+	data := sen.MustParse([]byte(`[[1,2,[1,2,3,4]]]`))
+	tt.Panic(t, func() { _ = x.MustRemove(data) })
+
+	x, err = jp.ParseString("$..")
+	tt.Nil(t, err)
+	tt.Panic(t, func() { _ = x.MustRemove(data) })
+}
+
+func TestExprRemoveEmptyExpr(t *testing.T) {
+	x, err := jp.ParseString("")
+	tt.Nil(t, err)
+	data := []any{}
+	tt.Panic(t, func() { _ = x.MustRemove(data) })
+	tt.Panic(t, func() { _ = x.MustRemoveOne(data) })
+}
+
+func TestExprRemoveUnionReflectMap(t *testing.T) {
+	x, err := jp.ParseString("['a','b'].field[0]")
+	tt.Nil(t, err)
+	data := map[string]any{"a": &RemObj{Field: []any{1, 2, 3}}}
+	result := x.MustRemove(data)
+	tt.Equal(t, "{a: {field: [2 3]}}", string(pw.Encode(result)))
+	tt.Equal(t, "{a: {field: [2 3]}}", string(pw.Encode(data)))
+
+	x, err = jp.ParseString("['field','x'][0]")
+	tt.Nil(t, err)
+	data2 := &RemObj{Field: []any{1, 2, 3}}
+	result = x.MustRemove(data2)
+	tt.Equal(t, "{field: [2 3]}", string(pw.Encode(result)))
+	tt.Equal(t, "{field: [2 3]}", string(pw.Encode(data2)))
+
+	x, err = jp.ParseString("['field','x'][0][1]")
+	tt.Nil(t, err)
+	data2 = &RemObj{Field: []any{[]any{1, 2, 3}}}
+	result = x.MustRemove(data2)
+	tt.Equal(t, "{field: [[1 3]]}", string(pw.Encode(result)))
+	tt.Equal(t, "{field: [[1 3]]}", string(pw.Encode(data2)))
+
+	x, err = jp.ParseString("['x','field']['field','x'][1]")
+	tt.Nil(t, err)
+	data2 = &RemObj{Field: &RemObj{Field: []any{1, 2, 3}}}
+	result = x.MustRemove(data2)
+	tt.Equal(t, "{field: {field: [1 3]}}", string(pw.Encode(result)))
+	tt.Equal(t, "{field: {field: [1 3]}}", string(pw.Encode(data2)))
+
+	data2 = &RemObj{Field: &RemObj{Field: []any{1, 2, 3}}}
+	result = x.MustRemoveOne(data2)
+	tt.Equal(t, "{field: {field: [1 3]}}", string(pw.Encode(result)))
+	tt.Equal(t, "{field: {field: [1 3]}}", string(pw.Encode(data2)))
+
+	x, err = jp.ParseString("['a','c']")
+	tt.Nil(t, err)
+	data3 := map[string][]any{"a": {1}, "b": {2}, "c": {3}}
+	result = x.MustRemove(data3)
+	tt.Equal(t, "{b: [2]}", string(pw.Encode(result)))
+	tt.Equal(t, "{b: [2]}", string(pw.Encode(data3)))
+
+	data3 = map[string][]any{"a": {1}, "b": {2}, "c": {3}}
+	result = x.MustRemoveOne(data3)
+	tt.Equal(t, "{b: [2] c: [3]}", string(pw.Encode(result)))
+	tt.Equal(t, "{b: [2] c: [3]}", string(pw.Encode(data3)))
+}
+
+func TestExprRemoveUnionReflectSlice(t *testing.T) {
+	x, err := jp.ParseString("[0,2].field[0]")
+	tt.Nil(t, err)
+	data := []any{&RemObj{Field: []any{1, 2, 3}}}
+	result := x.MustRemove(data)
+	tt.Equal(t, "[{field: [2 3]}]", string(pw.Encode(result)))
+	tt.Equal(t, "[{field: [2 3]}]", string(pw.Encode(data)))
+
+	data2 := []*RemObj{{Field: []any{1, 2, 3}}}
+	result = x.MustRemove(data2)
+	tt.Equal(t, "[{field: [2 3]}]", string(pw.Encode(result)))
+	tt.Equal(t, "[{field: [2 3]}]", string(pw.Encode(data2)))
+
+	x, err = jp.ParseString("[0,-1][1]")
+	tt.Nil(t, err)
+	data3 := [][]any{{1, 2, 3}, {4, 5, 6}}
+	result = x.MustRemove(data3)
+	tt.Equal(t, "[[1 3] [4 6]]", string(pw.Encode(result)))
+	tt.Equal(t, "[[1 3] [4 6]]", string(pw.Encode(data3)))
+
+	data3 = [][]any{{1, 2, 3}, {4, 5, 6}}
+	result = x.MustRemoveOne(data3)
+	tt.Equal(t, "[[1 3] [4 5 6]]", string(pw.Encode(result)))
+	tt.Equal(t, "[[1 3] [4 5 6]]", string(pw.Encode(data3)))
+
+	x, err = jp.ParseString("[0,2][0,1][1]")
+	tt.Nil(t, err)
+	data4 := [][]any{{[]any{1, 2, 3}}}
+	result = x.MustRemove(data4)
+	tt.Equal(t, "[[[1 3]]]", string(pw.Encode(result)))
+	tt.Equal(t, "[[[1 3]]]", string(pw.Encode(data4)))
+
+	x, err = jp.ParseString("[0,2]")
+	tt.Nil(t, err)
+	data4 = [][]any{{1}, {2}, {3}}
+	result = x.MustRemove(data4)
+	tt.Equal(t, "[[2]]", string(pw.Encode(result)))
+	tt.Equal(t, "[[1] [2] [3]]", string(pw.Encode(data4))) // should be unchanged
+
+	data4 = [][]any{{1}, {2}, {3}}
+	result = x.MustRemoveOne(data4)
+	tt.Equal(t, "[[2] [3]]", string(pw.Encode(result)))
+	tt.Equal(t, "[[1] [2] [3]]", string(pw.Encode(data4))) // should be unchanged
+}
+
+func TestExprRemoveSliceReflect(t *testing.T) {
+	x, err := jp.ParseString("[0:3].field[0]")
+	tt.Nil(t, err)
+	data := []*RemObj{{Field: []any{1, 2, 3}}}
+	result := x.MustRemove(data)
+	tt.Equal(t, "[{field: [2 3]}]", string(pw.Encode(result)))
+	tt.Equal(t, "[{field: [2 3]}]", string(pw.Encode(data)))
+
+	data2 := []map[string]any{{"field": []any{1, 2, 3}}}
+	result = x.MustRemove(data2)
+	tt.Equal(t, "[{field: [2 3]}]", string(pw.Encode(result)))
+	tt.Equal(t, "[{field: [2 3]}]", string(pw.Encode(data2)))
+
+	x, err = jp.ParseString("[0:3][0]")
+	tt.Nil(t, err)
+	data3 := [][]any{{1, 2, 3}, {4, 5, 6}}
+	result = x.MustRemove(data3)
+	tt.Equal(t, "[[2 3] [5 6]]", string(pw.Encode(result)))
+	tt.Equal(t, "[[2 3] [5 6]]", string(pw.Encode(data3)))
+
+	data3 = [][]any{{1, 2, 3}, {4, 5, 6}}
+	result = x.MustRemoveOne(data3)
+	tt.Equal(t, "[[2 3] [4 5 6]]", string(pw.Encode(result)))
+	tt.Equal(t, "[[2 3] [4 5 6]]", string(pw.Encode(data3)))
+
+	x, err = jp.ParseString("[-1:-2:-1][0]")
+	tt.Nil(t, err)
+	data3 = [][]any{{1, 2, 3}, {4, 5, 6}}
+	result = x.MustRemove(data3)
+	tt.Equal(t, "[[2 3] [5 6]]", string(pw.Encode(result)))
+	tt.Equal(t, "[[2 3] [5 6]]", string(pw.Encode(data3)))
+
+	data3 = [][]any{{1, 2, 3}, {4, 5, 6}}
+	result = x.MustRemoveOne(data3)
+	tt.Equal(t, "[[1 2 3] [5 6]]", string(pw.Encode(result)))
+	tt.Equal(t, "[[1 2 3] [5 6]]", string(pw.Encode(data3)))
+
+	x, err = jp.ParseString("[3:][0]")
+	tt.Nil(t, err)
+	data3 = [][]any{{1, 2, 3}, {4, 5, 6}}
+	result = x.MustRemove(data3)
+	tt.Equal(t, "[[1 2 3] [4 5 6]]", string(pw.Encode(result)))
+	tt.Equal(t, "[[1 2 3] [4 5 6]]", string(pw.Encode(data3)))
+
+	x, err = jp.ParseString("[1:2]")
+	tt.Nil(t, err)
+	data3 = [][]any{{1}, {2}, {3}, {4}}
+	result = x.MustRemove(data3)
+	tt.Equal(t, "[[1] [4]]", string(pw.Encode(result)))
+
+	data3 = [][]any{{1}, {2}, {3}, {4}}
+	result = x.MustRemoveOne(data3)
+	tt.Equal(t, "[[1] [3] [4]]", string(pw.Encode(result)))
+
+	x, err = jp.ParseString("[-2:-3:-1]")
+	tt.Nil(t, err)
+	data3 = [][]any{{1}, {2}, {3}, {4}}
+	result = x.MustRemove(data3)
+	tt.Equal(t, "[[1] [4]]", string(pw.Encode(result)))
+
+	data3 = [][]any{{1}, {2}, {3}, {4}}
+	result = x.MustRemoveOne(data3)
+	tt.Equal(t, "[[1] [2] [4]]", string(pw.Encode(result)))
+
+	x, err = jp.ParseString("[5:6]")
+	tt.Nil(t, err)
+	data3 = [][]any{{1}, {2}, {3}, {4}}
+	result = x.MustRemove(data3)
+	tt.Equal(t, "[[1] [2] [3] [4]]", string(pw.Encode(result)))
+
+	data3 = [][]any{{1}, {2}, {3}, {4}}
+	result = x.MustRemoveOne(data3)
+	tt.Equal(t, "[[1] [2] [3] [4]]", string(pw.Encode(result)))
+}
+
+func TestExprRemoveFilterSlice(t *testing.T) {
+	x, err := jp.ParseString("[?(@.x == 1)].y")
+	tt.Nil(t, err)
+	data := []map[string]any{{"x": 1, "y": 2}}
+	result := x.MustRemove(data)
+	tt.Equal(t, "[{x: 1}]", string(pw.Encode(result)))
+	tt.Equal(t, "[{x: 1}]", string(pw.Encode(data)))
+
+	data = []map[string]any{{"x": 1, "y": 2}}
+	result = x.MustRemoveOne(data)
+	tt.Equal(t, "[{x: 1}]", string(pw.Encode(result)))
+	tt.Equal(t, "[{x: 1}]", string(pw.Encode(data)))
+
+	x, err = jp.ParseString("[?(@.x < 3)]")
+	tt.Nil(t, err)
+	data = []map[string]any{{"x": 1}, {"x": 2}, {"x": 3}}
+	result = x.MustRemove(data)
+	tt.Equal(t, "[{x: 3}]", string(pw.Encode(result)))
+
+	data = []map[string]any{{"x": 1}, {"x": 2}, {"x": 3}}
+	result = x.MustRemoveOne(data)
+	tt.Equal(t, "[{x: 2} {x: 3}]", string(pw.Encode(result)))
+}
+
+func TestExprRemoveFilterMap(t *testing.T) {
+	x, err := jp.ParseString("[?(@.x == 1)].y")
+	tt.Nil(t, err)
+	data := map[string]map[string]any{"a": {"x": 1, "y": 2}, "b": {"x": 1, "y": 3}}
+	result := x.MustRemove(data)
+	tt.Equal(t, "{a: {x: 1} b: {x: 1}}", string(pw.Encode(result)))
+	tt.Equal(t, "{a: {x: 1} b: {x: 1}}", string(pw.Encode(data)))
+
+	data = map[string]map[string]any{"a": {"x": 1, "y": 2}, "b": {"x": 1, "y": 3}}
+	result = x.MustRemoveOne(data)
+	tt.Equal(t, "{a: {x: 1} b: {x: 1 y: 3}}", string(pw.Encode(result)))
+	tt.Equal(t, "{a: {x: 1} b: {x: 1 y: 3}}", string(pw.Encode(data)))
+
+	x, err = jp.ParseString("[?(@.x < 3)]")
+	tt.Nil(t, err)
+	data = map[string]map[string]any{"a": {"x": 1}, "b": {"x": 2}, "c": {"x": 3}}
+	result = x.MustRemove(data)
+	tt.Equal(t, "{c: {x: 3}}", string(pw.Encode(result)))
+
+	data = map[string]map[string]any{"a": {"x": 1}, "b": {"x": 2}, "c": {"x": 3}}
+	result = x.MustRemoveOne(data)
+	tt.Equal(t, "{b: {x: 2} c: {x: 3}}", string(pw.Encode(result)))
+}
