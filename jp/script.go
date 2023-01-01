@@ -499,4 +499,102 @@ func (s *Script) EvalWithRoot(stack any, data, root any) any {
 						sstack[i] = float64(tl) * tr
 					}
 				case float64:
-					switch tr := right.(type) 
+					switch tr := right.(type) {
+					case int64:
+						sstack[i] = tl * float64(tr)
+					case float64:
+						sstack[i] = tl * tr
+					}
+				}
+			case divide.code:
+				sstack[i] = nil
+				switch tl := left.(type) {
+				case int64:
+					switch tr := right.(type) {
+					case int64:
+						if tr != 0 {
+							sstack[i] = tl / tr
+						}
+					case float64:
+						if tr != 0.0 {
+							sstack[i] = float64(tl) / tr
+
+						}
+					}
+				case float64:
+					switch tr := right.(type) {
+					case int64:
+						if tr != 0 {
+							sstack[i] = tl / float64(tr)
+						}
+					case float64:
+						if tr != 0.0 {
+							sstack[i] = tl / tr
+						}
+					}
+				}
+			case in.code:
+				sstack[i] = false
+				if list, ok := right.([]any); ok {
+					for _, ev := range list {
+						if left == ev {
+							sstack[i] = true
+							break
+						}
+					}
+				}
+			case empty.code:
+				sstack[i] = false
+				if boo, ok := right.(bool); ok {
+					switch tl := left.(type) {
+					case string:
+						sstack[i] = boo == (len(tl) == 0)
+					case []any:
+						sstack[i] = boo == (len(tl) == 0)
+					case map[string]any:
+						sstack[i] = boo == (len(tl) == 0)
+					}
+				}
+			case has.code, exists.code:
+				sstack[i] = false
+				if boo, ok := right.(bool); ok {
+					sstack[i] = boo == (left != nil)
+				}
+			case rx.code:
+				sstack[i] = false
+				ls, ok := left.(string)
+				if !ok {
+					break
+				}
+				switch tr := right.(type) {
+				case string:
+					if rx, err := regexp.Compile(tr); err == nil {
+						sstack[i] = rx.MatchString(ls)
+					}
+				case *regexp.Regexp:
+					sstack[i] = tr.MatchString(ls)
+				}
+			case length.code:
+				sstack[i] = Nothing
+				switch tl := left.(type) {
+				case string:
+					sstack[i] = int64(len(tl))
+				case []any:
+					sstack[i] = int64(len(tl))
+				case map[string]any:
+					sstack[i] = int64(len(tl))
+				}
+			case count.code:
+				sstack[i] = Nothing
+				if nl, ok := left.([]any); ok {
+					sstack[i] = int64(len(nl))
+				}
+			case match.code:
+				sstack[i] = Nothing
+				if ls, ok := left.(string); ok {
+					if rs, _ := right.(string); 0 < len(rs) {
+						if rs[0] != '^' {
+							rs = "^" + rs
+						}
+						if rs[len(rs)-1] != '$' {
+						
