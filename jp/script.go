@@ -406,4 +406,97 @@ func (s *Script) EvalWithRoot(stack any, data, root any) any {
 				case float64:
 					switch tr := right.(type) {
 					case int64:
-						sstack[i] = 
+						sstack[i] = tl <= float64(tr)
+					case float64:
+						sstack[i] = tl <= tr
+					}
+				case string:
+					tr, ok := right.(string)
+					sstack[i] = ok && tl <= tr
+				}
+			case gte.code:
+				sstack[i] = false
+				switch tl := left.(type) {
+				case int64:
+					switch tr := right.(type) {
+					case int64:
+						sstack[i] = tl >= tr
+					case float64:
+						sstack[i] = float64(tl) >= tr
+					}
+				case float64:
+					switch tr := right.(type) {
+					case int64:
+						sstack[i] = tl >= float64(tr)
+					case float64:
+						sstack[i] = tl >= tr
+					}
+				case string:
+					tr, ok := right.(string)
+					sstack[i] = ok && tl >= tr
+				}
+			case or.code:
+				// If one is a boolean true then true.
+				lb, _ := left.(bool)
+				rb, _ := right.(bool)
+				sstack[i] = lb || rb
+			case and.code:
+				// If both are a boolean true then true else false.
+				lb, _ := left.(bool)
+				rb, _ := right.(bool)
+				sstack[i] = lb && rb
+			case not.code:
+				lb, _ := left.(bool)
+				sstack[i] = !lb
+			case add.code:
+				sstack[i] = nil
+				switch tl := left.(type) {
+				case int64:
+					switch tr := right.(type) {
+					case int64:
+						sstack[i] = tl + tr
+					case float64:
+						sstack[i] = float64(tl) + tr
+					}
+				case float64:
+					switch tr := right.(type) {
+					case int64:
+						sstack[i] = tl + float64(tr)
+					case float64:
+						sstack[i] = tl + tr
+					}
+				case string:
+					if tr, ok := right.(string); ok {
+						sstack[i] = tl + tr
+					}
+				}
+			case sub.code:
+				sstack[i] = nil
+				switch tl := left.(type) {
+				case int64:
+					switch tr := right.(type) {
+					case int64:
+						sstack[i] = tl - tr
+					case float64:
+						sstack[i] = float64(tl) - tr
+					}
+				case float64:
+					switch tr := right.(type) {
+					case int64:
+						sstack[i] = tl - float64(tr)
+					case float64:
+						sstack[i] = tl - tr
+					}
+				}
+			case mult.code:
+				sstack[i] = nil
+				switch tl := left.(type) {
+				case int64:
+					switch tr := right.(type) {
+					case int64:
+						sstack[i] = tl * tr
+					case float64:
+						sstack[i] = float64(tl) * tr
+					}
+				case float64:
+					switch tr := right.(type) 
