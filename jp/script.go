@@ -308,3 +308,102 @@ func (s *Script) EvalWithRoot(stack any, data, root any) any {
 		}
 		for i := len(sstack) - 1; 0 <= i; i-- {
 			o, _ := sstack[i].(*op)
+			if o == nil {
+				// a value, not an op
+				continue
+			}
+			var left any
+			var right any
+			if 1 < len(sstack)-i {
+				left = sstack[i+1]
+			}
+			if 2 < len(sstack)-i {
+				right = sstack[i+2]
+			}
+			switch o.code {
+			case eq.code:
+				if left == right {
+					sstack[i] = true
+				} else {
+					sstack[i] = false
+					switch tl := left.(type) {
+					case int64:
+						if tr, ok := right.(float64); ok {
+							sstack[i] = ok && float64(tl) == tr
+						}
+					case float64:
+						tr, ok := right.(int64)
+						sstack[i] = ok && tl == float64(tr)
+					}
+				}
+			case neq.code:
+				if left == right {
+					sstack[i] = false
+				} else {
+					sstack[i] = true
+					switch tl := left.(type) {
+					case int64:
+						if tr, ok := right.(float64); ok {
+							sstack[i] = ok && float64(tl) != tr
+						}
+					case float64:
+						tr, ok := right.(int64)
+						sstack[i] = ok && tl != float64(tr)
+					}
+				}
+			case lt.code:
+				sstack[i] = false
+				switch tl := left.(type) {
+				case int64:
+					switch tr := right.(type) {
+					case int64:
+						sstack[i] = tl < tr
+					case float64:
+						sstack[i] = float64(tl) < tr
+					}
+				case float64:
+					switch tr := right.(type) {
+					case int64:
+						sstack[i] = tl < float64(tr)
+					case float64:
+						sstack[i] = tl < tr
+					}
+				case string:
+					tr, ok := right.(string)
+					sstack[i] = ok && tl < tr
+				}
+			case gt.code:
+				sstack[i] = false
+				switch tl := left.(type) {
+				case int64:
+					switch tr := right.(type) {
+					case int64:
+						sstack[i] = tl > tr
+					case float64:
+						sstack[i] = float64(tl) > tr
+					}
+				case float64:
+					switch tr := right.(type) {
+					case int64:
+						sstack[i] = tl > float64(tr)
+					case float64:
+						sstack[i] = tl > tr
+					}
+				case string:
+					tr, ok := right.(string)
+					sstack[i] = ok && tl > tr
+				}
+			case lte.code:
+				sstack[i] = false
+				switch tl := left.(type) {
+				case int64:
+					switch tr := right.(type) {
+					case int64:
+						sstack[i] = tl <= tr
+					case float64:
+						sstack[i] = float64(tl) <= tr
+					}
+				case float64:
+					switch tr := right.(type) {
+					case int64:
+						sstack[i] = 
