@@ -687,4 +687,49 @@ func (s *Script) appendOp(o *op, left, right any) (pb *precBuf) {
 	return
 }
 
-func (s *Script) appendValue(buf []byte, v any, prec byte)
+func (s *Script) appendValue(buf []byte, v any, prec byte) []byte {
+	switch tv := v.(type) {
+	case nil:
+		buf = append(buf, "null"...)
+	case nothing:
+		buf = append(buf, "Nothing"...)
+	case string:
+		buf = append(buf, '\'')
+		buf = append(buf, tv...)
+		buf = append(buf, '\'')
+	case int64:
+		buf = append(buf, strconv.FormatInt(tv, 10)...)
+	case float64:
+		buf = append(buf, strconv.FormatFloat(tv, 'g', -1, 64)...)
+	case bool:
+		if tv {
+			buf = append(buf, "true"...)
+		} else {
+			buf = append(buf, "false"...)
+		}
+	case []any:
+		buf = append(buf, '[')
+		for i, v := range tv {
+			if 0 < i {
+				buf = append(buf, ',')
+			}
+			buf = s.appendValue(buf, v, prec)
+		}
+		buf = append(buf, ']')
+	case Expr:
+		buf = tv.Append(buf)
+	case *regexp.Regexp:
+		buf = append(buf, '/')
+		buf = append(buf, tv.String()...)
+		buf = append(buf, '/')
+	case *precBuf:
+		if prec < tv.prec {
+			buf = append(buf, '(')
+			buf = append(buf, tv.buf...)
+			buf = append(buf, ')')
+		} else {
+			buf = append(buf, tv.buf...)
+		}
+	}
+	return buf
+}
