@@ -597,4 +597,94 @@ func (s *Script) EvalWithRoot(stack any, data, root any) any {
 							rs = "^" + rs
 						}
 						if rs[len(rs)-1] != '$' {
-						
+							rs += "$"
+						}
+						if rx, err := regexp.Compile(rs); err == nil {
+							sstack[i] = rx.MatchString(ls)
+						}
+					}
+				}
+			case search.code:
+				sstack[i] = Nothing
+				if ls, ok := left.(string); ok {
+					if rs, _ := right.(string); 0 < len(rs) {
+						if rx, err := regexp.Compile(rs); err == nil {
+							sstack[i] = rx.MatchString(ls)
+						}
+					}
+				}
+			}
+			if i+int(o.cnt)+1 <= len(sstack) {
+				copy(sstack[i+1:], sstack[i+int(o.cnt)+1:])
+			}
+		}
+		if b, _ := sstack[0].(bool); b {
+			switch tstack := stack.(type) {
+			case []any:
+				tstack = append(tstack, v)
+				stack = tstack
+			case []gen.Node:
+				if n, ok := v.(gen.Node); ok {
+					tstack = append(tstack, n)
+					stack = tstack
+				}
+			}
+		}
+	}
+	for i := range sstack {
+		sstack[i] = nil
+	}
+	return stack
+}
+
+// Inspect the script.
+func (s *Script) Inspect() *Form {
+	f, _ := nextForm(s.template)
+
+	return f.(*Form)
+}
+
+func nextForm(st []any) (any, []any) {
+	var v any
+	if 0 < len(st) {
+		v = st[0]
+		st = st[1:]
+		if ov, ok := v.(*op); ok {
+			f := Form{Op: ov.name}
+			f.Left, st = nextForm(st)
+			f.Right, st = nextForm(st)
+			v = &f
+		}
+	}
+	return v, st
+}
+
+func (s *Script) appendOp(o *op, left, right any) (pb *precBuf) {
+	pb = &precBuf{prec: o.prec}
+	switch o.code {
+	case not.code:
+		pb.buf = append(pb.buf, o.name...)
+		pb.buf = s.appendValue(pb.buf, left, o.prec)
+	case length.code, count.code:
+		pb.buf = append(pb.buf, o.name...)
+		pb.buf = append(pb.buf, '(')
+		pb.buf = s.appendValue(pb.buf, left, o.prec)
+		pb.buf = append(pb.buf, ')')
+	case match.code, search.code:
+		pb.buf = append(pb.buf, o.name...)
+		pb.buf = append(pb.buf, '(')
+		pb.buf = s.appendValue(pb.buf, left, o.prec)
+		pb.buf = append(pb.buf, ',', ' ')
+		pb.buf = s.appendValue(pb.buf, right, o.prec)
+		pb.buf = append(pb.buf, ')')
+	default:
+		pb.buf = s.appendValue(pb.buf, left, o.prec)
+		pb.buf = append(pb.buf, ' ')
+		pb.buf = append(pb.buf, o.name...)
+		pb.buf = append(pb.buf, ' ')
+		pb.buf = s.appendValue(pb.buf, right, o.prec)
+	}
+	return
+}
+
+func (s *Script) appendValue(buf []byte, v any, prec byte)
