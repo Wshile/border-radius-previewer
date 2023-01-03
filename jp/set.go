@@ -107,4 +107,76 @@ func (x Expr) set(data, value any, fun string, one bool) error {
 			continue
 		}
 		stack[len(stack)-2] = stack[len(stack)-1]
-		stack[len(stack)-1] = ni
+		stack[len(stack)-1] = nil
+		stack = stack[:len(stack)-1]
+		switch tf := f.(type) {
+		case Child:
+			var has bool
+			switch tv := prev.(type) {
+			case map[string]any:
+				if int(fi) == len(x)-1 { // last one
+					if value == delFlag {
+						delete(tv, string(tf))
+					} else {
+						tv[string(tf)] = value
+					}
+					if one {
+						return nil
+					}
+				} else if v, has = tv[string(tf)]; has {
+					switch v.(type) {
+					case nil, gen.Bool, gen.Int, gen.Float, gen.String,
+						bool, string, float64, float32, int, uint, int8, int16, int32, int64, uint8, uint16, uint32, uint64:
+						return fmt.Errorf("can not follow a %T at '%s'", v, x[:fi+1])
+					case map[string]any, []any, gen.Object, gen.Array:
+						stack = append(stack, v)
+					default:
+						kind := reflect.Invalid
+						if rt := reflect.TypeOf(v); rt != nil {
+							kind = rt.Kind()
+						}
+						switch kind {
+						case reflect.Ptr, reflect.Slice, reflect.Struct, reflect.Array, reflect.Map:
+							stack = append(stack, v)
+						default:
+							return fmt.Errorf("can not follow a %T at '%s'", v, x[:fi+1])
+						}
+					}
+				} else if value != delFlag {
+					switch tc := x[fi+1].(type) {
+					case Child:
+						v = map[string]any{}
+						tv[string(tf)] = v
+						stack = append(stack, v)
+					case Nth:
+						if int(tc) < 0 {
+							return fmt.Errorf("can not deduce the length of the array to add at '%s'", x[:fi+1])
+						}
+						v = make([]any, int(tc)+1)
+						tv[string(tf)] = v
+						stack = append(stack, v)
+					default:
+						return fmt.Errorf("can not deduce what element to add at '%s'", x[:fi+1])
+					}
+				}
+			case gen.Object:
+				if int(fi) == len(x)-1 { // last one
+					if value == delFlag {
+						delete(tv, string(tf))
+					} else {
+						tv[string(tf)] = nodeValue
+					}
+					if one {
+						return nil
+					}
+				} else if v, has = tv[string(tf)]; has {
+					switch v.(type) {
+					case gen.Object, gen.Array:
+						stack = append(stack, v)
+					default:
+						return fmt.Errorf("can not follow a %T at '%s'", v, x[:fi+1])
+					}
+				} else if value != delFlag {
+					switch tc := x[fi+1].(type) {
+					case Child:
+						nv = gen.Object{}
