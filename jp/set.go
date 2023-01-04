@@ -245,4 +245,78 @@ func (x Expr) set(data, value any, fun string, one bool) error {
 							nil, gen.Bool, gen.Int, gen.Float, gen.String:
 							return fmt.Errorf("can not follow a %T at '%s'", v, x[:fi+1])
 						case map[string]any, []any, gen.Object, gen.Array:
-							stack = append(
+							stack = append(stack, v)
+						default:
+							kind := reflect.Invalid
+							if rt := reflect.TypeOf(v); rt != nil {
+								kind = rt.Kind()
+							}
+							switch kind {
+							case reflect.Ptr, reflect.Slice, reflect.Struct, reflect.Array, reflect.Map:
+								stack = append(stack, v)
+							default:
+								return fmt.Errorf("can not follow a %T at '%s'", v, x[:fi+1])
+							}
+						}
+					}
+				} else {
+					return fmt.Errorf("can not follow out of bounds array index at '%s'", x[:fi+1])
+				}
+			case gen.Array:
+				if i < 0 {
+					i = len(tv) + i
+				}
+				if 0 <= i && i < len(tv) {
+					if int(fi) == len(x)-1 { // last one
+						if value == delFlag {
+							tv[i] = nil
+						} else {
+							tv[i] = nodeValue
+						}
+						if one {
+							return nil
+						}
+					} else {
+						v = tv[i]
+						switch v.(type) {
+						case gen.Object, gen.Array:
+							stack = append(stack, v)
+						default:
+							return fmt.Errorf("can not follow a %T at '%s'", v, x[:fi+1])
+						}
+					}
+				} else {
+					return fmt.Errorf("can not follow out of bounds array index at '%s'", x[:fi+1])
+				}
+			default:
+				var has bool
+				if int(fi) == len(x)-1 { // last one
+					if value != delFlag {
+						if x.reflectSetNth(tv, i, value) && one {
+							return nil
+						}
+					}
+				} else if v, has = x.reflectGetNth(tv, i); has {
+					switch v.(type) {
+					case bool, string, float64, float32, int, uint, int8, int16, int32, int64, uint8, uint16, uint32, uint64,
+						nil, gen.Bool, gen.Int, gen.Float, gen.String:
+						return fmt.Errorf("can not follow a %T at '%s'", v, x[:fi+1])
+					case map[string]any, []any, gen.Object, gen.Array:
+						stack = append(stack, v)
+					default:
+						kind := reflect.Invalid
+						if rt := reflect.TypeOf(v); rt != nil {
+							kind = rt.Kind()
+						}
+						switch kind {
+						case reflect.Ptr, reflect.Slice, reflect.Struct, reflect.Array, reflect.Map:
+							stack = append(stack, v)
+						default:
+							return fmt.Errorf("can not follow a %T at '%s'", v, x[:fi+1])
+						}
+					}
+				}
+			}
+		case Wildcard:
+			switch tv := prev.(type) {
+			case map[str
