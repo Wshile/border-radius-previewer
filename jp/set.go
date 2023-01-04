@@ -180,3 +180,69 @@ func (x Expr) set(data, value any, fun string, one bool) error {
 					switch tc := x[fi+1].(type) {
 					case Child:
 						nv = gen.Object{}
+						tv[string(tf)] = nv
+						stack = append(stack, nv)
+					case Nth:
+						if int(tc) < 0 {
+							return fmt.Errorf("can not deduce the length of the array to add at '%s'", x[:fi+1])
+						}
+						nv = make(gen.Array, int(tc)+1)
+						tv[string(tf)] = nv
+						stack = append(stack, nv)
+					default:
+						return fmt.Errorf("can not deduce what element to add at '%s'", x[:fi+1])
+					}
+				}
+			default:
+				if int(fi) == len(x)-1 { // last one
+					if value != delFlag {
+						if x.reflectSetChild(tv, string(tf), value) && one {
+							return nil
+						}
+					}
+				} else if v, has = x.reflectGetChild(tv, string(tf)); has {
+					switch v.(type) {
+					case nil, gen.Bool, gen.Int, gen.Float, gen.String,
+						bool, string, float64, float32, int, uint, int8, int16, int32, int64, uint8, uint16, uint32, uint64:
+						return fmt.Errorf("can not follow a %T at '%s'", v, x[:fi+1])
+					case map[string]any, []any, gen.Object, gen.Array:
+						stack = append(stack, v)
+					default:
+						kind := reflect.Invalid
+						if rt := reflect.TypeOf(v); rt != nil {
+							kind = rt.Kind()
+						}
+						switch kind {
+						case reflect.Ptr, reflect.Slice, reflect.Struct, reflect.Array, reflect.Map:
+							stack = append(stack, v)
+						default:
+							return fmt.Errorf("can not follow a %T at '%s'", v, x[:fi+1])
+						}
+					}
+				}
+			}
+		case Nth:
+			i := int(tf)
+			switch tv := prev.(type) {
+			case []any:
+				if i < 0 {
+					i = len(tv) + i
+				}
+				if 0 <= i && i < len(tv) {
+					if int(fi) == len(x)-1 { // last one
+						if value == delFlag {
+							tv[i] = nil
+						} else {
+							tv[i] = value
+						}
+						if one {
+							return nil
+						}
+					} else {
+						v = tv[i]
+						switch v.(type) {
+						case bool, string, float64, float32, int, uint, int8, int16, int32, int64, uint8, uint16, uint32, uint64,
+							nil, gen.Bool, gen.Int, gen.Float, gen.String:
+							return fmt.Errorf("can not follow a %T at '%s'", v, x[:fi+1])
+						case map[string]any, []any, gen.Object, gen.Array:
+							stack = append(
