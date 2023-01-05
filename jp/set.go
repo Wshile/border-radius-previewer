@@ -405,3 +405,85 @@ func (x Expr) set(data, value any, fun string, one bool) error {
 						for k = range tv {
 							tv[k] = nodeValue
 							if one {
+								return nil
+							}
+						}
+					}
+				} else {
+					for _, v = range tv {
+						switch v.(type) {
+						case gen.Object, gen.Array:
+							stack = append(stack, v)
+						}
+					}
+				}
+			case gen.Array:
+				if int(fi) == len(x)-1 { // last one
+					for i := range tv {
+						if value == delFlag {
+							tv[i] = nil
+							if one {
+								return nil
+							}
+						} else {
+							tv[i] = nodeValue
+							if one {
+								return nil
+							}
+						}
+					}
+				} else {
+					for i := len(tv) - 1; 0 <= i; i-- {
+						v = tv[i]
+						switch v.(type) {
+						case gen.Object, gen.Array:
+							stack = append(stack, v)
+						}
+					}
+				}
+			default:
+				if int(fi) != len(x)-1 {
+					var va []any
+					if one {
+						if vv, has := x.reflectGetWildOne(tv); has {
+							va = []any{vv}
+						}
+					} else {
+						va = x.reflectGetWild(tv)
+					}
+					for _, v := range va {
+						switch v.(type) {
+						case nil, gen.Bool, gen.Int, gen.Float, gen.String,
+							bool, string, float64, float32, int, uint, int8, int16, int32, int64, uint8, uint16, uint32, uint64:
+						case map[string]any, []any, gen.Object, gen.Array:
+							stack = append(stack, v)
+						default:
+							kind := reflect.Invalid
+							if rt := reflect.TypeOf(v); rt != nil {
+								kind = rt.Kind()
+							}
+							switch kind {
+							case reflect.Ptr, reflect.Slice, reflect.Struct, reflect.Array, reflect.Map:
+								stack = append(stack, v)
+							}
+						}
+					}
+				}
+			}
+		case Descent:
+			di, _ := stack[len(stack)-1].(fragIndex)
+			// first pass expands, second continues evaluation
+			if (di & descentFlag) == 0 {
+				switch tv := prev.(type) {
+				case map[string]any:
+					// Put prev back and slide fi.
+					stack[len(stack)-1] = prev
+					stack = append(stack, di|descentFlag)
+					for _, v = range tv {
+						switch v.(type) {
+						case nil, gen.Bool, gen.Int, gen.Float, gen.String,
+							bool, string, float64, float32, int, uint, int8, int16, int32, int64, uint8, uint16, uint32, uint64:
+						case map[string]any, []any, gen.Object, gen.Array:
+							stack = append(stack, v)
+							stack = append(stack, fi|descentChildFlag)
+					
