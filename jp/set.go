@@ -486,4 +486,76 @@ func (x Expr) set(data, value any, fun string, one bool) error {
 						case map[string]any, []any, gen.Object, gen.Array:
 							stack = append(stack, v)
 							stack = append(stack, fi|descentChildFlag)
-					
+						default:
+							kind := reflect.Invalid
+							if rt := reflect.TypeOf(v); rt != nil {
+								kind = rt.Kind()
+							}
+							switch kind {
+							case reflect.Ptr, reflect.Slice, reflect.Struct, reflect.Array, reflect.Map:
+								stack = append(stack, v)
+							}
+						}
+					}
+				case []any:
+					// Put prev back and slide fi.
+					stack[len(stack)-1] = prev
+					stack = append(stack, di|descentFlag)
+					for i := len(tv) - 1; 0 <= i; i-- {
+						v = tv[i]
+						switch v.(type) {
+						case nil, gen.Bool, gen.Int, gen.Float, gen.String,
+							bool, string, float64, float32, int, uint, int8, int16, int32, int64, uint8, uint16, uint32, uint64:
+						case map[string]any, []any, gen.Object, gen.Array:
+							stack = append(stack, v)
+							stack = append(stack, fi|descentChildFlag)
+						default:
+							kind := reflect.Invalid
+							if rt := reflect.TypeOf(v); rt != nil {
+								kind = rt.Kind()
+							}
+							switch kind {
+							case reflect.Ptr, reflect.Slice, reflect.Struct, reflect.Array, reflect.Map:
+								stack = append(stack, v)
+							}
+						}
+					}
+				case gen.Object:
+					// Put prev back and slide fi.
+					stack[len(stack)-1] = prev
+					stack = append(stack, di|descentFlag)
+					for _, v = range tv {
+						switch v.(type) {
+						case map[string]any, []any, gen.Object, gen.Array:
+							stack = append(stack, v)
+							stack = append(stack, fi|descentChildFlag)
+						}
+					}
+				case gen.Array:
+					// Put prev back and slide fi.
+					stack[len(stack)-1] = prev
+					stack = append(stack, di|descentFlag)
+					for i := len(tv) - 1; 0 <= i; i-- {
+						v = tv[i]
+						switch v.(type) {
+						case map[string]any, []any, gen.Object, gen.Array:
+							stack = append(stack, v)
+							stack = append(stack, fi|descentChildFlag)
+						}
+					}
+				}
+			} else {
+				stack = append(stack, prev)
+			}
+		case Union:
+			for _, u := range tf {
+				switch tu := u.(type) {
+				case string:
+					var has bool
+					switch tv := prev.(type) {
+					case map[string]any:
+						if int(fi) == len(x)-1 { // last one
+							if value == delFlag {
+								delete(tv, tu)
+							} else {
+								tv[tu] = valu
