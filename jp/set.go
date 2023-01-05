@@ -319,4 +319,89 @@ func (x Expr) set(data, value any, fun string, one bool) error {
 			}
 		case Wildcard:
 			switch tv := prev.(type) {
-			case map[str
+			case map[string]any:
+				var k string
+				if int(fi) == len(x)-1 { // last one
+					if value == delFlag {
+						for k = range tv {
+							delete(tv, k)
+							if one {
+								return nil
+							}
+						}
+					} else {
+						for k = range tv {
+							tv[k] = value
+							if one {
+								return nil
+							}
+						}
+					}
+				} else {
+					for _, v = range tv {
+						switch v.(type) {
+						case nil, gen.Bool, gen.Int, gen.Float, gen.String,
+							bool, string, float64, float32, int, uint, int8, int16, int32, int64, uint8, uint16, uint32, uint64:
+						case map[string]any, []any, gen.Object, gen.Array:
+							stack = append(stack, v)
+						default:
+							kind := reflect.Invalid
+							if rt := reflect.TypeOf(v); rt != nil {
+								kind = rt.Kind()
+							}
+							switch kind {
+							case reflect.Ptr, reflect.Slice, reflect.Struct, reflect.Array, reflect.Map:
+								stack = append(stack, v)
+							}
+						}
+					}
+				}
+			case []any:
+				if int(fi) == len(x)-1 { // last one
+					for i := range tv {
+						if value == delFlag {
+							tv[i] = nil
+							if one {
+								return nil
+							}
+						} else {
+							tv[i] = value
+							if one {
+								return nil
+							}
+						}
+					}
+				} else {
+					for i := len(tv) - 1; 0 <= i; i-- {
+						v = tv[i]
+						switch v.(type) {
+						case nil, gen.Bool, gen.Int, gen.Float, gen.String,
+							bool, string, float64, float32, int, uint, int8, int16, int32, int64, uint8, uint16, uint32, uint64:
+						case map[string]any, []any, gen.Object, gen.Array:
+							stack = append(stack, v)
+						default:
+							kind := reflect.Invalid
+							if rt := reflect.TypeOf(v); rt != nil {
+								kind = rt.Kind()
+							}
+							switch kind {
+							case reflect.Ptr, reflect.Slice, reflect.Struct, reflect.Array, reflect.Map:
+								stack = append(stack, v)
+							}
+						}
+					}
+				}
+			case gen.Object:
+				var k string
+				if int(fi) == len(x)-1 { // last one
+					if value == delFlag {
+						for k = range tv {
+							delete(tv, k)
+							if one {
+								return nil
+							}
+						}
+					} else {
+						for k = range tv {
+							tv[k] = nodeValue
+							if one {
