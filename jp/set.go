@@ -636,4 +636,88 @@ func (x Expr) set(data, value any, fun string, one bool) error {
 								if value == delFlag {
 									tv[i] = nil
 								} else {
-			
+									tv[i] = value
+								}
+								if one {
+									return nil
+								}
+							} else {
+								switch v.(type) {
+								case nil, gen.Bool, gen.Int, gen.Float, gen.String,
+									bool, string, float64, float32, int, uint, int8, int16, int32, int64, uint8, uint16, uint32, uint64:
+								case map[string]any, []any, gen.Object, gen.Array:
+									stack = append(stack, v)
+								default:
+									kind := reflect.Invalid
+									if rt := reflect.TypeOf(v); rt != nil {
+										kind = rt.Kind()
+									}
+									switch kind {
+									case reflect.Ptr, reflect.Slice, reflect.Struct, reflect.Array, reflect.Map:
+										stack = append(stack, v)
+									}
+								}
+							}
+						}
+					case gen.Array:
+						if i < 0 {
+							i = len(tv) + i
+						}
+						if 0 <= i && i < len(tv) {
+							v = tv[i]
+						}
+						if int(fi) == len(x)-1 { // last one
+							if value == delFlag {
+								tv[i] = nil
+							} else {
+								tv[i] = nodeValue
+							}
+							if one {
+								return nil
+							}
+						} else {
+							switch v.(type) {
+							case map[string]any, []any, gen.Object, gen.Array:
+								stack = append(stack, v)
+							}
+						}
+					default:
+						var has bool
+						if int(fi) == len(x)-1 { // last one
+							if value != delFlag {
+								if x.reflectSetNth(tv, i, value) && one {
+									return nil
+								}
+							}
+						} else if v, has = x.reflectGetNth(tv, i); has {
+							switch v.(type) {
+							case nil, gen.Bool, gen.Int, gen.Float, gen.String,
+								bool, string, float64, float32, int, uint, int8, int16, int32, int64, uint8, uint16, uint32, uint64:
+							case map[string]any, []any, gen.Object, gen.Array:
+								stack = append(stack, v)
+							default:
+								kind := reflect.Invalid
+								if rt := reflect.TypeOf(v); rt != nil {
+									kind = rt.Kind()
+								}
+								switch kind {
+								case reflect.Ptr, reflect.Slice, reflect.Struct, reflect.Array, reflect.Map:
+									stack = append(stack, v)
+								}
+							}
+						}
+					}
+				}
+			}
+		case Slice:
+			start := 0
+			end := -1
+			step := 1
+			if 0 < len(tf) {
+				start = tf[0]
+			}
+			if 1 < len(tf) {
+				end = tf[1]
+			}
+			if 2 < len(tf) {
+		
