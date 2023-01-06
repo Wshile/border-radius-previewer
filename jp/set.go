@@ -558,4 +558,82 @@ func (x Expr) set(data, value any, fun string, one bool) error {
 							if value == delFlag {
 								delete(tv, tu)
 							} else {
-								tv[tu] = valu
+								tv[tu] = value
+							}
+							if one {
+								return nil
+							}
+						} else if v, has = tv[tu]; has {
+							switch v.(type) {
+							case nil, gen.Bool, gen.Int, gen.Float, gen.String,
+								bool, string, float64, float32, int, uint, int8, int16, int32, int64, uint8, uint16, uint32, uint64:
+							case map[string]any, []any, gen.Object, gen.Array:
+								stack = append(stack, v)
+							default:
+								kind := reflect.Invalid
+								if rt := reflect.TypeOf(v); rt != nil {
+									kind = rt.Kind()
+								}
+								switch kind {
+								case reflect.Ptr, reflect.Slice, reflect.Struct, reflect.Array, reflect.Map:
+									stack = append(stack, v)
+								}
+							}
+						}
+					case gen.Object:
+						if int(fi) == len(x)-1 { // last one
+							if value == delFlag {
+								delete(tv, tu)
+							} else {
+								tv[tu] = nodeValue
+							}
+							if one {
+								return nil
+							}
+						} else if v, has = tv[tu]; has {
+							switch v.(type) {
+							case map[string]any, []any, gen.Object, gen.Array:
+								stack = append(stack, v)
+							}
+						}
+					default:
+						var has bool
+						if int(fi) == len(x)-1 { // last one
+							if value != delFlag {
+								if x.reflectSetChild(tv, tu, value) && one {
+									return nil
+								}
+							}
+
+						} else if v, has = x.reflectGetChild(tv, tu); has {
+							switch v.(type) {
+							case nil, gen.Bool, gen.Int, gen.Float, gen.String,
+								bool, string, float64, float32, int, uint, int8, int16, int32, int64, uint8, uint16, uint32, uint64:
+							case map[string]any, []any, gen.Object, gen.Array:
+								stack = append(stack, v)
+							default:
+								kind := reflect.Invalid
+								if rt := reflect.TypeOf(v); rt != nil {
+									kind = rt.Kind()
+								}
+								switch kind {
+								case reflect.Ptr, reflect.Slice, reflect.Struct, reflect.Array, reflect.Map:
+									stack = append(stack, v)
+								}
+							}
+						}
+					}
+				case int64:
+					i := int(tu)
+					switch tv := prev.(type) {
+					case []any:
+						if i < 0 {
+							i = len(tv) + i
+						}
+						if 0 <= i && i < len(tv) {
+							v = tv[i]
+							if int(fi) == len(x)-1 { // last one
+								if value == delFlag {
+									tv[i] = nil
+								} else {
+			
