@@ -720,4 +720,79 @@ func (x Expr) set(data, value any, fun string, one bool) error {
 				end = tf[1]
 			}
 			if 2 < len(tf) {
-		
+				step = tf[2]
+			}
+			switch tv := prev.(type) {
+			case []any:
+				if start < 0 {
+					start = len(tv) + start
+				}
+				if end < 0 {
+					end = len(tv) + end
+				}
+				if start < 0 || end < 0 || len(tv) <= start || step == 0 {
+					continue
+				}
+				if len(tv) <= end {
+					end = len(tv) - 1
+				}
+				end = start + ((end - start) / step * step)
+				if 0 < step {
+					for i := end; start <= i; i -= step {
+						v = tv[i]
+						switch v.(type) {
+						case nil, gen.Bool, gen.Int, gen.Float, gen.String,
+							bool, string, float64, float32, int, uint, int8, int16, int32, int64, uint8, uint16, uint32, uint64:
+						case map[string]any, []any, gen.Object, gen.Array:
+							stack = append(stack, v)
+						default:
+							kind := reflect.Invalid
+							if rt := reflect.TypeOf(v); rt != nil {
+								kind = rt.Kind()
+							}
+							switch kind {
+							case reflect.Ptr, reflect.Slice, reflect.Struct, reflect.Array, reflect.Map:
+								stack = append(stack, v)
+							}
+						}
+					}
+				} else {
+					for i := end; i <= start; i -= step {
+						v = tv[i]
+						switch v.(type) {
+						case nil, gen.Bool, gen.Int, gen.Float, gen.String,
+							bool, string, float64, float32, int, uint, int8, int16, int32, int64, uint8, uint16, uint32, uint64:
+						case map[string]any, []any, gen.Object, gen.Array:
+							stack = append(stack, v)
+						default:
+							kind := reflect.Invalid
+							if rt := reflect.TypeOf(v); rt != nil {
+								kind = rt.Kind()
+							}
+							switch kind {
+							case reflect.Ptr, reflect.Slice, reflect.Struct, reflect.Array, reflect.Map:
+								stack = append(stack, v)
+							}
+						}
+					}
+				}
+			case gen.Array:
+				if start < 0 {
+					start = len(tv) + start
+				}
+				if end < 0 {
+					end = len(tv) + end
+				}
+				if start < 0 || end < 0 || len(tv) <= start || step == 0 {
+					continue
+				}
+				if len(tv) <= end {
+					end = len(tv) - 1
+				}
+				end = start + ((end - start) / step * step)
+				if 0 < step {
+					for i := end; start <= i; i -= step {
+						v = tv[i]
+						switch v.(type) {
+						case map[string]any, []any, gen.Object, gen.Array:
+							sta
