@@ -795,4 +795,93 @@ func (x Expr) set(data, value any, fun string, one bool) error {
 						v = tv[i]
 						switch v.(type) {
 						case map[string]any, []any, gen.Object, gen.Array:
-							sta
+							stack = append(stack, v)
+						}
+					}
+				} else {
+					for i := end; i <= start; i -= step {
+						v = tv[i]
+						switch v.(type) {
+						case map[string]any, []any, gen.Object, gen.Array:
+							stack = append(stack, v)
+						}
+					}
+				}
+			default:
+				if int(fi) != len(x)-1 {
+					for _, v := range x.reflectGetSlice(tv, start, end, step) {
+						switch v.(type) {
+						case nil, gen.Bool, gen.Int, gen.Float, gen.String,
+							bool, string, float64, float32, int, uint, int8, int16, int32, int64, uint8, uint16, uint32, uint64:
+						case map[string]any, []any, gen.Object, gen.Array:
+							stack = append(stack, v)
+						default:
+							kind := reflect.Invalid
+							if rt := reflect.TypeOf(v); rt != nil {
+								kind = rt.Kind()
+							}
+							switch kind {
+							case reflect.Ptr, reflect.Slice, reflect.Struct, reflect.Array, reflect.Map:
+								stack = append(stack, v)
+							}
+						}
+					}
+				}
+			}
+		case *Filter:
+			stack, _ = tf.EvalWithRoot(stack, prev, data).([]any)
+		case Root:
+			stack = append(stack, data)
+		case At, Bracket:
+			stack = append(stack, prev)
+		}
+		if int(fi) < len(x)-1 {
+			if _, ok := stack[len(stack)-1].(fragIndex); !ok {
+				fi++
+				f = x[fi]
+				stack = append(stack, fi)
+			}
+		}
+	}
+	return nil
+}
+
+func (x Expr) reflectSetChild(data any, key string, v any) bool {
+	if !isNil(data) {
+		rd := reflect.ValueOf(data)
+		rt := rd.Type()
+		if rt.Kind() == reflect.Ptr {
+			rt = rt.Elem()
+			rd = rd.Elem()
+		}
+		switch rt.Kind() {
+		case reflect.Struct:
+			rv := rd.FieldByNameFunc(func(k string) bool { return strings.EqualFold(k, key) })
+			vv := reflect.ValueOf(v)
+			vt := vv.Type()
+			if rv.CanSet() && vt.AssignableTo(rv.Type()) {
+				rv.Set(vv)
+				return true
+			}
+		case reflect.Map:
+			rk := reflect.ValueOf(key)
+			vv := reflect.ValueOf(v)
+			vt := vv.Type()
+			if vt.AssignableTo(rt.Elem()) {
+				rd.SetMapIndex(rk, vv)
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func (x Expr) reflectSetNth(data any, i int, v any) bool {
+	if !isNil(data) {
+		rd := reflect.ValueOf(data)
+		rt := rd.Type()
+		switch rt.Kind() {
+		case reflect.Slice, reflect.Array:
+			size := rd.Len()
+			if i < 0 {
+				i =
