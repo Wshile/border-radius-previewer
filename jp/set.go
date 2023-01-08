@@ -884,4 +884,18 @@ func (x Expr) reflectSetNth(data any, i int, v any) bool {
 		case reflect.Slice, reflect.Array:
 			size := rd.Len()
 			if i < 0 {
-				i =
+				i = size + i
+			}
+			if 0 <= i && i < size {
+				rv := rd.Index(i)
+				vv := reflect.ValueOf(v)
+				vt := vv.Type()
+				if rv.CanSet() && vt.AssignableTo(rv.Type()) {
+					rv.Set(vv)
+					return true
+				}
+			}
+		}
+	}
+	return false
+}
