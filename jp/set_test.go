@@ -103,4 +103,43 @@ var (
 		{path: "['a','b']", data: `{"a":1,"b":2,"c":3}`, value: 5, expect: `{"a":5,"b":2,"c":3}`},
 
 		{path: "", data: `{}`, value: 3, err: "can not set with an empty expression"},
-		
+		{path: "$", data: `{}`, value: 3, err: "can not set with an expression ending with a Root"},
+		{path: "@", data: `{}`, value: 3, err: "can not set with an expression ending with a At"},
+		{path: "a", data: `{}`, value: func() {}, err: "can not set a func() in a gen.Object", noSimple: true},
+		{path: "a.b", data: `{"a":4}`, value: 3, err: "/can not follow a .+ at 'a'/"},
+		{path: "a[-1]", data: `{}`, value: 3, err: "can not deduce the length of the array to add at 'a'"},
+		{path: "a[1,2].x", data: `{}`, value: 3, err: "can not deduce what element to add at 'a'"},
+		{path: "[0].1", data: `[1]`, value: 3, err: "/can not follow a .+ at '\\[0\\]'/"},
+		{path: "[1]", data: `[1]`, value: 3, err: "can not follow out of bounds array index at '[1]'"},
+	}
+	setReflectTestData = []*setReflectData{
+		{path: "a", data: &Sample{A: 1, B: "a string"}, value: 3, expect: `{"^":"Sample","a":3,"b":"a string"}`},
+		{path: "x.a", data: &Any{X: map[string]any{"a": 1}}, value: 3, expect: `{"^":"Any","x":{"a":3}}`},
+		{path: "x.a", data: &Any{X: &Sample{A: 1}}, value: 3, expect: `{"^":"Any","x":{"^":"Sample","a":3,"b":""}}`},
+		{path: "x.a", data: map[string]any{"x": &Sample{A: 1}}, value: 3, expect: `{"x":{"^":"Sample","a":3,"b":""}}`},
+		{path: "[1]", data: []int{1, 2, 3}, value: 5, expect: `[1,5,3]`},
+		{path: "[-2]", data: []int{1, 2, 3}, value: 5, expect: `[1,5,3]`},
+		{path: "[1].x", data: []*Any{{X: 1}, {X: 2}, {X: 3}}, value: 5, expect: `[{"^":"Any","x":1},{"^":"Any","x":5},{"^":"Any","x":3}]`},
+		{path: "$.*.x", data: []*Any{{X: 1}, {X: 2}, {X: 3}}, value: 5, expect: `[{"^":"Any","x":5},{"^":"Any","x":5},{"^":"Any","x":5}]`},
+		{path: "[1].x",
+			data: []map[string]any{
+				{"x": 1},
+				{"x": 2},
+				{"x": 3},
+			},
+			value: 5, expect: `[{"x":1},{"x":5},{"x":3}]`},
+		{path: "[*].x",
+			data: []map[string]any{
+				{"x": 1},
+				{"x": 2},
+				{"x": 3},
+			},
+			value: 5, expect: `[{"x":5},{"x":5},{"x":5}]`},
+		{path: "[1,'a'].x",
+			data: []*Any{{X: 1}, {X: 2}, {X: 3}}, value: 5,
+			expect: `[{"^":"Any","x":1},{"^":"Any","x":5},{"^":"Any","x":3}]`},
+		{path: "[1,'a'].x",
+			data: []map[string]any{
+				{"x": 1},
+				{"x": 2},
+				{"x
