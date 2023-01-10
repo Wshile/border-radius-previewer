@@ -269,4 +269,73 @@ var (
 		{path: "[0:1].x", data: []any{1}, value: 3, expect: `[1]`},
 		{path: "[1:0:-1].x", data: []any{1, 2}, value: 3, expect: `[1,2]`},
 
-		{path: 
+		{path: "x.a", data: map[string]any{"x": func() {}}, value: 3, err: "can not follow a func() at 'x'"},
+		{path: "x.a", data: &Any{X: 1}, value: 3, err: "can not follow a int at 'x'"},
+		{path: "x.a", data: &Any{X: func() {}}, value: 3, err: "can not follow a func() at 'x'"},
+		{path: "[0].x", data: []any{func() {}}, value: 5, err: "can not follow a func() at '[0]'"},
+		{path: "[0].x", data: []int{1, 2, 3}, value: 5, err: "can not follow a int at '[0]'"},
+		{path: "[0].x", data: []func(){func() {}}, value: 5, err: "can not follow a func() at '[0]'"},
+	}
+)
+
+func TestExprSet(t *testing.T) {
+	for i, d := range setTestData {
+		if testing.Verbose() {
+			fmt.Printf("... %d: %s\n", i, d.path)
+		}
+		x, err := jp.ParseString(d.path)
+		tt.Nil(t, err, i, " : ", x)
+
+		var data any
+		if !d.noSimple {
+			data, err = oj.ParseString(d.data)
+			tt.Nil(t, err, i, " : ", x)
+			err = x.Set(data, d.value)
+			if 0 < len(d.err) {
+				tt.NotNil(t, err, i, " : ", x)
+				tt.Equal(t, d.err, err.Error(), i, " : ", x)
+			} else {
+				result := oj.JSON(data, &oj.Options{Sort: true})
+				tt.Equal(t, d.expect, result, i, " : ", x)
+			}
+		}
+		if !d.noNode {
+			var p gen.Parser
+			data, err = p.Parse([]byte(d.data))
+			tt.Nil(t, err, i, " : ", x)
+			err = x.Set(data, d.value)
+			if 0 < len(d.err) {
+				tt.NotNil(t, err, i, " : ", x)
+				tt.Equal(t, d.err, err.Error(), i, " : ", x)
+			} else {
+				result := oj.JSON(data, &oj.Options{Sort: true})
+				tt.Equal(t, d.expect, result, i, " : ", x)
+			}
+		}
+	}
+}
+
+func TestExprSetOne(t *testing.T) {
+	for i, d := range setOneTestData {
+		if testing.Verbose() {
+			fmt.Printf("... %d: %s\n", i, d.path)
+		}
+		x, err := jp.ParseString(d.path)
+		tt.Nil(t, err, i, " : ", x)
+
+		var data any
+		if !d.noSimple {
+			data, err = oj.ParseString(d.data)
+			tt.Nil(t, err, i, " : ", x)
+			err = x.SetOne(data, d.value)
+			if 0 < len(d.err) {
+				tt.NotNil(t, err, i, " : ", x)
+				tt.Equal(t, d.err, err.Error(), i, " : ", x)
+			} else {
+				result := oj.JSON(data, &oj.Options{Sort: true})
+				tt.Equal(t, d.expect, result, i, " : ", x)
+			}
+		}
+		if !d.noNode {
+			var p gen.Parser
+			data, err = p.Parse([]byte(d.data
