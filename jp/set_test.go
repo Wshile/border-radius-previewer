@@ -338,4 +338,64 @@ func TestExprSetOne(t *testing.T) {
 		}
 		if !d.noNode {
 			var p gen.Parser
-			data, err = p.Parse([]byte(d.data
+			data, err = p.Parse([]byte(d.data))
+			tt.Nil(t, err, i, " : ", x)
+			err = x.SetOne(data, d.value)
+			if 0 < len(d.err) {
+				tt.NotNil(t, err, i, " : ", x)
+				tt.Equal(t, d.err, err.Error(), i, " : ", x)
+			} else {
+				result := oj.JSON(data, &oj.Options{Sort: true})
+				tt.Equal(t, d.expect, result, i, " : ", x)
+			}
+		}
+	}
+}
+
+func TestExprSetReflect(t *testing.T) {
+	for i, d := range setReflectTestData {
+		if testing.Verbose() {
+			fmt.Printf("... %d: %s\n", i, d.path)
+		}
+		x, err := jp.ParseString(d.path)
+		tt.Nil(t, err, i, " : ", x)
+
+		err = x.Set(d.data, d.value)
+		if 0 < len(d.err) {
+			tt.NotNil(t, err, i, " : ", x)
+			tt.Equal(t, d.err, err.Error(), i, " : ", x)
+		} else {
+			result := oj.JSON(d.data, &oj.Options{Sort: true, CreateKey: "^"})
+			tt.Equal(t, d.expect, result, i, " : ", x)
+		}
+	}
+}
+
+func TestExprSetOneReflect(t *testing.T) {
+	for i, d := range setOneReflectTestData {
+		if testing.Verbose() {
+			fmt.Printf("... %d: %s\n", i, d.path)
+		}
+		x, err := jp.ParseString(d.path)
+		tt.Nil(t, err, i, " : ", x)
+
+		err = x.SetOne(d.data, d.value)
+		if 0 < len(d.err) {
+			tt.NotNil(t, err, i, " : ", x)
+			tt.Equal(t, d.err, err.Error(), i, " : ", x)
+		} else {
+			result := oj.JSON(d.data, &oj.Options{Sort: true, CreateKey: "^"})
+			tt.Equal(t, d.expect, result, i, " : ", x)
+		}
+	}
+}
+
+func TestExprMustSet(t *testing.T) {
+	data := map[string]any{"a": 1, "b": 2, "c": 3}
+	tt.Panic(t, func() { jp.C("b").N(0).MustSet(data, 7) })
+}
+
+func TestExprMustSetOne(t *testing.T) {
+	data := map[string]any{"a": 1, "b": 2, "c": 3}
+	tt.Panic(t, func() { jp.C("b").N(0).MustSetOne(data, 7) })
+}
