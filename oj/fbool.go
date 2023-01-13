@@ -66,4 +66,30 @@ func iappendBool(fi *finfo, buf []byte, rv reflect.Value, addr uintptr, safe boo
 	return buf, nil, aWrote
 }
 
-func iappendBoolAsString(fi *finfo, 
+func iappendBoolAsString(fi *finfo, buf []byte, rv reflect.Value, addr uintptr, safe bool) ([]byte, any, appendStatus) {
+	buf = append(buf, fi.jkey...)
+	if rv.FieldByIndex(fi.index).Interface().(bool) {
+		buf = append(buf, `"true"`...)
+	} else {
+		buf = append(buf, `"false"`...)
+	}
+	return buf, nil, aWrote
+}
+
+func iappendBoolNotEmpty(fi *finfo, buf []byte, rv reflect.Value, addr uintptr, safe bool) ([]byte, any, appendStatus) {
+	if rv.FieldByIndex(fi.index).Interface().(bool) {
+		buf = append(buf, fi.jkey...)
+		buf = append(buf, "true"...)
+		return buf, nil, aWrote
+	}
+	return buf, nil, aSkip
+}
+
+func iappendBoolNotEmptyAsString(fi *finfo, buf []byte, rv reflect.Value, addr uintptr, safe bool) ([]byte, any, appendStatus) {
+	if rv.FieldByIndex(fi.index).Interface().(bool) {
+		buf = append(buf, fi.jkey...)
+		buf = append(buf, `"true"`...)
+		return buf, nil, aWrote
+	}
+	return buf, nil, aSkip
+}
