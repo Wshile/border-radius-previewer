@@ -75,4 +75,26 @@ func iappendInt16AsString(fi *finfo, buf []byte, rv reflect.Value, addr uintptr,
 	return buf, nil, aWrote
 }
 
-func iappendInt16NotEmpty(fi *finfo, buf []byte, rv reflec
+func iappendInt16NotEmpty(fi *finfo, buf []byte, rv reflect.Value, addr uintptr, safe bool) ([]byte, any, appendStatus) {
+	v := rv.FieldByIndex(fi.index).Interface().(int16)
+	if v == 0 {
+		return buf, nil, aSkip
+	}
+	buf = append(buf, fi.jkey...)
+	buf = strconv.AppendInt(buf, int64(v), 10)
+
+	return buf, nil, aWrote
+}
+
+func iappendInt16NotEmptyAsString(fi *finfo, buf []byte, rv reflect.Value, addr uintptr, safe bool) ([]byte, any, appendStatus) {
+	v := rv.FieldByIndex(fi.index).Interface().(int16)
+	if v == 0 {
+		return buf, nil, aSkip
+	}
+	buf = append(buf, fi.jkey...)
+	buf = append(buf, '"')
+	buf = strconv.AppendInt(buf, int64(v), 10)
+	buf = append(buf, '"')
+
+	return buf, nil, aWrote
+}
