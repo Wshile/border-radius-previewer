@@ -94,4 +94,7 @@ func iappendInt64NotEmptyAsString(fi *finfo, buf []byte, rv reflect.Value, addr 
 	buf = append(buf, fi.jkey...)
 	buf = append(buf, '"')
 	buf = strconv.AppendInt(buf, v, 10)
-	buf = 
+	buf = append(buf, '"')
+
+	return buf, nil, aWrote
+}
