@@ -152,4 +152,99 @@ func (wr *Writer) tightStruct(rv reflect.Value, si *sinfo) {
 		} else {
 			wr.buf = append(wr.buf, si.rt.Name()...)
 		}
-		wr.buf = a
+		wr.buf = append(wr.buf, `",`...)
+		comma = true
+	}
+	var addr uintptr
+	if rv.CanAddr() {
+		addr = rv.UnsafeAddr()
+	}
+	var stat appendStatus
+	for _, fi := range fields {
+		if 0 < addr {
+			wr.buf, v, stat = fi.Append(fi, wr.buf, rv, addr, !wr.HTMLUnsafe)
+		} else {
+			wr.buf, v, stat = fi.iAppend(fi, wr.buf, rv, addr, !wr.HTMLUnsafe)
+		}
+		switch stat {
+		case aWrote:
+			wr.buf = append(wr.buf, ',')
+			comma = true
+			continue
+		case aSkip:
+			continue
+		case aChanged:
+			if wr.OmitNil && (*[2]uintptr)(unsafe.Pointer(&v))[1] == 0 {
+				wr.buf = wr.buf[:len(wr.buf)-fi.keyLen()]
+				continue
+			}
+			wr.appendJSON(v, 0)
+			wr.buf = append(wr.buf, ',')
+			comma = true
+			continue
+		}
+		var fv reflect.Value
+		kind := fi.kind
+	Retry:
+		switch kind {
+		case reflect.Ptr:
+			if (*[2]uintptr)(unsafe.Pointer(&v))[1] != 0 { // Check for nil of any type
+				fv = reflect.ValueOf(v).Elem()
+				kind = fv.Kind()
+				v = fv.Interface()
+				goto Retry
+			}
+			if wr.OmitNil {
+				wr.buf = wr.buf[:len(wr.buf)-fi.keyLen()]
+				continue
+			}
+			wr.buf = append(wr.buf, "null"...)
+		case reflect.Interface:
+			if wr.OmitNil && (*[2]uintptr)(unsafe.Pointer(&v))[1] == 0 {
+				wr.buf = wr.buf[:len(wr.buf)-fi.keyLen()]
+				continue
+			}
+			wr.appendJSON(v, 0)
+		case reflect.Struct:
+			if !fv.IsValid() {
+				fv = reflect.ValueOf(v)
+			}
+			wr.tightStruct(fv, fi.elem)
+		case reflect.Slice, reflect.Array:
+			if !fv.IsValid() {
+				fv = reflect.ValueOf(v)
+			}
+			wr.tightSlice(fv, fi.elem)
+		case reflect.Map:
+			if !fv.IsValid() {
+				fv = reflect.ValueOf(v)
+			}
+			wr.tightMap(fv, fi.elem)
+		default:
+			wr.appendJSON(v, 0)
+		}
+		wr.buf = append(wr.buf, ',')
+		comma = true
+	}
+	if comma {
+		wr.buf[len(wr.buf)-1] = '}'
+	} else {
+		wr.buf = append(wr.buf, '}')
+	}
+}
+
+func (wr *Writer) tightSlice(rv reflect.Value, si *sinfo) {
+	end := rv.Len()
+	comma := false
+	wr.buf = append(wr.buf, '[')
+	for j := 0; j < end; j++ {
+		rm := rv.Index(j)
+		if rm.Kind() == reflect.Ptr {
+			rm = rm.Elem()
+		}
+		switch rm.Kind() {
+		case reflect.Struct:
+			wr.tightStruct(rm, si)
+		case reflect.Slice, reflect.Array:
+			wr.tightSlice(rm, si)
+		case refl
