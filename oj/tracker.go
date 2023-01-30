@@ -51,4 +51,7 @@ func (t *tracker) byteError(off int, mode string, b byte, r rune) error {
 	case spaceMap:
 		err.Message = fmt.Sprintf("extra characters after close, '%c'", r)
 	default:
-		err.Message = fmt.Sprintf("unex
+		err.Message = fmt.Sprintf("unexpected character '%c'", r)
+	}
+	return err
+}
