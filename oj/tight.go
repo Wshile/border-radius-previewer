@@ -247,4 +247,73 @@ func (wr *Writer) tightSlice(rv reflect.Value, si *sinfo) {
 			wr.tightStruct(rm, si)
 		case reflect.Slice, reflect.Array:
 			wr.tightSlice(rm, si)
-		case refl
+		case reflect.Map:
+			wr.tightMap(rm, si)
+		default:
+			wr.appendJSON(rm.Interface(), 0)
+		}
+		wr.buf = append(wr.buf, ',')
+		comma = true
+	}
+	if comma {
+		wr.buf[len(wr.buf)-1] = ']'
+	} else {
+		wr.buf = append(wr.buf, ']')
+	}
+}
+
+func (wr *Writer) tightMap(rv reflect.Value, si *sinfo) {
+	wr.buf = append(wr.buf, '{')
+	keys := rv.MapKeys()
+	if wr.Sort {
+		sort.Slice(keys, func(i, j int) bool { return 0 > strings.Compare(keys[i].String(), keys[j].String()) })
+	}
+	comma := false
+	for _, kv := range keys {
+		rm := rv.MapIndex(kv)
+		if rm.Kind() == reflect.Ptr {
+			if wr.OmitNil && rm.IsNil() {
+				continue
+			}
+			rm = rm.Elem()
+		}
+		switch rm.Kind() {
+		case reflect.Struct:
+			wr.buf = ojg.AppendJSONString(wr.buf, kv.String(), !wr.HTMLUnsafe)
+			wr.buf = append(wr.buf, ':')
+			wr.tightStruct(rm, si)
+		case reflect.Slice, reflect.Array:
+			if (wr.OmitNil || wr.OmitEmpty) && rm.Len() == 0 {
+				continue
+			}
+			wr.buf = ojg.AppendJSONString(wr.buf, kv.String(), !wr.HTMLUnsafe)
+			wr.buf = append(wr.buf, ':')
+			wr.tightSlice(rm, si)
+		case reflect.Map:
+			if (wr.OmitNil || wr.OmitEmpty) && rm.Len() == 0 {
+				continue
+			}
+			wr.buf = ojg.AppendJSONString(wr.buf, kv.String(), !wr.HTMLUnsafe)
+			wr.buf = append(wr.buf, ':')
+			wr.tightMap(rm, si)
+		case reflect.String:
+			if (wr.OmitNil || wr.OmitEmpty) && rm.Len() == 0 {
+				continue
+			}
+			wr.buf = ojg.AppendJSONString(wr.buf, kv.String(), !wr.HTMLUnsafe)
+			wr.buf = append(wr.buf, ':')
+			wr.appendJSON(rm.Interface(), 0)
+		default:
+			wr.buf = ojg.AppendJSONString(wr.buf, kv.String(), !wr.HTMLUnsafe)
+			wr.buf = append(wr.buf, ':')
+			wr.appendJSON(rm.Interface(), 0)
+		}
+		wr.buf = append(wr.buf, ',')
+		comma = true
+	}
+	if comma {
+		wr.buf[len(wr.buf)-1] = '}'
+	} else {
+		wr.buf = append(wr.buf, '}')
+	}
+}
