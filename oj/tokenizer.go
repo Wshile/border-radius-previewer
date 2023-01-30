@@ -299,3 +299,184 @@ func (t *Tokenizer) tokenizeBuffer(buf []byte, last bool) error {
 			// which are all over 256 long.
 			if t.mode[256] == 'n' {
 				t.handleNum()
+			}
+			t.starts = t.starts[:len(t.starts)-1]
+			t.handler.ArrayEnd()
+			t.mode = afterMap
+		case valNull:
+			if off+4 <= len(buf) && string(buf[off:off+4]) == "null" {
+				off += 3
+				t.mode = afterMap
+				t.handler.Null()
+			} else {
+				t.mode = nullMap
+				t.ri = 0
+			}
+		case valTrue:
+			if off+4 <= len(buf) && string(buf[off:off+4]) == "true" {
+				off += 3
+				t.mode = afterMap
+				t.handler.Bool(true)
+			} else {
+				t.mode = trueMap
+				t.ri = 0
+			}
+		case valFalse:
+			if off+5 <= len(buf) && string(buf[off:off+5]) == "false" {
+				off += 4
+				t.mode = afterMap
+				t.handler.Bool(false)
+			} else {
+				t.mode = falseMap
+				t.ri = 0
+			}
+		case numDot:
+			if 0 < len(t.num.BigBuf) {
+				t.num.BigBuf = append(t.num.BigBuf, b)
+				t.mode = dotMap
+				continue
+			}
+			for i, b = range buf[off+1:] {
+				if digitMap[b] != numDigit {
+					break
+				}
+				t.num.Frac = t.num.Frac*10 + uint64(b-'0')
+				t.num.Div *= 10.0
+				if math.MaxInt64 < t.num.Frac {
+					t.num.FillBig()
+					break
+				}
+			}
+			off += i
+			if digitMap[b] == numDigit {
+				off++
+			}
+			t.mode = fracMap
+		case numFrac:
+			t.num.AddFrac(b)
+			t.mode = fracMap
+		case fracE:
+			if 0 < len(t.num.BigBuf) {
+				t.num.BigBuf = append(t.num.BigBuf, b)
+			}
+			t.mode = expSignMap
+			continue
+		case strQuote:
+			t.mode = t.nextMode
+			if t.nextMode == colonMap {
+				t.handler.Key(string(t.tmp))
+			} else {
+				t.handler.String(string(t.tmp))
+			}
+		case numZero:
+			t.mode = zeroMap
+		case numDigit:
+			t.num.AddDigit(b)
+		case negDigit:
+			t.num.AddDigit(b)
+			t.mode = digitMap
+		case numSpc:
+			t.handleNum()
+			t.mode = afterMap
+		case numNewline:
+			t.handleNum()
+			t.line++
+			t.noff = off
+			t.mode = afterMap
+			for i, b = range buf[off+1:] {
+				if spaceMap[b] != skipChar {
+					break
+				}
+			}
+			off += i
+		case expSign:
+			t.mode = expZeroMap
+			if b == '-' {
+				t.num.NegExp = true
+			}
+			continue
+		case expDigit:
+			t.num.AddExp(b)
+			t.mode = expMap
+		case uOk:
+			t.ri++
+			switch b {
+			case '0', '1', '2', '3', '4', '5', '6', '7', '8', '9':
+				t.rn = t.rn<<4 | rune(b-'0')
+			case 'a', 'b', 'c', 'd', 'e', 'f':
+				t.rn = t.rn<<4 | rune(b-'a'+10)
+			case 'A', 'B', 'C', 'D', 'E', 'F':
+				t.rn = t.rn<<4 | rune(b-'A'+10)
+			}
+			if t.ri == 4 {
+				if len(t.runeBytes) < 6 {
+					t.runeBytes = make([]byte, 6)
+				}
+				n := utf8.EncodeRune(t.runeBytes, t.rn)
+				t.tmp = append(t.tmp, t.runeBytes[:n]...)
+				t.mode = stringMap
+			}
+			continue
+		case tokenOk:
+			switch {
+			case t.mode['r'] == tokenOk:
+				t.ri++
+				if "true"[t.ri] != b {
+					return t.newError(off, "expected true")
+				}
+				if 3 <= t.ri {
+					t.handler.Bool(true)
+					t.mode = afterMap
+				}
+			case t.mode['a'] == tokenOk:
+				t.ri++
+				if "false"[t.ri] != b {
+					return t.newError(off, "expected false")
+				}
+				if 4 <= t.ri {
+					t.handler.Bool(false)
+					t.mode = afterMap
+				}
+			case t.mode['u'] == tokenOk && t.mode['l'] == tokenOk:
+				t.ri++
+				if "null"[t.ri] != b {
+					return t.newError(off, "expected null")
+				}
+				if 3 <= t.ri {
+					t.handler.Null()
+					t.mode = afterMap
+				}
+			}
+		case charErr:
+			return t.byteError(off, t.mode, b, bytes.Runes(buf[off:])[0])
+		}
+		if depth == 0 && 256 < len(t.mode) && t.mode[256] == 'a' {
+			t.mi = 0
+			if t.OnlyOne {
+				t.mode = spaceMap
+			} else {
+				t.mode = valueMap
+			}
+		}
+	}
+	if last {
+		if len(t.mode) == 256 { // valid finishing maps are one byte longer
+			return t.newError(off, "incomplete JSON")
+		}
+		if t.mode[256] == 'n' {
+			t.handleNum()
+		}
+	}
+	return nil
+}
+
+func (t *Tokenizer) handleNum() {
+	switch tn := t.num.AsNum().(type) {
+	case int64:
+		t.handler.Int(tn)
+	case float64:
+		t.handler.Float(tn)
+	case json.Number:
+		t.handler.Number(string(tn))
+	}
+}
