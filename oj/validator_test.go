@@ -110,4 +110,79 @@ func TestValidatorValidateString(t *testing.T) {
 		{src: `1.2}`, expect: "unexpected object close at 1:4"},
 		{src: `1.2e2]`, expect: "unexpected array close at 1:6"},
 		{src: `1.2e2}`, expect: "unexpected object close at 1:6"},
-		{src: `1.2e2x`, expect: 
+		{src: `1.2e2x`, expect: "invalid number at 1:6"},
+		{src: "\"x\ty\"", expect: "invalid JSON character 0x09 at 1:3"},
+		{src: `"x\zy"`, expect: "invalid JSON escape character '\\z' at 1:4"},
+		{src: `"x\u004z"`, expect: "invalid JSON unicode character 'z' at 1:8"},
+		{src: "\xef\xbb[]", expect: "expected BOM at 1:3"},
+		{src: "null \n {}", expect: "extra characters after close, '{' at 2:2", onlyOne: true},
+		{src: "[ // a comment\n  true\n]", expect: "unexpected character '/' at 1:3"},
+	} {
+		var err error
+		if d.onlyOne {
+			p := oj.Validator{OnlyOne: d.onlyOne}
+			err = p.Validate([]byte(d.src))
+		} else {
+			err = oj.Validate([]byte(d.src))
+		}
+		if 0 < len(d.expect) {
+			tt.NotNil(t, err, d.src)
+			tt.Equal(t, d.expect, err.Error(), i, ": ", d.src)
+		} else {
+			tt.Nil(t, err, i, ": ", d.src)
+		}
+	}
+}
+
+func TestValidatorValidateReaderMany(t *testing.T) {
+	for i, d := range []data{
+		{src: "null"},
+		// The read buffer is 4096 so force a buffer read in the middle of
+		// reading a token.
+		{src: strings.Repeat(" ", 4094) + "null "},
+		{src: strings.Repeat(" ", 4094) + "true "},
+		{src: strings.Repeat(" ", 4094) + "false "},
+	} {
+		r := strings.NewReader(d.src)
+		err := oj.ValidateReader(r)
+		tt.Nil(t, err, i, ": ", d.src)
+	}
+}
+
+func TestValidatorValidateReaderBasic(t *testing.T) {
+	r := strings.NewReader("[true,[false,[null],123],456]")
+	err := oj.ValidateReader(r)
+	tt.Nil(t, err)
+
+	var buf []byte
+	buf = append(buf, "[\n"...)
+	for i := 0; i < 1000; i++ {
+		buf = append(buf, "  true,\n"...)
+	}
+	buf = append(buf, "  false\n]\n"...)
+	br := bytes.NewReader(buf)
+	err = oj.ValidateReader(br)
+	tt.Nil(t, err)
+}
+
+func TestValidatorValidateResuse(t *testing.T) {
+	var v oj.Validator
+	err := v.Validate([]byte("[true,[false,[null],123],456]"))
+	tt.Nil(t, err)
+	// a second time
+	err = v.Validate([]byte("[true,[false,[null],123],456]"))
+	tt.Nil(t, err)
+
+	r := strings.NewReader("[true,[false,[null],123],456]")
+	err = v.ValidateReader(r)
+	tt.Nil(t, err)
+}
+
+func TestValidatorValidateBOM(t *testing.T) {
+	var v oj.Validator
+	err := v.Validate([]byte("\xef\xbb\xbf[true]"))
+	tt.Nil(t, err)
+}
+
+func TestValidatorValidateReaderBOM(t *testing.T) {
+	var v oj.Validator
