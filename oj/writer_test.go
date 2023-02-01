@@ -660,3 +660,401 @@ func TestWriteReflectMapEmpty(t *testing.T) {
 	tt.Equal(t, `{
   "x": "abc"
 }`, s)
+	s = oj.JSON(map[string]str{"x": str("")}, &opt)
+	tt.Equal(t, `{}`, s)
+
+	s = oj.JSON(map[string][]int{"x": {}}, &opt)
+	tt.Equal(t, `{}`, s)
+
+	s = oj.JSON(map[string]map[string]int{"x": {}}, &opt)
+	tt.Equal(t, `{}`, s)
+
+	opt.Indent = 0
+	s = oj.JSON(map[string]str{"x": str("abc")}, &opt)
+	tt.Equal(t, `{"x":"abc"}`, s)
+
+	s = oj.JSON(map[string]str{"x": str("")}, &opt)
+	tt.Equal(t, `{}`, s)
+
+	s = oj.JSON(map[string][]int{"x": {}}, &opt)
+	tt.Equal(t, `{}`, s)
+
+	s = oj.JSON(map[string]map[string]int{"x": {}}, &opt)
+	tt.Equal(t, `{}`, s)
+}
+
+func TestWriteSliceWide(t *testing.T) {
+	type Nest struct {
+		Dig []Nest
+	}
+	opt := oj.Options{Tab: true}
+	n := &Nest{}
+	for i := 20; 0 < i; i-- {
+		n = &Nest{Dig: []Nest{*n}}
+	}
+	s := oj.JSON(n, &opt)
+	tt.Equal(t, 1852, len(s))
+
+	opt.Tab = false
+	opt.Indent = 4
+	s = oj.JSON(n, &opt)
+	tt.Equal(t, 6713, len(s))
+
+	opt.Indent = 0
+	s = oj.JSON(n, &opt)
+	tt.Equal(t, 210, len(s))
+}
+
+func TestWriteSliceArray(t *testing.T) {
+	type Matrix struct {
+		Rows [][4]int
+	}
+	opt := oj.Options{Indent: 2}
+	m := &Matrix{Rows: [][4]int{{1, 2, 3, 4}}}
+	s := oj.JSON(m, &opt)
+	tt.Equal(t, `{
+  "rows": [
+    [
+      1,
+      2,
+      3,
+      4
+    ]
+  ]
+}`, s)
+
+	opt.Indent = 0
+	s = oj.JSON(m, &opt)
+	tt.Equal(t, `{"rows":[[1,2,3,4]]}`, s)
+
+	opt.OmitNil = false
+	s = oj.JSON(&Matrix{}, &opt)
+	tt.Equal(t, `{"rows":[]}`, s)
+}
+
+func TestWriteSliceMap(t *testing.T) {
+	type SMS struct {
+		Maps []map[string]int
+	}
+	opt := oj.Options{Indent: 2, Sort: true}
+	m := &SMS{Maps: []map[string]int{{"x": 1, "y": 2}}}
+	s := oj.JSON(m, &opt)
+	tt.Equal(t, `{
+  "maps": [
+    {
+      "x": 1,
+      "y": 2
+    }
+  ]
+}`, s)
+
+	opt.Indent = 0
+	s = oj.JSON(m, &opt)
+	tt.Equal(t, `{"maps":[{"x":1,"y":2}]}`, s)
+
+	opt.OmitEmpty = true
+	s = oj.JSON(&SMS{}, &opt)
+	tt.Equal(t, `{}`, s)
+}
+
+func TestWriteMapWide(t *testing.T) {
+	type Nest struct {
+		Dig map[string]*Nest
+	}
+	opt := oj.Options{Tab: true, OmitNil: true}
+	n := &Nest{map[string]*Nest{"x": nil}}
+	for i := 16; 0 < i; i-- {
+		n = &Nest{Dig: map[string]*Nest{"x": n}}
+	}
+	s := oj.JSON(n, &opt)
+	tt.Equal(t, 1396, len(s))
+
+	opt.Tab = false
+	opt.Indent = 4
+	s = oj.JSON(n, &opt)
+	tt.Equal(t, 4685, len(s))
+
+	opt.Indent = 0
+	s = oj.JSON(n, &opt)
+	tt.Equal(t, 234, len(s))
+
+	opt.OmitEmpty = true
+	s = oj.JSON(&Nest{}, &opt)
+	tt.Equal(t, "{}", s)
+}
+
+func TestWriteMapSlice(t *testing.T) {
+	m := map[string][]int{"x": {1, 2, 3}, "y": {}}
+	opt := oj.Options{Indent: 2, OmitNil: true, Sort: true}
+	s := oj.JSON(m, &opt)
+	tt.Equal(t, `{
+  "x": [
+    1,
+    2,
+    3
+  ]
+}`, s)
+
+	opt.OmitNil = false
+	s = oj.JSON(m, &opt)
+	tt.Equal(t, `{
+  "x": [
+    1,
+    2,
+    3
+  ],
+  "y": []
+}`, s)
+
+	opt.Indent = 0
+	s = oj.JSON(m, &opt)
+	tt.Equal(t, `{"x":[1,2,3],"y":[]}`, s)
+
+	opt.OmitNil = true
+	s = oj.JSON(m, &opt)
+	tt.Equal(t, `{"x":[1,2,3]}`, s)
+}
+
+func TestWriteMapMap(t *testing.T) {
+	m := map[string]map[string]int{"x": {"y": 3}, "z": {}}
+	opt := oj.Options{Indent: 2, OmitNil: true, Sort: true}
+	s := oj.JSON(m, &opt)
+	tt.Equal(t, `{
+  "x": {
+    "y": 3
+  }
+}`, s)
+
+	opt.Indent = 0
+	s = oj.JSON(m, &opt)
+	tt.Equal(t, `{"x":{"y":3}}`, s)
+}
+
+func TestWriteStructOther(t *testing.T) {
+	type Sample struct {
+		X *int
+		Y int
+	}
+	x := 1
+	sample := Sample{X: &x, Y: 2}
+	opt := oj.Options{Indent: 2}
+	b, err := oj.Marshal(&sample, &opt)
+	tt.Nil(t, err)
+	tt.Equal(t, `{
+  "x": 1,
+  "y": 2
+}`, string(b))
+
+	opt.Indent = 0
+	b, err = oj.Marshal(&sample, &opt)
+	tt.Nil(t, err)
+	tt.Equal(t, `{"x":1,"y":2}`, string(b))
+}
+
+func TestWriteStructOmit(t *testing.T) {
+	type Sample struct {
+		X *int
+	}
+	sample := Sample{X: nil}
+	opt := oj.Options{Indent: 2, OmitNil: true}
+	b, err := oj.Marshal(&sample, &opt)
+	tt.Nil(t, err)
+	tt.Equal(t, `{}`, string(b))
+
+	opt.Indent = 0
+	b, err = oj.Marshal(&sample, &opt)
+	tt.Nil(t, err)
+	tt.Equal(t, `{}`, string(b))
+}
+
+func TestWriteStructEmbed(t *testing.T) {
+	type In struct {
+		X int
+	}
+	type Out struct {
+		In In
+		Y  int
+	}
+	o := Out{In: In{X: 1}, Y: 2}
+	opt := oj.Options{Indent: 2}
+	b, err := oj.Marshal(&o, &opt)
+	tt.Nil(t, err)
+	tt.Equal(t, `{
+  "in": {
+    "x": 1
+  },
+  "y": 2
+}`, string(b))
+
+	opt.Indent = 0
+	b, err = oj.Marshal(&o, &opt)
+	tt.Nil(t, err)
+	tt.Equal(t, `{"in":{"x":1},"y":2}`, string(b))
+}
+
+func TestWriteStructAnonymous(t *testing.T) {
+	type In struct {
+		X int
+	}
+	type Out struct {
+		In
+		Y int
+	}
+	o := Out{In: In{X: 1}, Y: 2}
+	opt := oj.Options{Indent: 2, NestEmbed: true}
+	b, err := oj.Marshal(&o, &opt)
+	tt.Nil(t, err)
+	tt.Equal(t, `{
+  "in": {
+    "x": 1
+  },
+  "y": 2
+}`, string(b))
+
+	opt.Indent = 0
+	b, err = oj.Marshal(&o, &opt)
+	tt.Nil(t, err)
+	tt.Equal(t, `{"in":{"x":1},"y":2}`, string(b))
+}
+
+func TestWriteSliceNil(t *testing.T) {
+	var a []any
+	b, err := oj.Marshal(a)
+	tt.Nil(t, err)
+	tt.Equal(t, "null", string(b))
+
+	a = []any{}
+	b, err = oj.Marshal(a)
+	tt.Nil(t, err)
+	tt.Equal(t, "[]", string(b))
+}
+
+func TestWriteStrictPanic(t *testing.T) {
+	_, err := oj.Marshal(func() {}, 2)
+	tt.NotNil(t, err)
+
+	_, err = oj.Marshal(func() {})
+	tt.NotNil(t, err)
+}
+
+type Marsha struct {
+	val int
+}
+
+func (m *Marsha) MarshalJSON() ([]byte, error) {
+	if m.val == 5 {
+		return nil, fmt.Errorf("oops")
+	}
+	return []byte(fmt.Sprintf(`{"v":%d}`, m.val)), nil
+}
+
+func TestMarshalMarshaler(t *testing.T) {
+	j, err := oj.Marshal(&Marsha{val: 3})
+	tt.Nil(t, err)
+	tt.Equal(t, `{"v":3}`, string(j))
+
+	_, err = oj.Marshal(&Marsha{val: 5})
+	tt.NotNil(t, err)
+}
+
+type TM struct {
+	val int
+}
+
+func (tm *TM) MarshalText() ([]byte, error) {
+	if tm.val == 5 {
+		return nil, fmt.Errorf("oops")
+	}
+	return []byte(fmt.Sprintf("-- %d --", tm.val)), nil
+}
+
+func TestMarshalTextMarshaler(t *testing.T) {
+	j, err := oj.Marshal(&TM{val: 3})
+	tt.Nil(t, err)
+	tt.Equal(t, `"-- 3 --"`, string(j))
+
+	_, err = oj.Marshal(&TM{val: 5})
+	tt.NotNil(t, err)
+}
+
+func TestMarshalNoAddr(t *testing.T) {
+	type Sample struct {
+		When time.Time
+		Mars Marsha
+	}
+	testCase := Sample{
+		When: time.Unix(0, 0),
+		Mars: Marsha{val: 3},
+	}
+	ojg.ErrorWithStack = true
+	_, err := oj.Marshal(testCase)
+	tt.Nil(t, err)
+}
+
+func BenchmarkMarshalFlat(b *testing.B) {
+	m := Mix{
+		Val:   1,
+		Str:   2,
+		Title: "Mix",
+		Skip:  4,
+		Dash:  5.5,
+		Boo:   true,
+	}
+	for i := 0; i < b.N; i++ {
+		if _, err := oj.Marshal(&m); err != nil {
+			b.Fatal(err)
+		}
+	}
+}
+
+func BenchmarkMarshalNestList(b *testing.B) {
+	n := Nest{
+		List: []*Dummy{
+			{Val: 1},
+			{Val: 2},
+			{Val: 3},
+		},
+	}
+	for i := 0; i < b.N; i++ {
+		if _, err := oj.Marshal(&n); err != nil {
+			b.Fatal(err)
+		}
+	}
+}
+
+func BenchmarkWriteNestIndentList(b *testing.B) {
+	n := Nest{
+		List: []*Dummy{
+			{Val: 1},
+			{Val: 2},
+			{Val: 3},
+		},
+	}
+	wr := oj.Writer{Options: oj.Options{Indent: 2}}
+	for i := 0; i < b.N; i++ {
+		_ = wr.JSON(&n)
+	}
+}
+
+func BenchmarkMarshalMap(b *testing.B) {
+	type Dap struct {
+		M map[string]*Dummy
+	}
+	d := Dap{M: map[string]*Dummy{
+		"a": {Val: 1},
+		"b": {Val: 2},
+		"c": {Val: 3},
+	}}
+	for i := 0; i < b.N; i++ {
+		if _, err := oj.Marshal(&d); err != nil {
+			b.Fatal(err)
+		}
+	}
+}
+
+func TestWriteDev(t *testing.T) {
+	data := map[string]any{"x": "", "y": []any{}, "z": map[string]any{}}
+	opt := oj.Options{OmitEmpty: true}
+	s := oj.JSON(data, &opt)
+	tt.Equal(t, `{}`, s)
+}
