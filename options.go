@@ -198,4 +198,80 @@ type Options struct {
 	Color bool
 
 	// SyntaxColor is the color for syntax in the JSON output.
-	Syn
+	SyntaxColor string
+
+	// KeyColor is the color for a key in the JSON output.
+	KeyColor string
+
+	// NullColor is the color for a null in the JSON output.
+	NullColor string
+
+	// BoolColor is the color for a bool in the JSON output.
+	BoolColor string
+
+	// NumberColor is the color for a number in the JSON output.
+	NumberColor string
+
+	// StringColor is the color for a string in the JSON output.
+	StringColor string
+
+	// TimeColor is the color for a time.Time in the JSON output.
+	TimeColor string
+
+	// NoColor turns the color off.
+	NoColor string
+
+	// UseTags if true will use the json annotation tags when marhsalling,
+	// writing, or decomposing an struct. If no tag is present then the
+	// KeyExact flag is referenced to determine the key.
+	UseTags bool
+
+	// KeyExact if true will use the exact field name for an encoded struct
+	// field. If false the key style most often seen in JSON files where the
+	// first character of the object keys is lowercase.
+	KeyExact bool
+
+	// HTMLUnsafe if true turns off escaping of &, <, and >.
+	HTMLUnsafe bool
+
+	// NestEmbed if true will generate an element for each anonymous embedded
+	// field.
+	NestEmbed bool
+
+	// BytesAs indicates how []byte fields should be encoded. Choices are
+	// BytesAsString, BytesAsBase64 (the go json package default), or
+	// BytesAsArray.
+	BytesAs int
+
+	// Converter to use when decomposing or altering if non nil. The Converter
+	// type includes more details.
+	Converter *Converter
+}
+
+// AppendTime appends a time string to the buffer.
+func (o *Options) AppendTime(buf []byte, t time.Time, sen bool) []byte {
+	if o.TimeMap {
+		buf = append(buf, '{')
+		if sen {
+			buf = AppendSENString(buf, o.CreateKey, o.HTMLUnsafe)
+		} else {
+			buf = AppendJSONString(buf, o.CreateKey, o.HTMLUnsafe)
+		}
+		buf = append(buf, ':')
+		if sen {
+			if o.FullTypePath {
+				buf = append(buf, `"time/Time" value:`...)
+			} else {
+				buf = append(buf, "Time value:"...)
+			}
+		} else {
+			if o.FullTypePath {
+				buf = append(buf, `"time/Time","value":`...)
+			} else {
+				buf = append(buf, `"Time","value":`...)
+			}
+		}
+	} else if 0 < len(o.TimeWrap) {
+		buf = append(buf, '{')
+		if sen {
+			buf = AppendSENString(buf, o.TimeW
