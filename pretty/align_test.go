@@ -140,3 +140,89 @@ func TestWriteAlignMapNumber(t *testing.T) {
 ]`, string(out))
 }
 
+func TestWriteAlignMapString(t *testing.T) {
+	w := pretty.Writer{
+		Width:    50,
+		MaxDepth: 3,
+		Align:    true,
+	}
+	data := []any{
+		map[string]any{"x": true, "y": false},
+		map[string]any{"z": nil, "y": "yoda"},
+		map[string]any{"x": "x-ray", "y": "yellow", "z": "zoo"},
+	}
+	out := w.Encode(data)
+	tt.Equal(t, `[
+  {"x": true   , "y": false   ,           },
+  {              "y": "yoda"  , "z": null },
+  {"x": "x-ray", "y": "yellow", "z": "zoo"}
+]`, string(out))
+
+	w.SEN = true
+	out = w.Encode(data)
+	tt.Equal(t, `[
+  {x: true  y: false         }
+  {         y: yoda   z: null}
+  {x: x-ray y: yellow z: zoo }
+]`, string(out))
+}
+
+func TestWriteAlignMapNested(t *testing.T) {
+	w := pretty.Writer{
+		Width:    60,
+		MaxDepth: 3,
+		Align:    true,
+	}
+	data := []any{
+		map[string]any{"x": 1, "y": 2, "z": map[string]any{"a": 1, "b": 2, "c": 3}},
+		map[string]any{"x": 100, "y": 200, "z": map[string]any{"a": 10, "b": 20, "c": 30}},
+	}
+	out := w.Encode(data)
+	tt.Equal(t, `[
+  {"x":   1, "y":   2, "z": {"a":  1, "b":  2, "c":  3}},
+  {"x": 100, "y": 200, "z": {"a": 10, "b": 20, "c": 30}}
+]`, string(out))
+
+	w.SEN = true
+	out = w.Encode(data)
+	tt.Equal(t, `[
+  {x:   1 y:   2 z: {a:  1 b:  2 c:  3}}
+  {x: 100 y: 200 z: {a: 10 b: 20 c: 30}}
+]`, string(out))
+}
+
+func TestWriteAlignMapArray(t *testing.T) {
+	w := pretty.Writer{
+		Width:    60,
+		MaxDepth: 3,
+		Align:    true,
+	}
+	data := []any{
+		map[string]any{"x": 1, "y": 2, "z": []any{1, 2, 3}},
+		map[string]any{"x": 10, "y": 20, "z": []any{10, 200, 3000}},
+	}
+	out := w.Encode(data)
+	tt.Equal(t, `[
+  {"x":  1, "y":  2, "z": [ 1,   2,    3]},
+  {"x": 10, "y": 20, "z": [10, 200, 3000]}
+]`, string(out))
+
+	w.SEN = true
+	out = w.Encode(data)
+	tt.Equal(t, `[
+  {x:  1 y:  2 z: [ 1   2    3]}
+  {x: 10 y: 20 z: [10 200 3000]}
+]`, string(out))
+}
+
+func TestWriteAlignArrayMap(t *testing.T) {
+	w := pretty.Writer{
+		Width:    60,
+		MaxDepth: 3,
+		Align:    true,
+	}
+	data := []any{
+		[]any{1, 2, 3, map[string]any{"x": 1, "y": 2, "z": 3}},
+		[]any{100, 200, 300, map[string]any{"x": 1, "y": 20, "z": 300}},
+	}
+	out := w.En
