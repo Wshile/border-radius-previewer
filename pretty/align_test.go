@@ -225,4 +225,53 @@ func TestWriteAlignArrayMap(t *testing.T) {
 		[]any{1, 2, 3, map[string]any{"x": 1, "y": 2, "z": 3}},
 		[]any{100, 200, 300, map[string]any{"x": 1, "y": 20, "z": 300}},
 	}
-	out := w.En
+	out := w.Encode(data)
+	tt.Equal(t, `[
+  [  1,   2,   3, {"x": 1, "y":  2, "z":   3}],
+  [100, 200, 300, {"x": 1, "y": 20, "z": 300}]
+]`, string(out))
+
+	w.SEN = true
+	out = w.Encode(data)
+	tt.Equal(t, `[
+  [  1   2   3 {x: 1 y:  2 z:   3}]
+  [100 200 300 {x: 1 y: 20 z: 300}]
+]`, string(out))
+}
+
+func TestWriteAlignColor(t *testing.T) {
+	w := pretty.Writer{
+		Options:  testColor,
+		Width:    60,
+		MaxDepth: 3,
+		Align:    true,
+	}
+	data := []any{
+		[]any{1, 2, 3, map[string]any{"x": 1, "y": 2, "z": 3}},
+		[]any{100, 200, 300, map[string]any{"x": 1, "y": 20, "z": 300}},
+	}
+	out := w.Encode(data)
+	tt.Equal(t, `s[x
+  s[x  01xs,x   02xs,x   03xs,x s{xk"x"x: 01xs,x k"y"x:  02xs,x k"z"x:   03xs}xs]xs,x
+  s[x0100xs,x 0200xs,x 0300xs,x s{xk"x"x: 01xs,x k"y"x: 020xs,x k"z"x: 0300xs}xs]x
+s]x`, string(out))
+
+	w.SEN = true
+	out = w.Encode(data)
+	tt.Equal(t, `s[x
+  s[x  01x   02x   03x s{xkxx: 01x kyx:  02x kzx:   03xs}xs]x
+  s[x0100x 0200x 0300x s{xkxx: 01x kyx: 020x kzx: 0300xs}xs]x
+s]x`, string(out))
+}
+
+type simplyPanic int
+
+func (sp simplyPanic) Simplify() any {
+	panic("no can do")
+}
+
+func TestMarshalError(t *testing.T) {
+	w := pretty.Writer{}
+	_, err := w.Marshal(simplyPanic(0))
+	tt.NotNil(t, err)
+}
