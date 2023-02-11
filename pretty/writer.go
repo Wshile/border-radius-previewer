@@ -399,4 +399,16 @@ func (w *Writer) alignMap(n *node, t *table, comma, cs []byte) {
 				w.buf = append(w.buf, m.buf...)
 			case arrayNode:
 				w.alignArray(m, col, comma, []byte{' '})
-			case ma
+			case mapNode:
+				w.alignMap(m, col, comma, []byte{' '})
+			}
+		}
+	}
+	if w.Color {
+		w.buf = append(w.buf, w.SyntaxColor...)
+		w.buf = append(w.buf, '}')
+		w.buf = append(w.buf, w.NoColor...)
+	} else {
+		w.buf = append(w.buf, '}')
+	}
+}
