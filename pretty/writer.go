@@ -305,4 +305,98 @@ func (w *Writer) checkAlign(n *node, start int, comma, cs []byte) bool {
 
 func (w *Writer) alignArray(n *node, t *table, comma, cs []byte) {
 	if w.Color {
-		w.buf
+		w.buf = append(w.buf, w.SyntaxColor...)
+		w.buf = append(w.buf, '[')
+		w.buf = append(w.buf, w.NoColor...)
+	} else {
+		w.buf = append(w.buf, '[')
+	}
+	for k, col := range t.columns {
+		if len(n.members) <= k {
+			break
+		}
+		if 0 < k {
+			w.buf = append(w.buf, comma...)
+			w.buf = append(w.buf, ' ')
+		}
+		m := n.members[k]
+		cw := col.size
+		switch m.kind {
+		case strNode:
+			w.buf = append(w.buf, m.buf...)
+			if m.size < cw {
+				w.buf = append(w.buf, spaces[1:cw-m.size+1]...)
+			}
+		case numNode:
+			if m.size < cw {
+				w.buf = append(w.buf, spaces[1:cw-m.size+1]...)
+			}
+			w.buf = append(w.buf, m.buf...)
+		case arrayNode:
+			w.alignArray(m, col, comma, []byte{' '})
+		case mapNode:
+			w.alignMap(m, col, comma, []byte{' '})
+		}
+	}
+	if w.Color {
+		w.buf = append(w.buf, w.SyntaxColor...)
+		w.buf = append(w.buf, ']')
+		w.buf = append(w.buf, w.NoColor...)
+	} else {
+		w.buf = append(w.buf, ']')
+	}
+}
+
+func (w *Writer) alignMap(n *node, t *table, comma, cs []byte) {
+	if w.Color {
+		w.buf = append(w.buf, w.SyntaxColor...)
+		w.buf = append(w.buf, '{')
+		w.buf = append(w.buf, w.NoColor...)
+	} else {
+		w.buf = append(w.buf, '{')
+	}
+	prevExist := false
+	for i, col := range t.columns {
+		k, _ := col.key.(string)
+		var m *node
+		for _, mm := range n.members {
+			if string(mm.key) == k {
+				m = mm
+				break
+			}
+		}
+		if prevExist {
+			w.buf = append(w.buf, comma...)
+			w.buf = append(w.buf, ' ')
+		}
+		if m == nil {
+			prevExist = false
+			pad := len(k) + 2 + col.size
+			if i < len(t.columns)-1 {
+				if w.SEN {
+					pad++
+				} else {
+					pad += 2
+				}
+			}
+			w.buf = append(w.buf, spaces[1:pad+1]...)
+		} else {
+			prevExist = true
+			w.buf = append(w.buf, k...)
+			w.buf = append(w.buf, ':')
+			w.buf = append(w.buf, ' ')
+			cw := col.size
+			switch m.kind {
+			case strNode:
+				w.buf = append(w.buf, m.buf...)
+				if m.size < cw {
+					w.buf = append(w.buf, spaces[1:cw-m.size+1]...)
+				}
+			case numNode:
+				if m.size < cw {
+					w.buf = append(w.buf, spaces[1:cw-m.size+1]...)
+				}
+				w.buf = append(w.buf, m.buf...)
+			case arrayNode:
+				w.alignArray(m, col, comma, []byte{' '})
+			case ma
