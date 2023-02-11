@@ -106,4 +106,104 @@ func (w *Writer) encode(data any) (out []byte, err error) {
 		w.Width = len(spaces) - 1
 	}
 	if w.WriteLimit == 0 {
-		w.
+		w.WriteLimit = 1024
+	}
+	if cap(w.buf) < w.InitSize {
+		w.buf = make([]byte, 0, w.InitSize)
+	} else {
+		w.buf = w.buf[:0]
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			if err, _ = r.(error); err == nil {
+				err = fmt.Errorf("%v", r)
+				out = []byte{}
+				if w.Color && w.w != nil {
+					_, err = w.w.Write([]byte(w.NoColor))
+				}
+			}
+		}
+	}()
+	tree := w.build(data)
+	w.buf = w.buf[:0]
+	w.Indent = 2
+	if w.Width*3/8 < tree.depth {
+		w.Indent = 1
+	}
+	w.fill(tree, 0, false)
+	if w.w != nil && 0 < len(w.buf) {
+		_, err = w.w.Write(w.buf)
+		w.buf = w.buf[:0]
+	}
+	out = w.buf
+
+	return
+}
+
+func (w *Writer) fill(n *node, depth int, flat bool) {
+	start := depth * w.Indent
+	switch n.kind {
+	case strNode, numNode:
+		w.buf = append(w.buf, n.buf...)
+	case arrayNode:
+		var comma []byte
+		if w.Color {
+			if !w.SEN {
+				comma = append(comma, w.SyntaxColor...)
+				comma = append(comma, ',')
+				comma = append(comma, w.NoColor...)
+			}
+			w.buf = append(w.buf, w.SyntaxColor...)
+			w.buf = append(w.buf, '[')
+			w.buf = append(w.buf, w.NoColor...)
+		} else {
+			if !w.SEN {
+				comma = append(comma, ',')
+			}
+			w.buf = append(w.buf, '[')
+		}
+		if !flat && start+n.size < w.Width && n.depth < w.MaxDepth {
+			flat = true
+		}
+		d2 := depth + 1
+		var cs []byte
+		var is []byte
+
+		if flat {
+			cs = []byte{' '}
+		} else {
+			x := d2*w.Indent + 1
+			if len(spaces) < x {
+				flat = true
+			} else {
+				cs = []byte(spaces[0:x])
+				x = depth*w.Indent + 1
+				is = []byte(spaces[0:x])
+			}
+		}
+		if !w.Align || w.MaxDepth < n.depth || len(n.members) < 2 || w.checkAlign(n, start, comma, cs) {
+			for i, m := range n.members {
+				if 0 < i {
+					w.buf = append(w.buf, comma...)
+					w.buf = append(w.buf, cs...)
+				} else if !flat {
+					w.buf = append(w.buf, cs...)
+				}
+				w.fill(m, d2, flat)
+			}
+		}
+		w.buf = append(w.buf, is...)
+		if w.Color {
+			w.buf = append(w.buf, w.SyntaxColor...)
+			w.buf = append(w.buf, ']')
+			w.buf = append(w.buf, w.NoColor...)
+		} else {
+			w.buf = append(w.buf, ']')
+		}
+	case mapNode:
+		var comma []byte
+		if w.Color {
+			if !w.SEN {
+				comma = append(comma, w.SyntaxColor...)
+				comma = append(comma, ',')
+				comma
