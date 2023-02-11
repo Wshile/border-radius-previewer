@@ -206,4 +206,103 @@ func (w *Writer) fill(n *node, depth int, flat bool) {
 			if !w.SEN {
 				comma = append(comma, w.SyntaxColor...)
 				comma = append(comma, ',')
-				comma
+				comma = append(comma, w.NoColor...)
+			}
+			w.buf = append(w.buf, w.SyntaxColor...)
+			w.buf = append(w.buf, '{')
+			w.buf = append(w.buf, w.NoColor...)
+		} else {
+			if !w.SEN {
+				comma = append(comma, ',')
+			}
+			w.buf = append(w.buf, '{')
+		}
+		d2 := depth + 1
+		var cs []byte
+		var is []byte
+
+		if !flat && start+n.size < w.Width && n.depth < w.MaxDepth {
+			flat = true
+		}
+		if flat {
+			cs = []byte{' '}
+		} else {
+			x := d2*w.Indent + 1
+			if len(spaces) < x {
+				flat = true
+			} else {
+				cs = []byte(spaces[0:x])
+				x = depth*w.Indent + 1
+				is = []byte(spaces[0:x])
+			}
+		}
+		keyWidth := 1
+		if w.Align {
+			for _, m := range n.members {
+				if keyWidth < len(m.key) {
+					keyWidth = len(m.key)
+				}
+			}
+		}
+		for i, m := range n.members {
+			if 0 < i {
+				w.buf = append(w.buf, comma...)
+				w.buf = append(w.buf, cs...)
+			} else if !flat {
+				w.buf = append(w.buf, cs...)
+			}
+			w.buf = append(w.buf, m.key...)
+			if w.Color {
+				w.buf = append(w.buf, w.SyntaxColor...)
+				w.buf = append(w.buf, ':')
+				w.buf = append(w.buf, w.NoColor...)
+				w.buf = append(w.buf, ' ')
+			} else {
+				w.buf = append(w.buf, ": "...)
+			}
+			for i := keyWidth - len(m.key); 0 < i; i-- {
+				w.buf = append(w.buf, ' ')
+			}
+			w.fill(m, d2, flat)
+		}
+		w.buf = append(w.buf, is...)
+		if w.Color {
+			w.buf = append(w.buf, w.SyntaxColor...)
+			w.buf = append(w.buf, '}')
+			w.buf = append(w.buf, w.NoColor...)
+		} else {
+			w.buf = append(w.buf, '}')
+		}
+	}
+	if w.w != nil && w.WriteLimit < len(w.buf) {
+		if _, err := w.w.Write(w.buf); err != nil {
+			panic(err)
+		}
+		w.buf = w.buf[:0]
+	}
+}
+
+// Return true if not filled.
+func (w *Writer) checkAlign(n *node, start int, comma, cs []byte) bool {
+	c := n.genTables(w.SEN)
+	if c == nil || w.Width < start+c.size {
+		return true
+	}
+	for i, m := range n.members {
+		if 0 < i {
+			w.buf = append(w.buf, comma...)
+		}
+		w.buf = append(w.buf, cs...)
+		switch m.kind {
+		case arrayNode:
+			w.alignArray(m, c, comma, cs)
+		case mapNode:
+			w.alignMap(m, c, comma, cs)
+		}
+	}
+	return false
+}
+
+func (w *Writer) alignArray(n *node, t *table, comma, cs []byte) {
+	if w.Color {
+		w.buf
