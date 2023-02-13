@@ -48,4 +48,95 @@ func (wr *Writer) colorSEN(data any, depth int) {
 		wr.buf = strconv.AppendUint(wr.buf, uint64(td), 10)
 	case uint16:
 		wr.buf = append(wr.buf, wr.NumberColor...)
-		wr.buf = st
+		wr.buf = strconv.AppendUint(wr.buf, uint64(td), 10)
+	case uint32:
+		wr.buf = append(wr.buf, wr.NumberColor...)
+		wr.buf = strconv.AppendUint(wr.buf, uint64(td), 10)
+	case uint64:
+		wr.buf = append(wr.buf, wr.NumberColor...)
+		wr.buf = strconv.AppendUint(wr.buf, td, 10)
+
+	case float32:
+		wr.buf = append(wr.buf, wr.NumberColor...)
+		wr.buf = strconv.AppendFloat(wr.buf, float64(td), 'g', -1, 32)
+	case float64:
+		wr.buf = append(wr.buf, wr.NumberColor...)
+		wr.buf = strconv.AppendFloat(wr.buf, td, 'g', -1, 64)
+
+	case string:
+		wr.buf = append(wr.buf, wr.StringColor...)
+		wr.buf = ojg.AppendSENString(wr.buf, td, !wr.HTMLUnsafe)
+
+	case time.Time:
+		wr.buf = append(wr.buf, wr.TimeColor...)
+		wr.buf = wr.AppendTime(wr.buf, td, true)
+
+	case []any:
+		wr.colorArray(td, depth)
+
+	case map[string]any:
+		wr.colorObject(td, depth)
+
+	default:
+		if simp, _ := data.(alt.Simplifier); simp != nil {
+			data = simp.Simplify()
+			wr.colorSEN(data, depth)
+			return
+		}
+		if g, _ := data.(alt.Genericer); g != nil {
+			wr.colorSEN(g.Generic().Simplify(), depth)
+			return
+		}
+		if 0 < len(wr.CreateKey) {
+			ao := alt.Options{CreateKey: wr.CreateKey, OmitNil: wr.OmitNil, FullTypePath: wr.FullTypePath}
+			wr.colorSEN(alt.Decompose(data, &ao), depth)
+			return
+		}
+		wr.colorSEN(alt.Decompose(data, &alt.Options{OmitNil: wr.OmitNil}), depth)
+	}
+	wr.buf = append(wr.buf, wr.NoColor...)
+
+	if wr.w != nil && wr.WriteLimit < len(wr.buf) {
+		if _, err := wr.w.Write(wr.buf); err != nil {
+			panic(err)
+		}
+		wr.buf = wr.buf[:0]
+	}
+}
+
+func (wr *Writer) colorArray(n []any, depth int) {
+	wr.buf = append(wr.buf, wr.SyntaxColor...)
+	wr.buf = append(wr.buf, '[')
+	wr.buf = append(wr.buf, wr.NoColor...)
+
+	d2 := depth + 1
+	var is string
+	var cs string
+	if wr.Tab {
+		x := depth + 1
+		if len(tabs) < x {
+			x = len(tabs)
+		}
+		is = tabs[0:x]
+		x = d2 + 1
+		if len(tabs) < x {
+			x = len(tabs)
+		}
+		cs = tabs[0:x]
+	} else if 0 < wr.Indent {
+		x := depth*wr.Indent + 1
+		if len(spaces) < x {
+			x = len(spaces)
+		}
+		is = spaces[0:x]
+		x = d2*wr.Indent + 1
+		if len(spaces) < x {
+			x = len(spaces)
+		}
+		cs = spaces[0:x]
+	}
+	for j, m := range n {
+		if 0 < j && len(cs) == 0 {
+			wr.buf = append(wr.buf, ' ')
+		}
+		wr.buf = append(wr.buf, 
