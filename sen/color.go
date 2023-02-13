@@ -139,4 +139,109 @@ func (wr *Writer) colorArray(n []any, depth int) {
 		if 0 < j && len(cs) == 0 {
 			wr.buf = append(wr.buf, ' ')
 		}
-		wr.buf = append(wr.buf, 
+		wr.buf = append(wr.buf, []byte(cs)...)
+		wr.colorSEN(m, d2)
+	}
+	wr.buf = append(wr.buf, []byte(is)...)
+	wr.buf = append(wr.buf, wr.SyntaxColor...)
+	wr.buf = append(wr.buf, ']')
+}
+
+func (wr *Writer) colorObject(n map[string]any, depth int) {
+	wr.buf = append(wr.buf, wr.SyntaxColor...)
+	wr.buf = append(wr.buf, '{')
+	wr.buf = append(wr.buf, wr.NoColor...)
+
+	d2 := depth + 1
+	var is string
+	var cs string
+	first := true
+	if wr.Tab {
+		x := depth + 1
+		if len(tabs) < x {
+			x = len(tabs)
+		}
+		is = tabs[0:x]
+		x = d2 + 1
+		if len(tabs) < x {
+			x = len(tabs)
+		}
+		cs = tabs[0:x]
+	} else if 0 < wr.Indent {
+		x := depth*wr.Indent + 1
+		if len(spaces) < x {
+			x = len(spaces)
+		}
+		is = spaces[0:x]
+		x = d2*wr.Indent + 1
+		if len(spaces) < x {
+			x = len(spaces)
+		}
+		cs = spaces[0:x]
+	}
+	if wr.Sort {
+		keys := make([]string, 0, len(n))
+		for k := range n {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			m := n[k]
+			switch tm := m.(type) {
+			case nil:
+				if wr.OmitNil {
+					continue
+				}
+			case string:
+				if wr.OmitEmpty && len(tm) == 0 {
+					continue
+				}
+			case map[string]any:
+				if wr.OmitEmpty && len(tm) == 0 {
+					continue
+				}
+			case []any:
+				if wr.OmitEmpty && len(tm) == 0 {
+					continue
+				}
+			}
+			if first {
+				first = false
+			} else if len(cs) == 0 {
+				wr.buf = append(wr.buf, ' ')
+			}
+			wr.buf = append(wr.buf, []byte(cs)...)
+			wr.buf = append(wr.buf, wr.KeyColor...)
+			wr.buf = ojg.AppendSENString(wr.buf, k, !wr.HTMLUnsafe)
+			wr.buf = append(wr.buf, wr.NoColor...)
+			wr.buf = append(wr.buf, wr.SyntaxColor...)
+			wr.buf = append(wr.buf, ':')
+			wr.buf = append(wr.buf, wr.NoColor...)
+			if 0 < wr.Indent {
+				wr.buf = append(wr.buf, ' ')
+			}
+			wr.colorSEN(m, d2)
+		}
+	} else {
+		for k, m := range n {
+			switch tm := m.(type) {
+			case nil:
+				if wr.OmitNil {
+					continue
+				}
+			case string:
+				if wr.OmitEmpty && len(tm) == 0 {
+					continue
+				}
+			case map[string]any:
+				if wr.OmitEmpty && len(tm) == 0 {
+					continue
+				}
+			case []any:
+				if wr.OmitEmpty && len(tm) == 0 {
+					continue
+				}
+			}
+			if first {
+				first = false
+			} else if len(cs) == 
