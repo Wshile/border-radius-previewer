@@ -244,4 +244,23 @@ func (wr *Writer) colorObject(n map[string]any, depth int) {
 			}
 			if first {
 				first = false
-			} else if len(cs) == 
+			} else if len(cs) == 0 {
+				wr.buf = append(wr.buf, ' ')
+			}
+			wr.buf = append(wr.buf, []byte(cs)...)
+			wr.buf = append(wr.buf, wr.KeyColor...)
+			wr.buf = ojg.AppendSENString(wr.buf, k, !wr.HTMLUnsafe)
+			wr.buf = append(wr.buf, wr.NoColor...)
+			wr.buf = append(wr.buf, wr.SyntaxColor...)
+			wr.buf = append(wr.buf, ':')
+			wr.buf = append(wr.buf, wr.NoColor...)
+			if 0 < wr.Indent {
+				wr.buf = append(wr.buf, ' ')
+			}
+			wr.colorSEN(m, d2)
+		}
+	}
+	wr.buf = append(wr.buf, []byte(is)...)
+	wr.buf = append(wr.buf, wr.SyntaxColor...)
+	wr.buf = append(wr.buf, '}')
+}
