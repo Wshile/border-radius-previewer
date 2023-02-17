@@ -86,4 +86,15 @@ func iappendIntNotEmpty(fi *finfo, buf []byte, rv reflect.Value, addr uintptr, s
 	return buf, nil, aWrote
 }
 
-func iappendIntNotEmptyAsString(fi *finfo, buf []byte, rv reflect.Value, addr ui
+func iappendIntNotEmptyAsString(fi *finfo, buf []byte, rv reflect.Value, addr uintptr, safe bool) ([]byte, any, appendStatus) {
+	v := rv.FieldByIndex(fi.index).Interface().(int)
+	if v == 0 {
+		return buf, nil, aSkip
+	}
+	buf = append(buf, fi.jkey...)
+	buf = append(buf, '"')
+	buf = strconv.AppendInt(buf, int64(v), 10)
+	buf = append(buf, '"')
+
+	return buf, nil, aWrote
+}
