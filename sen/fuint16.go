@@ -93,4 +93,8 @@ func iappendUint16NotEmptyAsString(fi *finfo, buf []byte, rv reflect.Value, addr
 	}
 	buf = append(buf, fi.jkey...)
 	buf = append(buf, '"')
-	buf = strconv.AppendUint(buf, uint
+	buf = strconv.AppendUint(buf, uint64(v), 10)
+	buf = append(buf, '"')
+
+	return buf, nil, aWrote
+}
