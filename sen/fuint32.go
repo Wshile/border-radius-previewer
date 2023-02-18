@@ -69,4 +69,32 @@ func iappendUint32(fi *finfo, buf []byte, rv reflect.Value, addr uintptr, safe b
 func iappendUint32AsString(fi *finfo, buf []byte, rv reflect.Value, addr uintptr, safe bool) ([]byte, any, appendStatus) {
 	buf = append(buf, fi.jkey...)
 	buf = append(buf, '"')
-	buf = strconv.AppendUint(buf, uint64(rv.FieldBy
+	buf = strconv.AppendUint(buf, uint64(rv.FieldByIndex(fi.index).Interface().(uint32)), 10)
+	buf = append(buf, '"')
+
+	return buf, nil, aWrote
+}
+
+func iappendUint32NotEmpty(fi *finfo, buf []byte, rv reflect.Value, addr uintptr, safe bool) ([]byte, any, appendStatus) {
+	v := rv.FieldByIndex(fi.index).Interface().(uint32)
+	if v == 0 {
+		return buf, nil, aSkip
+	}
+	buf = append(buf, fi.jkey...)
+	buf = strconv.AppendUint(buf, uint64(v), 10)
+
+	return buf, nil, aWrote
+}
+
+func iappendUint32NotEmptyAsString(fi *finfo, buf []byte, rv reflect.Value, addr uintptr, safe bool) ([]byte, any, appendStatus) {
+	v := rv.FieldByIndex(fi.index).Interface().(uint32)
+	if v == 0 {
+		return buf, nil, aSkip
+	}
+	buf = append(buf, fi.jkey...)
+	buf = append(buf, '"')
+	buf = strconv.AppendUint(buf, uint64(v), 10)
+	buf = append(buf, '"')
+
+	return buf, nil, aWrote
+}
