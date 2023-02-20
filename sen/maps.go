@@ -225,4 +225,12 @@ const (
 		"................................" //   0xe0
 	//   0123456789abcdef0123456789abcdef
 	commentMap = "" +
-	
+		"..........L....................." + // 0x00
+		"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" + // 0x20
+		"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" + // 0x40
+		"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" + // 0x60
+		"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" + // 0x80
+		"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" + // 0xa0
+		"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" + // 0xc0
+		"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" //   0xe0)
+)
