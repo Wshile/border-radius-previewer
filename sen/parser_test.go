@@ -69,4 +69,53 @@ func TestParserParseString(t *testing.T) {
 		{src: "\xef\xbb\xbf\"xyz\"", value: "xyz"},
 
 		{src: "[]", value: []any{}},
-		{src: "[0,\ntrue , false
+		{src: "[0,\ntrue , false,null]", value: []any{0, true, false, nil}},
+		{src: `[0.1e3,"x",-1,{}]`, value: []any{100.0, "x", -1, map[string]any{}}},
+		{src: "[1.2,0]", value: []any{1.2, 0}},
+		{src: "[1.2e2,0.1]", value: []any{1.2e2, 0.1}},
+		{src: "[1.2e2,0]", value: []any{1.2e2, 0}},
+		{src: "[true]", value: []any{true}},
+		{src: "[true,false]", value: []any{true, false}},
+		{src: "[[]]", value: []any{[]any{}}},
+		{src: "[[true]]", value: []any{[]any{true}}},
+		{src: `"x\t\n\"\b\f\r\u0041\\\/y"`, value: "x\t\n\"\b\f\r\u0041\\/y"},
+		{src: `"x\u004a\u004Ay"`, value: "xJJy"},
+		{src: `"x\ry"`, value: "x\ry"},
+
+		{src: "{}", value: map[string]any{}},
+		{src: `{"a\tbc":true}`, value: map[string]any{"a\tbc": true}},
+		{src: `{x:null}`, value: map[string]any{"x": nil}},
+		{src: `{x:true}`, value: map[string]any{"x": true}},
+		{src: `{x:false}`, value: map[string]any{"x": false}},
+		{src: "{\"z\":0,\n\"z2\":0}", value: map[string]any{"z": 0, "z2": 0}},
+		{src: `{"z":1.2,"z2":0}`, value: map[string]any{"z": 1.2, "z2": 0}},
+		{src: `{"abc":{"def" :3}}`, value: map[string]any{"abc": map[string]any{"def": 3}}},
+		{src: `{"x":1.2e3,"y":true}`, value: map[string]any{"x": 1200.0, "y": true}},
+
+		{src: `{"abc": [{"x": {"y": [{"b": true}]},"z": 7}]}`,
+			value: map[string]any{
+				"abc": []any{
+					map[string]any{
+						"x": map[string]any{
+							"y": []any{
+								map[string]any{
+									"b": true,
+								},
+							},
+						},
+						"z": 7,
+					},
+				},
+			}},
+		{src: "{}}", expect: "extra characters after close, '}' at 1:3"},
+		{src: "{ \n", expect: "not closed at 2:1"},
+		{src: "{}\n }", expect: "extra characters after close, '}' at 2:2"},
+		{src: "{]}", expect: "unexpected array close at 1:2"},
+		{src: "[}]", expect: "unexpected object close at 1:2"},
+		{src: "{\"a\" \n : 1]}", expect: "unexpected array close at 2:5"},
+		{src: `[1}]`, expect: "unexpected object close at 1:3"},
+		{src: `1]`, expect: "unexpected array close at 1:2"},
+		{src: `1}`, expect: "unexpected object close at 1:2"},
+		{src: `]`, expect: "unexpected array close at 1:1"},
+		{src: `[null x`, expect: "not closed at 1:8"},
+		{src: "{\n\"x\":1 ]", expect: "unexpected array c
