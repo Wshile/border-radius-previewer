@@ -157,4 +157,50 @@ func TestParserParseString(t *testing.T) {
 		{src: `{123{}}`, expect: "expected a key at 1:5"},
 		{src: `{[]]}`, expect: "expected a key at 1:3"},
 
-		{src: "[0 1
+		{src: "[0 1,2]", value: []any{0, 1, 2}},
+		{src: "[0[1[2]]]", value: []any{0, []any{1, []any{2}}}},
+		{src: `{aaa:0 "bbb":"one" , c:2}`, value: map[string]any{"aaa": 0, "bbb": "one", "c": 2}},
+		{src: "{aaa\n:one b:\ntwo}", value: map[string]any{"aaa": "one", "b": "two"}},
+		{src: "[abc[x]]", value: []any{"abc", []any{"x"}}},
+		{src: "[abc{x:1}]", value: []any{"abc", map[string]any{"x": 1}}},
+		{src: `{aaa:"bbb" "bbb":"one" , c:2}`, value: map[string]any{"aaa": "bbb", "bbb": "one", "c": 2}},
+		{src: `{aaa:"b\tb" x:2}`, value: map[string]any{"aaa": "b\tb", "x": 2}},
+
+		{src: "[0{x:1}]", value: []any{0, map[string]any{"x": 1}}},
+		{src: "[1{x:1}]", value: []any{1, map[string]any{"x": 1}}},
+		{src: "[1.5{x:1}]", value: []any{1.5, map[string]any{"x": 1}}},
+		{src: "[1.5[1]]", value: []any{1.5, []any{1}}},
+		{src: "[1.5e2{x:1}]", value: []any{150., map[string]any{"x": 1}}},
+		{src: "[1.5e2[1]]", value: []any{150.0, []any{1}}},
+
+		{src: "[abc// a comment\n]", value: []any{"abc"}},
+		{src: "[123// a comment\n]", value: []any{123}},
+		{src: "[ // a comment\n  true\n]", value: []any{true}},
+		{src: "[\n  null // a comment\n  true\n]", value: []any{nil, true}},
+		{src: "[\n  null / a comment\n  true\n]", expect: "unexpected character ' ' at 2:9"},
+	} {
+		if testing.Verbose() {
+			fmt.Printf("... %d: %q\n", i, d.src)
+		}
+		v, err := sen.Parse([]byte(d.src))
+		if 0 < len(d.expect) {
+			tt.NotNil(t, err, d.src)
+			tt.Equal(t, d.expect, err.Error(), i, ": ", d.src)
+		} else {
+			tt.Nil(t, err, d.src)
+			tt.Equal(t, d.value, v, i, ": '", d.src, "'")
+		}
+	}
+}
+
+func TestParserParseReader(t *testing.T) {
+	for i, d := range []rdata{
+		{src: "null", value: nil},
+		// The read buffer is 4096 so force a buffer read in the middle of
+		// reading a token.
+		{src: strings.Repeat(" ", 4094) + "null ", value: nil},
+		{src: strings.Repeat(" ", 4094) + "true ", value: true},
+		{src: strings.Repeat(" ", 4094) + "false ", value: false},
+		{src: strings.Repeat(" ", 4094) + "hello\n  ", value: "hello"},
+		{src: strings.Repeat(" ", 4092) + "{x:null} ", value: map[string]any{"x": nil}},
+		{src: string
