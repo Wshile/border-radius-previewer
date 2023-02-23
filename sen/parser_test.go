@@ -345,4 +345,100 @@ func TestParserParseReaderCallbackAlt(t *testing.T) {
 
 	results = results[:0]
 	v, err = p.ParseReader(strings.NewReader(callbackSEN), cb)
-	tt.Nil(t, 
+	tt.Nil(t, err)
+	tt.Nil(t, v)
+	tt.Equal(t, `1 [2] map[x:3] true false 123`, string(results))
+}
+
+func TestParseBadArg(t *testing.T) {
+	var p sen.Parser
+	_, err := p.Parse([]byte(callbackSEN), "bad")
+	tt.NotNil(t, err)
+
+	_, err = p.ParseReader(strings.NewReader(callbackSEN), "bad")
+	tt.NotNil(t, err)
+}
+
+func TestParserParseReaderErrRead(t *testing.T) {
+	var p sen.Parser
+	r := tt.ShortReader{Max: 20, Content: []byte(callbackSEN)}
+	_, err := p.ParseReader(&r)
+	tt.NotNil(t, err)
+}
+
+func TestParserParseReaderEOF(t *testing.T) {
+	var p sen.Parser
+	_, err := p.ParseReader(iotest.DataErrReader(strings.NewReader("[1 2]")))
+	tt.Nil(t, err)
+}
+
+func TestParserParseReaderErr(t *testing.T) {
+	var p sen.Parser
+	_, err := p.ParseReader(iotest.DataErrReader(strings.NewReader("[1 2}")))
+	tt.NotNil(t, err)
+
+	r := tt.ShortReader{Max: 5000, Content: []byte("[ 123" + strings.Repeat(",  123", 120) + "]")}
+	_, err = p.ParseReader(&r)
+	tt.NotNil(t, err)
+}
+
+func TestParserParseChan(t *testing.T) {
+	var results []byte
+	rc := make(chan any, 10)
+	var p sen.Parser
+	_, err := p.Parse([]byte(callbackSEN), rc)
+	tt.Nil(t, err)
+	rc <- nil
+	for {
+		n := <-rc
+		if n == nil {
+			break
+		}
+		if 0 < len(results) {
+			results = append(results, ' ')
+		}
+		results = append(results, fmt.Sprintf("%v", n)...)
+	}
+	tt.Equal(t, `1 [2] map[x:3] true false 123`, string(results))
+
+	results = results[:0]
+	_, err = p.Parse([]byte(tokenSEN), rc)
+	tt.Nil(t, err)
+	rc <- nil
+	for {
+		n := <-rc
+		if n == nil {
+			break
+		}
+		if 0 < len(results) {
+			results = append(results, ' ')
+		}
+		results = append(results, fmt.Sprintf("%v", n)...)
+	}
+	tt.Equal(t, `abc def`, string(results))
+}
+
+func TestParserParseReaderChan(t *testing.T) {
+	var results []byte
+	rc := make(chan any, 10)
+	_, err := sen.ParseReader(strings.NewReader(callbackSEN), rc)
+	tt.Nil(t, err)
+	rc <- nil
+	for {
+		n := <-rc
+		if n == nil {
+			break
+		}
+		if 0 < len(results) {
+			results = append(results, ' ')
+		}
+		results = append(results, fmt.Sprintf("%v", n)...)
+	}
+	tt.Equal(t, `1 [2] map[x:3] true false 123`, string(results))
+}
+
+func TestMustParsePanic(t *testing.T) {
+	tt.Panic(t, func() { _ = sen.MustParse([]byte("[1 2}")) })
+}
+
+func T
