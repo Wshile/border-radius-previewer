@@ -203,4 +203,63 @@ func TestParserParseReader(t *testing.T) {
 		{src: strings.Repeat(" ", 4094) + "false ", value: false},
 		{src: strings.Repeat(" ", 4094) + "hello\n  ", value: "hello"},
 		{src: strings.Repeat(" ", 4092) + "{x:null} ", value: map[string]any{"x": nil}},
-		{src: string
+		{src: strings.Repeat(" ", 4092) + "{x:true} ", value: map[string]any{"x": true}},
+		{src: strings.Repeat(" ", 4092) + "{x:false} ", value: map[string]any{"x": false}},
+		{src: strings.Repeat(" ", 4090) + "{abc:def} ", value: map[string]any{"abc": "def"}},
+		{src: strings.Repeat(" ", 4093) + "{abc:def} ", value: map[string]any{"abc": "def"}},
+		{src: strings.Repeat(" ", 4093) + "[abc[def]]", value: []any{"abc", []any{"def"}}},
+		{src: strings.Repeat(" ", 4093) + "[abc]", value: []any{"abc"}},
+		{src: strings.Repeat(" ", 4093) + "[abc// comment\n]", value: []any{"abc"}},
+		{src: strings.Repeat(" ", 4093) + "[abc{x:1}]", value: []any{"abc", map[string]any{"x": 1}}},
+
+		{src: strings.Repeat(" ", 4094) + "abc#", expect: "unexpected character '#' at 1:2"},
+		{src: strings.Repeat(" ", 4094) + "hello\n #", expect: "extra characters after close, '#' at 2:2"},
+		{src: strings.Repeat(" ", 4094) + "hello]", expect: "unexpected array close at 1:4"},
+		{src: strings.Repeat(" ", 4094) + "hello}", expect: "unexpected object close at 1:4"},
+		{src: strings.Repeat(" ", 4095) + `"x"`, value: "x"},
+	} {
+		if testing.Verbose() {
+			fmt.Printf("... %d: %q\n", i, d.src)
+		}
+		var err error
+		var v any
+		var p sen.Parser
+		v, err = p.ParseReader(strings.NewReader(d.src))
+
+		if 0 < len(d.expect) {
+			tt.NotNil(t, err, d.src)
+			tt.Equal(t, d.expect, err.Error(), i, ": ", d.src)
+		} else {
+			tt.Nil(t, err, d.src)
+			tt.Equal(t, d.value, v, i, ": ", d.src)
+		}
+	}
+}
+
+func TestParserParseCallback(t *testing.T) {
+	var results []byte
+	cb := func(n any) {
+		if 0 < len(results) {
+			results = append(results, ' ')
+		}
+		results = append(results, fmt.Sprintf("%v", n)...)
+	}
+	p := sen.Parser{Reuse: true}
+	v, err := p.Parse([]byte(callbackSEN), cb)
+	tt.Nil(t, err)
+	tt.Nil(t, v)
+	tt.Equal(t, `1 [2] map[x:3] true false 123`, string(results))
+
+	_, _ = p.Parse([]byte("[1,[2,[3}]]")) // fail to leave stack not cleaned up
+
+	results = results[:0]
+	v, err = p.Parse([]byte(callbackSEN), cb)
+	tt.Nil(t, err)
+	tt.Nil(t, v)
+	tt.Equal(t, `1 [2] map[x:3] true false 123`, string(results))
+
+	results = results[:0]
+	v, err = p.Parse([]byte("123"), cb)
+	tt.Nil(t, err)
+	tt.Nil(t, v)
+	tt.Equal(t, `123`, string(re
