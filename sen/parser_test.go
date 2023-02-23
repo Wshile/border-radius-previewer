@@ -441,4 +441,60 @@ func TestMustParsePanic(t *testing.T) {
 	tt.Panic(t, func() { _ = sen.MustParse([]byte("[1 2}")) })
 }
 
-func T
+func TestMustParseReaderPanic(t *testing.T) {
+	tt.Panic(t, func() { _ = sen.MustParseReader(strings.NewReader("[1 2}")) })
+}
+
+func TestParserMustParsePanic(t *testing.T) {
+	var p sen.Parser
+	tt.Panic(t, func() { _ = p.MustParse([]byte("[1 2}")) })
+}
+
+func TestParserMustParseReader(t *testing.T) {
+	var p sen.Parser
+	tt.Panic(t, func() { _ = p.MustParseReader(iotest.DataErrReader(strings.NewReader("[1 2}"))) })
+}
+
+func TestParserPlus(t *testing.T) {
+	src := `['abc' + "def" + 'ghi']`
+	v := sen.MustParse([]byte(src))
+	tt.Equal(t, []any{"abcdefghi"}, v)
+
+	src = `{a: abc + "def" + 'ghi'}`
+	v = sen.MustParse([]byte(src))
+	tt.Equal(t, map[string]any{"a": "abcdefghi"}, v)
+}
+
+func TestParserTokenFunc(t *testing.T) {
+	v := sen.MustParse([]byte("fun(123)"))
+	tt.Equal(t, 123, v)
+
+	v = sen.MustParse([]byte(`[fun("xyz")]`))
+	tt.Equal(t, []any{"xyz"}, v)
+
+	p := sen.Parser{}
+	p.AddTokenFunc("fun", func(args ...any) any {
+		var sum int64
+		for _, a := range args {
+			i, _ := a.(int64)
+			sum += i
+		}
+		return sum
+	})
+	v = p.MustParse([]byte("fun(1,2,3)"))
+	tt.Equal(t, 6, v)
+
+	_, err := sen.Parse([]byte("[1,2,3)"))
+	tt.NotNil(t, err)
+
+	_, err = sen.Parse([]byte("3)"))
+	tt.NotNil(t, err)
+
+	src := strings.Repeat(" ", 4094) + "fun(1,3,5)"
+	v = p.MustParseReader(strings.NewReader(src))
+	tt.Equal(t, 9, v)
+
+	src = strings.Repeat(" ", 4090) + "fun(abc)"
+	v = sen.MustParseReader(strings.NewReader(src))
+	tt.Equal(t, "abc", v)
+}
