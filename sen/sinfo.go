@@ -176,4 +176,26 @@ func buildLowFields(rt reflect.Type, out, pretty, embedded, omitEmpty bool) (fa 
 			if f.Type.Kind() == reflect.Ptr {
 				for _, fi := range buildLowFields(f.Type.Elem(), out, pretty, embedded, omitEmpty) {
 					fi.index = append([]int{i}, fi.index...)
-					fi.App
+					fi.Append = fi.iAppend
+					fa = append(fa, fi)
+				}
+			} else {
+				for _, fi := range buildLowFields(f.Type, out, pretty, embedded, omitEmpty) {
+					fi.index = append([]int{i}, fi.index...)
+					fi.offset += f.Offset
+					fa = append(fa, fi)
+				}
+			}
+		} else {
+			if 3 < len(name) {
+				if name[0] < 0x80 {
+					name[0] |= 0x20
+				}
+			} else {
+				name = bytes.ToLower(name)
+			}
+			fa = append(fa, newFinfo(&f, string(name), omitEmpty, false, pretty, embedded))
+		}
+	}
+	return
+}
