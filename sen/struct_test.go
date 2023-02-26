@@ -235,4 +235,112 @@ func TestSENTagOmitEmptyAsString(t *testing.T) {
 }
 
 func TestSENTagPtrOmitEmpty(t *testing.T) {
-	type 
+	type Bare struct {
+	}
+	type Sample struct {
+		Ptr    *Bare  `json:"p,omitempty"`
+		NilPtr *Bare  `json:"np,omitempty"`
+		Slice  []any  `json:"s,omitempty"`
+		Empty  []any  `json:"e,omitempty"`
+		Any    any    `json:"a,omitempty"`
+		NilAny any    `json:"na,omitempty"`
+		Bar    **Bare `json:"bar"`
+	}
+	sample := Sample{
+		Ptr:    &Bare{},
+		NilPtr: nil,
+		Slice:  []any{true},
+		Empty:  []any{},
+		Any:    &Bare{},
+		NilAny: nil,
+	}
+	wr := sen.Writer{Options: ojg.Options{UseTags: true}}
+
+	out := wr.MustSEN(&sample)
+	tt.Equal(t, `{a:{} bar:null p:{} s:[true]}`, string(out))
+
+	out = wr.MustSEN(sample)
+	tt.Equal(t, `{a:{} bar:null p:{} s:[true]}`, string(out))
+
+	wr.Indent = 2
+	out = wr.MustSEN(sample)
+	tt.Equal(t, `{
+  a: {}
+  bar: null
+  p: {}
+  s: [
+    true
+  ]
+}`, string(out))
+}
+
+func TestSENTagPtr(t *testing.T) {
+	type Bare struct {
+	}
+	type Sample struct {
+		Ptr    *Bare `json:"p"`
+		NilPtr *Bare `json:"np"`
+		Slice  []any `json:"s"`
+		Empty  []any `json:"e"`
+		Any    any   `json:"a"`
+		NilAny any   `json:"na"`
+	}
+	sample := Sample{
+		Ptr:    &Bare{},
+		NilPtr: nil,
+		Slice:  []any{true},
+		Empty:  []any{},
+		Any:    &Bare{},
+		NilAny: nil,
+	}
+	wr := sen.Writer{Options: ojg.Options{UseTags: true}}
+
+	out := wr.MustSEN(&sample)
+	tt.Equal(t, `{a:{} e:[] na:null np:null p:{} s:[true]}`, string(out))
+
+	out = wr.MustSEN(sample)
+	tt.Equal(t, `{a:{} e:[] na:null np:null p:{} s:[true]}`, string(out))
+}
+
+func TestSENTagOther(t *testing.T) {
+	type Sample struct {
+		AsIs int `json:",omitempty"`
+		Dash int `json:"-,"`
+		Skip int `json:"-"`
+		Nil  any `json:"nil"`
+		x    int
+	}
+	sample := Sample{
+		AsIs: 1,
+		Dash: 2,
+		Skip: 3,
+		x:    4,
+	}
+	wr := sen.Writer{Options: ojg.Options{UseTags: true, OmitNil: true, Indent: 2}}
+
+	out := wr.MustSEN(&sample)
+	tt.Equal(t, `{
+  -: 2
+  AsIs: 1
+}`, string(out))
+
+	wr.Indent = 0
+	out = wr.MustSEN(&sample)
+	tt.Equal(t, `{-:2 AsIs:1}`, string(out))
+}
+
+type Decimal struct {
+	value *big.Int
+	exp   int32
+	fail  bool
+}
+
+func (d Decimal) MarshalJSON() ([]byte, error) {
+	if d.fail {
+		return nil, fmt.Errorf("don't like this one")
+	}
+	return []byte(fmt.Sprintf(`"%d,%d"`, d.value, d.exp)), nil
+}
+
+type TestStruct struct {
+	Outer 
