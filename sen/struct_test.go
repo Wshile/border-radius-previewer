@@ -343,4 +343,87 @@ func (d Decimal) MarshalJSON() ([]byte, error) {
 }
 
 type TestStruct struct {
-	Outer 
+	Outer   bool     `json:"outer"`
+	Decimal Decimal  `json:"decimal"`
+	Ptr     *Decimal `json:"ptr,omitempty"`
+	Nptr    *Decimal `json:"nptr"`
+}
+
+func TestBytesStructMarshaler(t *testing.T) {
+	tsa := []TestStruct{{
+		Outer:   true,
+		Decimal: Decimal{value: big.NewInt(5), exp: 2},
+		Ptr:     &Decimal{value: big.NewInt(3), exp: 7},
+		Nptr:    &Decimal{value: big.NewInt(1), exp: 9},
+	}}
+	opt := ojg.Options{UseTags: true}
+	out := sen.Bytes(tsa, &opt)
+	tt.Equal(t, `[{decimal:"5,2" nptr:"1,9" outer:true ptr:"3,7"}]`, string(out))
+
+	tsa = []TestStruct{{
+		Outer:   true,
+		Decimal: Decimal{value: big.NewInt(5), exp: 2},
+		Ptr:     nil,
+		Nptr:    nil,
+	}}
+	out = sen.Bytes(tsa, &opt)
+	tt.Equal(t, `[{decimal:"5,2" nptr:null outer:true}]`, string(out))
+
+	tsa = []TestStruct{{
+		Outer:   true,
+		Decimal: Decimal{value: big.NewInt(5), exp: 2, fail: true},
+	}}
+	tt.Panic(t, func() { _ = sen.Bytes(tsa) })
+}
+
+type Tex struct {
+	val int
+}
+
+func (t *Tex) MarshalText() ([]byte, error) {
+	if t.val == 0 {
+		return nil, fmt.Errorf("don't like this one")
+	}
+	return []byte(fmt.Sprintf("%02d", t.val)), nil
+}
+
+func TestBytesStructTextMarshaler(t *testing.T) {
+	type TexWrap struct {
+		Bed  Tex  `json:"bed"`
+		Ptr  *Tex `json:"ptr,omitempty"`
+		Nptr *Tex `json:"nptr"`
+	}
+	opt := ojg.Options{UseTags: true}
+	tw := TexWrap{Bed: Tex{val: 1}, Ptr: &Tex{val: 2}, Nptr: &Tex{val: 3}}
+	out := sen.Bytes(&tw, &opt)
+	tt.Equal(t, `{bed:"01" nptr:"03" ptr:"02"}`, string(out))
+
+	tw = TexWrap{Bed: Tex{val: 1}, Ptr: nil, Nptr: nil}
+	out = sen.Bytes(&tw, &opt)
+	tt.Equal(t, `{bed:"01" nptr:null}`, string(out))
+
+	tw = TexWrap{Bed: Tex{val: 0}}
+	tt.Panic(t, func() { _ = sen.Bytes(&tw) })
+}
+
+type Silly struct {
+	val int
+}
+
+func (s *Silly) Simplify() any {
+	return map[string]any{"val": s.val}
+}
+
+func TestBytesStructSimplifier(t *testing.T) {
+	opt := ojg.Options{UseTags: true}
+	type SillyWrap struct {
+		Bed  Silly  `json:"bed"`
+		Ptr  *Silly `json:"ptr,omitempty"`
+		Nptr *Silly `json:"nptr"`
+	}
+	sim := SillyWrap{Bed: Silly{val: 1}, Ptr: &Silly{val: 2}, Nptr: &Silly{val: 3}}
+	out := sen.Bytes(&sim, &opt)
+	tt.Equal(t, `{bed:{val:1} nptr:{val:3} ptr:{val:2}}`, string(out))
+
+	sim = SillyWrap{Bed: Silly{val: 1}, Ptr: nil, Nptr: nil}
+	ou
