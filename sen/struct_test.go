@@ -426,4 +426,46 @@ func TestBytesStructSimplifier(t *testing.T) {
 	tt.Equal(t, `{bed:{val:1} nptr:{val:3} ptr:{val:2}}`, string(out))
 
 	sim = SillyWrap{Bed: Silly{val: 1}, Ptr: nil, Nptr: nil}
-	ou
+	out = sen.Bytes(&sim, &opt)
+	tt.Equal(t, `{bed:{val:1} nptr:null}`, string(out))
+
+	sim = SillyWrap{Bed: Silly{val: 1}, Ptr: &Silly{val: 2}, Nptr: nil}
+	opt.OmitNil = true
+	out = sen.Bytes(&sim, &opt)
+	tt.Equal(t, `{bed:{val:1} ptr:{val:2}}`, string(out))
+
+	opt.Indent = 2
+	out = sen.Bytes(&sim, &opt)
+	tt.Equal(t, `{
+  bed: {
+    val: 1
+  }
+  ptr: {
+    val: 2
+  }
+}`, string(out))
+}
+
+type Genny struct {
+	val int
+}
+
+func (g *Genny) Generic() gen.Node {
+	return gen.Object{"val": gen.Int(g.val)}
+}
+
+func TestBytesStructGenericer(t *testing.T) {
+	opt := ojg.Options{UseTags: true}
+	type GennyWrap struct {
+		Bed  Genny  `json:"bed"`
+		Ptr  *Genny `json:"ptr,omitempty"`
+		Nptr *Genny `json:"nptr"`
+	}
+	tw := GennyWrap{Bed: Genny{val: 1}, Ptr: &Genny{val: 2}, Nptr: &Genny{val: 3}}
+	out := sen.Bytes(&tw, &opt)
+	tt.Equal(t, `{bed:{val:1} nptr:{val:3} ptr:{val:2}}`, string(out))
+
+	tw = GennyWrap{Bed: Genny{val: 1}, Ptr: nil, Nptr: nil}
+	out = sen.Bytes(&tw, &opt)
+	tt.Equal(t, `{bed:{val:1} nptr:null}`, string(out))
+}
