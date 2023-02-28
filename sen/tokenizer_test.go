@@ -102,4 +102,76 @@ func TestTokenizerLoad(t *testing.T) {
 	tt.Equal(t, "[ true null 123 12.3 ] { x: 3 } ", string(h.buf))
 }
 
-func TestTokenizerLoadErrR
+func TestTokenizerLoadErrRead(t *testing.T) {
+	h := oj.ZeroHandler{}
+	r := tt.ShortReader{Max: 5, Content: []byte("[1, 2, 3, true, false]")}
+	err := sen.TokenizeLoad(&r, &h)
+	tt.NotNil(t, err)
+
+	r = tt.ShortReader{Max: 5000, Content: []byte("[ 123" + strings.Repeat(",  123", 120) + "]")}
+	err = sen.TokenizeLoad(&r, &h)
+	tt.NotNil(t, err)
+}
+
+type eofReader int
+
+func (r eofReader) Read(b []byte) (int, error) {
+	b[0] = '['
+	return 1, io.EOF
+}
+
+func TestTokenizerLoadEOF(t *testing.T) {
+	h := oj.ZeroHandler{}
+	toker := sen.Tokenizer{}
+	err := toker.Load(eofReader(0), &h)
+	tt.NotNil(t, err)
+
+	err = toker.Load(eofReader(0), &h)
+	tt.NotNil(t, err)
+}
+
+func TestTokenizerLoadMany(t *testing.T) {
+	h := oj.ZeroHandler{}
+	for i, s := range []string{
+		// The read buffer is 4096 so force a buffer read in the middle of
+		// reading a token.
+		strings.Repeat(" ", 4094) + "null ",
+		strings.Repeat(" ", 4094) + "true ",
+		strings.Repeat(" ", 4094) + "false ",
+		strings.Repeat(" ", 4094) + `{x:1}`,
+		strings.Repeat(" ", 4095) + `"x"`,
+		strings.Repeat(" ", 4095) + "xyz",
+		strings.Repeat(" ", 4094) + "[xyz]",
+		strings.Repeat(" ", 4094) + "[xyz[]]",
+		strings.Repeat(" ", 4094) + "[xyz{}]",
+		strings.Repeat(" ", 4092) + "{x:abc}",
+		strings.Repeat(" ", 4094) + "abc// comment\n",
+		strings.Repeat(" ", 4094) + "[abc\n  def]",
+	} {
+		toker := sen.Tokenizer{}
+		err := toker.Load(strings.NewReader(s), &h)
+		tt.Nil(t, err, i)
+	}
+}
+
+func TestTokenizerMany(t *testing.T) {
+	for i, d := range []tokeTest{
+		{src: "null", expect: "null"},
+		{src: "true", expect: "true"},
+		{src: "false", expect: "false"},
+		{src: "false \n ", expect: "false"},
+		{src: "hello", expect: "hello"},
+		{src: "hello ", expect: "hello"},
+		{src: `"hello"`, expect: "hello"},
+		{src: "[one two]", expect: "[ one two ]"},
+		{src: "123", expect: "123"},
+		{src: "-12.3", expect: "-12.3"},
+		{src: "2e-7", expect: "2e-07"},
+		{src: "-12.5e-2", expect: "-0.125"},
+		{src: "0", expect: "0"},
+		{src: "0\n ", expect: "0"},
+		{src: "-12.3 ", expect: "-12.3"},
+		{src: "-12.3\n", expect: "-12.3"},
+		{src: "-12.3e-5", expect: "-0.000123"},
+		{src: "12.3e+5 ", expect: "1.23e+06"},
+		{src: "12.3e+5\n ", expect: "1.23
