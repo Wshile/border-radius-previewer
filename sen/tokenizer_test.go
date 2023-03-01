@@ -256,4 +256,51 @@ func TestTokenizerMany(t *testing.T) {
 		{src: "x]", err: "unexpected array close at 1:2"},
 		{src: "x}", err: "unexpected object close at 1:2"},
 		{src: "x#", err: "unexpected character '#' at 1:2"},
-		{src: "{x#:1}", err:
+		{src: "{x#:1}", err: "expected a colon, not '#' at 1:3"},
+		{src: `{123}`, err: "expected a key at 1:5"},
+		{src: `{123 }`, err: "expected a key at 1:5"},
+		{src: `{123[}`, err: "expected a key at 1:5"},
+		{src: `{{}}`, err: "expected a key at 1:2"},
+		{src: `{123`, err: "not closed at 1:5"},
+		{src: "{123\n", err: "expected a key at 1:5"},
+		{src: `{123// comment`, err: "expected a key at 1:5"},
+		{src: `{123{}}`, err: "expected a key at 1:5"},
+		{src: `{[]]}`, err: "expected a key at 1:2"},
+
+		{src: "[0 1,2]", expect: "[ 0 1 2 ]"},
+		{src: "[0[1[2]]]", expect: "[ 0 [ 1 [ 2 ] ] ]"},
+
+		{src: `{aaa:0 "bbb":"one" , c:2}`, expect: "{ aaa: 0 bbb: one c: 2 }"},
+		{src: "{aaa\n:one b:\ntwo}", expect: "{ aaa: one b: two }"},
+		{src: "[abc[x]]", expect: "[ abc [ x ] ]"},
+		{src: "[abc{x:1}]", expect: "[ abc { x: 1 } ]"},
+		{src: `{aaa:"bbb" "bbb":"one" , c:2}`, expect: "{ aaa: bbb bbb: one c: 2 }"},
+		{src: `{aaa:"b\tb" x:2}`, expect: "{ aaa: b\tb x: 2 }"},
+
+		{src: "[0{x:1}]", expect: "[ 0 { x: 1 } ]"},
+		{src: "[1{x:1}]", expect: "[ 1 { x: 1 } ]"},
+		{src: "[1.5{x:1}]", expect: "[ 1.5 { x: 1 } ]"},
+		{src: "[1.5[1]]", expect: "[ 1.5 [ 1 ] ]"},
+		{src: "[1.5e2{x:1}]", expect: "[ 150 { x: 1 } ]"},
+		{src: "[1.5e2[1]]", expect: "[ 150 [ 1 ] ]"},
+
+		{src: "[abc// a comment\n]", expect: "[ abc ]"},
+		{src: "[123// a comment\n]", expect: "[ 123 ]"},
+		{src: "[ // a comment\n  true\n]", expect: "[ true ]"},
+		{src: "[\n  null // a comment\n  true\n]", expect: "[ null true ]"},
+		{src: "[\n  null / a comment\n  true\n]", err: "unexpected character ' ' at 2:9"},
+	} {
+		if testing.Verbose() {
+			fmt.Printf("... %d: %q\n", i, d.src)
+		}
+		h := testHandler{}
+		err := sen.TokenizeString(d.src, &h)
+		if 0 < len(d.expect) {
+			tt.Nil(t, err, d.src)
+			tt.Equal(t, d.expect, strings.TrimSpace(string(h.buf)), i, ": ", d.src)
+		} else {
+			tt.NotNil(t, err, d.src)
+			tt.Equal(t, d.err, err.Error(), i, ": ", d.src)
+		}
+	}
+}
