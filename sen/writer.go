@@ -192,4 +192,94 @@ func (wr *Writer) appendSEN(data any, depth int) {
 	case uint8:
 		wr.buf = strconv.AppendUint(wr.buf, uint64(td), 10)
 	case uint16:
-		wr.buf = strconv.AppendUi
+		wr.buf = strconv.AppendUint(wr.buf, uint64(td), 10)
+	case uint32:
+		wr.buf = strconv.AppendUint(wr.buf, uint64(td), 10)
+	case uint64:
+		wr.buf = strconv.AppendUint(wr.buf, td, 10)
+
+	case float32:
+		wr.buf = strconv.AppendFloat(wr.buf, float64(td), 'g', -1, 32)
+	case float64:
+		wr.buf = strconv.AppendFloat(wr.buf, td, 'g', -1, 64)
+
+	case string:
+		wr.buf = wr.appendString(wr.buf, td, !wr.HTMLUnsafe)
+
+	case []byte:
+		switch wr.BytesAs {
+		case ojg.BytesAsBase64:
+			wr.buf = wr.appendString(wr.buf, base64.StdEncoding.EncodeToString(td), !wr.HTMLUnsafe)
+		case ojg.BytesAsArray:
+			a := make([]any, len(td))
+			for i, m := range td {
+				a[i] = int64(m)
+			}
+			wr.appendArray(wr, a, depth)
+		default:
+			wr.buf = wr.appendString(wr.buf, string(td), !wr.HTMLUnsafe)
+		}
+
+	case time.Time:
+		wr.buf = wr.AppendTime(wr.buf, td, true)
+
+	case []any:
+		wr.appendArray(wr, td, depth)
+		wr.needSep = false
+
+	case map[string]any:
+		wr.appendObject(wr, td, depth)
+		wr.needSep = false
+
+	case alt.Simplifier:
+		wr.appendSEN(td.Simplify(), depth)
+	case alt.Genericer:
+		wr.appendSEN(td.Generic().Simplify(), depth)
+	case json.Marshaler:
+		out, err := td.MarshalJSON()
+		if err != nil {
+			panic(err)
+		}
+		wr.buf = append(wr.buf, out...)
+	case encoding.TextMarshaler:
+		out, err := td.MarshalText()
+		if err != nil {
+			panic(err)
+		}
+		wr.buf = wr.appendString(wr.buf, string(out), !wr.HTMLUnsafe)
+
+	default:
+		wr.appendDefault(wr, data, depth)
+		if 0 < len(wr.buf) {
+			switch wr.buf[len(wr.buf)-1] {
+			case '}', ']':
+				wr.needSep = false
+			default:
+			}
+		}
+	}
+	if wr.w != nil && wr.WriteLimit < len(wr.buf) {
+		if _, err := wr.w.Write(wr.buf); err != nil {
+			panic(err)
+		}
+		wr.buf = wr.buf[:0]
+	}
+}
+
+func appendDefault(wr *Writer, data any, depth int) {
+	if !wr.NoReflect {
+		rv := reflect.ValueOf(data)
+		kind := rv.Kind()
+		if kind == reflect.Ptr {
+			rv = rv.Elem()
+			kind = rv.Kind()
+		}
+		switch kind {
+		case reflect.Struct:
+			wr.appendStruct(rv, depth, nil)
+		case reflect.Slice, reflect.Array:
+			wr.appendSlice(rv, depth, nil)
+		case reflect.Map:
+			wr.appendMap(rv, depth, nil)
+		default:
+			// Not much should get here except Complex and n
