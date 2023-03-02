@@ -282,4 +282,116 @@ func appendDefault(wr *Writer, data any, depth int) {
 		case reflect.Map:
 			wr.appendMap(rv, depth, nil)
 		default:
-			// Not much should get here except Complex and n
+			// Not much should get here except Complex and non-decomposable
+			// values.
+			dec := alt.Decompose(data, &wr.Options)
+			wr.appendSEN(dec, depth)
+			return
+		}
+	} else {
+		wr.buf = wr.appendString(wr.buf, fmt.Sprintf("%v", data), !wr.HTMLUnsafe)
+	}
+}
+
+func appendArray(wr *Writer, n []any, depth int) {
+	var is string
+	var cs string
+	d2 := depth + 1
+	if wr.Tab {
+		x := depth + 1
+		if len(tabs) < x {
+			x = len(tabs)
+		}
+		is = tabs[0:x]
+		x = d2 + 1
+		if len(tabs) < x {
+			x = len(tabs)
+		}
+		cs = tabs[0:x]
+	} else {
+		x := depth*wr.Indent + 1
+		if len(spaces) < x {
+			x = len(spaces)
+		}
+		is = spaces[0:x]
+		x = d2*wr.Indent + 1
+		if len(spaces) < x {
+			x = len(spaces)
+		}
+		cs = spaces[0:x]
+	}
+	if 0 < len(n) {
+		wr.buf = append(wr.buf, '[')
+		for _, m := range n {
+			wr.buf = append(wr.buf, cs...)
+			wr.appendSEN(m, d2)
+		}
+		wr.buf = append(wr.buf, is...)
+		wr.buf = append(wr.buf, ']')
+	} else {
+		wr.buf = append(wr.buf, "[]"...)
+	}
+}
+
+func appendObject(wr *Writer, n map[string]any, depth int) {
+	d2 := depth + 1
+	var is string
+	var cs string
+	if wr.Tab {
+		x := depth + 1
+		if len(tabs) < x {
+			x = len(tabs)
+		}
+		is = tabs[0:x]
+		x = d2 + 1
+		if len(tabs) < x {
+			x = len(tabs)
+		}
+		cs = tabs[0:x]
+	} else {
+		x := depth*wr.Indent + 1
+		if len(spaces) < x {
+			x = len(spaces)
+		}
+		is = spaces[0:x]
+		x = d2*wr.Indent + 1
+		if len(spaces) < x {
+			x = len(spaces)
+		}
+		cs = spaces[0:x]
+	}
+	wr.buf = append(wr.buf, '{')
+	for k, m := range n {
+		switch tm := m.(type) {
+		case nil:
+			if wr.OmitNil {
+				continue
+			}
+		case string:
+			if wr.OmitEmpty && len(tm) == 0 {
+				continue
+			}
+		case map[string]any:
+			if wr.OmitEmpty && len(tm) == 0 {
+				continue
+			}
+		case []any:
+			if wr.OmitEmpty && len(tm) == 0 {
+				continue
+			}
+		}
+		wr.buf = append(wr.buf, cs...)
+		wr.buf = wr.appendString(wr.buf, k, !wr.HTMLUnsafe)
+		wr.buf = append(wr.buf, ": "...)
+		wr.appendSEN(m, d2)
+	}
+	wr.buf = append(wr.buf, is...)
+	wr.buf = append(wr.buf, '}')
+}
+
+func appendSortObject(wr *Writer, n map[string]any, depth int) {
+	d2 := depth + 1
+	var is string
+	var cs string
+	if wr.Tab {
+		x 
