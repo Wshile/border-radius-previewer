@@ -394,4 +394,116 @@ func appendSortObject(wr *Writer, n map[string]any, depth int) {
 	var is string
 	var cs string
 	if wr.Tab {
-		x 
+		x := depth + 1
+		if len(tabs) < x {
+			x = len(tabs)
+		}
+		is = tabs[0:x]
+		x = d2 + 1
+		if len(tabs) < x {
+			x = len(tabs)
+		}
+		cs = tabs[0:x]
+	} else {
+		x := depth*wr.Indent + 1
+		if len(spaces) < x {
+			x = len(spaces)
+		}
+		is = spaces[0:x]
+		x = d2*wr.Indent + 1
+		if len(spaces) < x {
+			x = len(spaces)
+		}
+		cs = spaces[0:x]
+	}
+	keys := make([]string, 0, len(n))
+	for k := range n {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+	wr.buf = append(wr.buf, '{')
+	for _, k := range keys {
+		m := n[k]
+		switch tm := m.(type) {
+		case nil:
+			if wr.OmitNil {
+				continue
+			}
+		case string:
+			if wr.OmitEmpty && len(tm) == 0 {
+				continue
+			}
+		case map[string]any:
+			if wr.OmitEmpty && len(tm) == 0 {
+				continue
+			}
+		case []any:
+			if wr.OmitEmpty && len(tm) == 0 {
+				continue
+			}
+		}
+		wr.buf = append(wr.buf, cs...)
+		wr.buf = wr.appendString(wr.buf, k, !wr.HTMLUnsafe)
+		wr.buf = append(wr.buf, ": "...)
+		wr.appendSEN(m, d2)
+	}
+	wr.buf = append(wr.buf, is...)
+	wr.buf = append(wr.buf, '}')
+}
+
+func (wr *Writer) appendStruct(rv reflect.Value, depth int, si *sinfo) {
+	if si == nil {
+		si = getSinfo(rv.Interface(), wr.OmitEmpty)
+	}
+	d2 := depth + 1
+	fields := si.fields[wr.findex]
+	wr.buf = append(wr.buf, '{')
+	empty := true
+	var v any
+	indented := false
+	var is string
+	var cs string
+	if wr.Tab {
+		x := depth + 1
+		if len(tabs) < x {
+			x = len(tabs)
+		}
+		is = tabs[0:x]
+		x = d2 + 1
+		if len(tabs) < x {
+			x = len(tabs)
+		}
+		cs = tabs[0:x]
+	} else {
+		x := depth*wr.Indent + 1
+		if len(spaces) < x {
+			x = len(spaces)
+		}
+		is = spaces[0:x]
+		x = d2*wr.Indent + 1
+		if len(spaces) < x {
+			x = len(spaces)
+		}
+		cs = spaces[0:x]
+	}
+	if 0 < len(wr.CreateKey) {
+		wr.buf = append(wr.buf, cs...)
+		wr.buf = wr.appendString(wr.buf, wr.CreateKey, !wr.HTMLUnsafe)
+		wr.buf = append(wr.buf, `: "`...)
+		if wr.FullTypePath {
+			wr.buf = append(wr.buf, si.rt.PkgPath()...)
+			wr.buf = append(wr.buf, '/')
+			wr.buf = append(wr.buf, si.rt.Name()...)
+		} else {
+			wr.buf = append(wr.buf, si.rt.Name()...)
+		}
+		wr.buf = append(wr.buf, '"')
+		empty = false
+	}
+	var addr uintptr
+	if rv.CanAddr() {
+		addr = rv.UnsafeAddr()
+	}
+	var stat appendStatus
+	for _, fi := range fields {
+		if !i
