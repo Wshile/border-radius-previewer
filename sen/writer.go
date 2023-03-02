@@ -506,4 +506,107 @@ func (wr *Writer) appendStruct(rv reflect.Value, depth int, si *sinfo) {
 	}
 	var stat appendStatus
 	for _, fi := range fields {
-		if !i
+		if !indented {
+			wr.buf = append(wr.buf, cs...)
+			indented = true
+		}
+		if 0 < addr {
+			wr.buf, v, stat = fi.Append(fi, wr.buf, rv, addr, !wr.HTMLUnsafe)
+		} else {
+			wr.buf, v, stat = fi.iAppend(fi, wr.buf, rv, addr, !wr.HTMLUnsafe)
+		}
+		switch stat {
+		case aWrote:
+			empty = false
+			indented = false
+			continue
+		case aSkip:
+			continue
+		case aChanged:
+			if wr.OmitNil && (*[2]uintptr)(unsafe.Pointer(&v))[1] == 0 {
+				wr.buf = wr.buf[:len(wr.buf)-fi.keyLen()]
+				continue
+			}
+			wr.appendSEN(v, d2)
+			indented = false
+			empty = false
+			continue
+		}
+		indented = false
+		var fv reflect.Value
+		kind := fi.kind
+	Retry:
+		switch kind {
+		case reflect.Ptr:
+			if (*[2]uintptr)(unsafe.Pointer(&v))[1] != 0 { // Check for nil of any type
+				fv = reflect.ValueOf(v).Elem()
+				kind = fv.Kind()
+				v = fv.Interface()
+				goto Retry
+			}
+			if wr.OmitNil {
+				wr.buf = wr.buf[:len(wr.buf)-fi.keyLen()]
+				indented = true
+				continue
+			}
+			wr.buf = append(wr.buf, "null"...)
+		case reflect.Interface:
+			if wr.OmitNil && (*[2]uintptr)(unsafe.Pointer(&v))[1] == 0 {
+				wr.buf = wr.buf[:len(wr.buf)-fi.keyLen()]
+				indented = true
+				continue
+			}
+			wr.appendSEN(v, 0)
+		case reflect.Struct:
+			if !fv.IsValid() {
+				fv = reflect.ValueOf(v)
+			}
+			wr.appendStruct(fv, d2, fi.elem)
+		case reflect.Slice, reflect.Array:
+			if !fv.IsValid() {
+				fv = reflect.ValueOf(v)
+			}
+			wr.appendSlice(fv, d2, fi.elem)
+		case reflect.Map:
+			if !fv.IsValid() {
+				fv = reflect.ValueOf(v)
+			}
+			wr.appendMap(fv, d2, fi.elem)
+		default:
+			wr.appendSEN(v, d2)
+		}
+		empty = false
+	}
+	if indented {
+		wr.buf = wr.buf[:len(wr.buf)-len(cs)]
+	}
+	if !empty {
+		wr.buf = append(wr.buf, is...)
+	}
+	wr.buf = append(wr.buf, '}')
+}
+
+func (wr *Writer) appendSlice(rv reflect.Value, depth int, si *sinfo) {
+	end := rv.Len()
+	if end == 0 {
+		wr.buf = append(wr.buf, "[]"...)
+		return
+	}
+	d2 := depth + 1
+	var is string
+	var cs string
+	if wr.Tab {
+		x := depth + 1
+		if len(tabs) < x {
+			x = len(tabs)
+		}
+		is = tabs[0:x]
+		x = d2 + 1
+		if len(tabs) < x {
+			x = len(tabs)
+		}
+		cs = tabs[0:x]
+	} else {
+		x := depth*wr.Indent + 1
+		if len(spaces) < x {
+			x = len(
