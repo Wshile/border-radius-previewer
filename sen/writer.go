@@ -704,4 +704,23 @@ func (wr *Writer) appendMap(rv reflect.Value, depth int, si *sinfo) {
 			wr.buf = append(wr.buf, ": "...)
 			wr.appendMap(rm, d2, si)
 		case reflect.String:
-			if (wr.OmitEmpty) && rm.L
+			if (wr.OmitEmpty) && rm.Len() == 0 {
+				continue
+			}
+			wr.buf = append(wr.buf, cs...)
+			wr.buf = wr.appendString(wr.buf, kv.String(), !wr.HTMLUnsafe)
+			wr.buf = append(wr.buf, ": "...)
+			wr.appendSEN(rm.Interface(), d2)
+		default:
+			wr.buf = append(wr.buf, cs...)
+			wr.buf = wr.appendString(wr.buf, kv.String(), !wr.HTMLUnsafe)
+			wr.buf = append(wr.buf, ": "...)
+			wr.appendSEN(rm.Interface(), d2)
+		}
+		empty = false
+	}
+	if !empty {
+		wr.buf = append(wr.buf, is...)
+	}
+	wr.buf = append(wr.buf, '}')
+}
