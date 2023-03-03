@@ -609,4 +609,99 @@ func (wr *Writer) appendSlice(rv reflect.Value, depth int, si *sinfo) {
 	} else {
 		x := depth*wr.Indent + 1
 		if len(spaces) < x {
-			x = len(
+			x = len(spaces)
+		}
+		is = spaces[0:x]
+		x = d2*wr.Indent + 1
+		if len(spaces) < x {
+			x = len(spaces)
+		}
+		cs = spaces[0:x]
+	}
+	wr.buf = append(wr.buf, '[')
+	for j := 0; j < end; j++ {
+		wr.buf = append(wr.buf, cs...)
+		rm := rv.Index(j)
+		switch rm.Kind() {
+		case reflect.Struct:
+			wr.appendStruct(rm, d2, si)
+		case reflect.Slice, reflect.Array:
+			wr.appendSlice(rm, d2, si)
+		case reflect.Map:
+			wr.appendMap(rm, d2, si)
+		default:
+			wr.appendSEN(rm.Interface(), d2)
+		}
+	}
+	wr.buf = append(wr.buf, is...)
+	wr.buf = append(wr.buf, ']')
+}
+
+func (wr *Writer) appendMap(rv reflect.Value, depth int, si *sinfo) {
+	d2 := depth + 1
+	var is string
+	var cs string
+	if wr.Tab {
+		x := depth + 1
+		if len(tabs) < x {
+			x = len(tabs)
+		}
+		is = tabs[0:x]
+		x = d2 + 1
+		if len(tabs) < x {
+			x = len(tabs)
+		}
+		cs = tabs[0:x]
+	} else {
+		x := depth*wr.Indent + 1
+		if len(spaces) < x {
+			x = len(spaces)
+		}
+		is = spaces[0:x]
+		x = d2*wr.Indent + 1
+		if len(spaces) < x {
+			x = len(spaces)
+		}
+		cs = spaces[0:x]
+	}
+	keys := rv.MapKeys()
+	if wr.Sort {
+		sort.Slice(keys, func(i, j int) bool { return 0 > strings.Compare(keys[i].String(), keys[j].String()) })
+	}
+	empty := true
+	wr.buf = append(wr.buf, '{')
+	for _, kv := range keys {
+		rm := rv.MapIndex(kv)
+		if rm.Kind() == reflect.Ptr {
+			if rm.IsNil() {
+				if wr.OmitNil {
+					continue
+				}
+			} else {
+				rm = rm.Elem()
+			}
+		}
+		switch rm.Kind() {
+		case reflect.Struct:
+			wr.buf = append(wr.buf, cs...)
+			wr.buf = wr.appendString(wr.buf, kv.String(), !wr.HTMLUnsafe)
+			wr.buf = append(wr.buf, ": "...)
+			wr.appendStruct(rm, d2, si)
+		case reflect.Slice, reflect.Array:
+			if (wr.OmitNil || wr.OmitEmpty) && rm.Len() == 0 {
+				continue
+			}
+			wr.buf = append(wr.buf, cs...)
+			wr.buf = wr.appendString(wr.buf, kv.String(), !wr.HTMLUnsafe)
+			wr.buf = append(wr.buf, ": "...)
+			wr.appendSlice(rm, d2, si)
+		case reflect.Map:
+			if (wr.OmitNil || wr.OmitEmpty) && rm.Len() == 0 {
+				continue
+			}
+			wr.buf = append(wr.buf, cs...)
+			wr.buf = wr.appendString(wr.buf, kv.String(), !wr.HTMLUnsafe)
+			wr.buf = append(wr.buf, ": "...)
+			wr.appendMap(rm, d2, si)
+		case reflect.String:
+			if (wr.OmitEmpty) && rm.L
